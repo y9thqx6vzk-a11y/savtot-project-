@@ -7,6 +7,8 @@ import { motion } from "framer-motion";
 import { useAppMotion } from "@/lib/useMotionConfig";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import JsonUploader from "@/components/ui/JsonUploader";
+import ProjectSwitcher from "@/components/ui/ProjectSwitcher";
+import ShareModal from "@/components/ui/ShareModal";
 import Step1Story from "./Step1Story";
 import Step2Gaps from "./Step2Gaps";
 import Step3Avenues from "./Step3Avenues";
@@ -45,24 +47,15 @@ export default function JourneyWizard() {
   return (
     <div className="max-w-2xl mx-auto py-16 px-6 relative font-sans text-right" dir="rtl">
       {/* Top Bar Actions */}
-      <div className="flex items-center justify-between mb-12 border-b border-zinc-200 dark:border-zinc-800 pb-5">
-        <div className="flex items-center gap-2.5">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-12 border-b border-zinc-200 dark:border-zinc-800 pb-5">
+        <div className="flex flex-wrap items-center gap-2">
           <ThemeToggle />
+          <ProjectSwitcher />
+          <ShareModal />
           <JsonUploader />
           <button 
-            onClick={() => {
-              if (window.confirm("האם לפתוח פרויקט חדש ונקי? (מומלץ לייצא קובץ גיבוי JSON אם ברצונך לשמור את הנתונים הנוכחיים)")) {
-                useAppStore.getState().resetProject();
-              }
-            }}
-            className="text-xs px-3 py-1 rounded transition-colors font-mono border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:border-zinc-400 dark:hover:border-zinc-600 shadow-xs"
-            title="איפוס והתחלת פרויקט חדש מדף חלק"
-          >
-            + פרויקט חדש
-          </button>
-          <button 
             onClick={handleLoadSample}
-            className="text-xs px-3 py-1 rounded transition-colors font-mono border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white hover:border-zinc-400 dark:hover:border-zinc-600 shadow-xs"
+            className="text-xs px-2.5 py-1.5 rounded transition-colors font-mono border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white hover:border-zinc-400 dark:hover:border-zinc-600 shadow-xs"
           >
             טען דוגמה
           </button>

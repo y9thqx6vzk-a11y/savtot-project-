@@ -8,6 +8,8 @@ import { useAppMotion } from "@/lib/useMotionConfig";
 import { GapCategory } from "@/types/project";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import JsonUploader from "@/components/ui/JsonUploader";
+import ProjectSwitcher from "@/components/ui/ProjectSwitcher";
+import ShareModal from "@/components/ui/ShareModal";
 
 export default function SkeletonDashboard() {
   const { 
@@ -20,7 +22,7 @@ export default function SkeletonDashboard() {
     exportJSON,
     collapsedAvenueIds,
     toggleAvenueCollapse,
-    theme,
+    createProject,
   } = useAppStore();
 
   const { transition, shouldReduceMotion } = useAppMotion();
@@ -172,8 +174,10 @@ export default function SkeletonDashboard() {
             </div>
           </div>
           
-          <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-2.5 flex-wrap">
             <ThemeToggle />
+            <ProjectSwitcher />
+            <ShareModal />
             <JsonUploader />
 
             {/* Focus Mode Toggle */}
@@ -213,17 +217,6 @@ export default function SkeletonDashboard() {
                 title="קיצורי מקלדת"
               >
                 ?
-              </button>
-              <button 
-                onClick={() => {
-                  if (window.confirm("האם לפתוח פרויקט חדש ונקי? (מומלץ לייצא קובץ גיבוי JSON אם ברצונך לשמור את הנתונים הנוכחיים)")) {
-                    useAppStore.getState().resetProject();
-                  }
-                }}
-                className="text-xs text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-md px-3 py-1.5 font-sans shadow-sm"
-                title="איפוס והתחלת פרויקט חדש מדף חלק"
-              >
-                + פרויקט חדש
               </button>
               <button 
                 onClick={() => setStage(1)} 
@@ -628,6 +621,12 @@ export default function SkeletonDashboard() {
               </Command.Group>
 
               <Command.Group heading="נתונים" className="text-[11px] font-semibold text-zinc-500 px-2 py-1.5 mt-2">
+                <Command.Item 
+                  onSelect={() => { createProject(); setCmdOpen(false); }}
+                  className="px-3 py-2 text-xs text-zinc-800 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-md cursor-pointer data-[selected=true]:bg-zinc-100 dark:data-[selected=true]:bg-zinc-900 flex justify-between"
+                >
+                  <span>התחל פרויקט חדש מדף חלק</span>
+                </Command.Item>
                 <Command.Item 
                   onSelect={() => { handleExport(); setCmdOpen(false); }}
                   className="px-3 py-2 text-xs text-zinc-800 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-md cursor-pointer data-[selected=true]:bg-zinc-100 dark:data-[selected=true]:bg-zinc-900 flex justify-between"

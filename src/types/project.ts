@@ -70,3 +70,10 @@ export interface ProjectData {
   subBranchBufferDays?: number;
   endProjectBufferDays?: number;
 }
+
+export interface ProjectRecord {
+  id: string;
+  name: string;
+  updatedAt: number;
+  data: ProjectData;
+}
