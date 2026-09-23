@@ -150,27 +150,27 @@ export default function SkeletonDashboard() {
   };
 
   return (
-    <div className="min-h-screen flex justify-center py-12 px-6 select-none font-sans text-right" dir="rtl">
+    <div className="min-h-screen flex justify-center py-6 sm:py-12 px-3 sm:px-6 select-none font-sans text-right" dir="rtl">
       
       <div className="w-full max-w-4xl">
         {/* Top Header Section: Clean Vertical Hierarchy */}
-        <div className="mb-8 border-b border-zinc-200 dark:border-zinc-800 pb-5 space-y-4">
+        <div className="mb-6 sm:mb-8 border-b border-zinc-200 dark:border-zinc-800 pb-5 space-y-4">
           {/* Row 1: Title */}
           <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-light tracking-tight text-zinc-950 dark:text-zinc-50">
+            <h1 className="text-2xl sm:text-3xl font-light tracking-tight text-zinc-950 dark:text-zinc-50 break-words">
               {project.oneLiner || "לוח השלד (The Skeleton)"}
             </h1>
             {/* Traffic Light Dot (ONLY color on canvas) */}
             <div 
               title={`באפר ביטחון: ${consumedDays}/${totalDays} ימים (${bufferPct}%) - ${bufferStatusText}`}
-              className="relative cursor-help"
+              className="relative cursor-help shrink-0"
             >
               <div className={`w-3.5 h-3.5 rounded-full ${bufferColor} transition-all duration-300`} />
             </div>
           </div>
 
           {/* Row 2: Description & Details */}
-          <div className="text-xs text-zinc-500 dark:text-zinc-400 flex items-center gap-4 font-mono flex-wrap">
+          <div className="text-xs text-zinc-500 dark:text-zinc-400 flex items-center gap-x-4 gap-y-1.5 font-mono flex-wrap">
             <span>{project.avenues.length} אפיקי פעולה</span>
             <span>באפר: {consumedDays} / {totalDays} ימים ({bufferPct}%)</span>
             <button 
@@ -182,8 +182,8 @@ export default function SkeletonDashboard() {
           </div>
 
           {/* Row 3: Action Controls Bar (Menu first on the right in RTL) */}
-          <div className="pt-2 flex items-center justify-between gap-3 flex-wrap">
-            <div className="flex items-center gap-2.5 flex-wrap">
+          <div className="pt-2 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-2">
               {/* 1. תפריט 3 פסים בצד ימין ראשון */}
               <HamburgerMenu
                 onOpenShortcuts={() => setShortcutsOpen(true)}
@@ -197,7 +197,7 @@ export default function SkeletonDashboard() {
               <div className="flex items-center bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-zinc-200 dark:border-zinc-700">
                 <button
                   onClick={() => setViewMode("skeleton")}
-                  className={`text-xs px-3 py-1.5 rounded-md font-medium transition-all ${
+                  className={`text-xs px-2.5 sm:px-3 py-1.5 rounded-md font-medium transition-all ${
                     viewMode === "skeleton"
                       ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 shadow-sm"
                       : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
@@ -207,7 +207,7 @@ export default function SkeletonDashboard() {
                 </button>
                 <button
                   onClick={() => setViewMode("calendar")}
-                  className={`text-xs px-3 py-1.5 rounded-md font-medium transition-all flex items-center gap-1.5 ${
+                  className={`text-xs px-2.5 sm:px-3 py-1.5 rounded-md font-medium transition-all flex items-center gap-1.5 ${
                     viewMode === "calendar"
                       ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 shadow-sm"
                       : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
@@ -321,11 +321,11 @@ export default function SkeletonDashboard() {
                                   : 'border-r-2 border-transparent hover:bg-zinc-50 dark:hover:bg-zinc-850/30'
                               }`}
                             >
-                              <div className="flex items-center justify-between py-2.5 pl-3 pr-3">
-                                <div className="flex items-center gap-3">
+                              <div className="flex flex-col sm:flex-row sm:items-center justify-between py-2.5 px-3 gap-2">
+                                <div className="flex items-center gap-2.5 flex-wrap">
                                   <button 
                                     onClick={() => toggleTaskComplete(ave.id, task.id, task.completed)}
-                                    className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${
+                                    className={`w-4 h-4 shrink-0 rounded border flex items-center justify-center transition-all ${
                                       task.completed 
                                         ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 border-transparent shadow-sm' 
                                         : 'border-zinc-300 dark:border-zinc-700 hover:border-zinc-500'
@@ -334,7 +334,7 @@ export default function SkeletonDashboard() {
                                     {task.completed && <span className="text-[10px] font-bold">✓</span>}
                                   </button>
 
-                                  <span className={`text-sm transition-colors ${
+                                  <span className={`text-sm break-words transition-colors ${
                                     task.completed 
                                       ? 'text-zinc-400 line-through' 
                                       : 'text-zinc-900 dark:text-zinc-100 font-medium'
@@ -343,13 +343,13 @@ export default function SkeletonDashboard() {
                                   </span>
 
                                   {isCriticalTask && (
-                                    <span className="text-[9px] font-mono text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">
+                                    <span className="text-[9px] font-mono text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded shrink-0">
                                       קריטי
                                     </span>
                                   )}
 
                                   {!task.isEssential && !mvpOnly && (
-                                    <span className="text-[9px] font-mono text-zinc-400 border border-zinc-200 dark:border-zinc-800 px-1.5 py-0.5 rounded">
+                                    <span className="text-[9px] font-mono text-zinc-400 border border-zinc-200 dark:border-zinc-800 px-1.5 py-0.5 rounded shrink-0">
                                       תוספת
                                     </span>
                                   )}
@@ -357,16 +357,16 @@ export default function SkeletonDashboard() {
                                   {/* Subtasks expand toggle */}
                                   <button
                                     onClick={() => setExpandedDashboardTaskId(isSubtasksExpanded ? null : task.id)}
-                                    className="text-[10px] font-mono text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-2 py-0.5 rounded transition-colors"
+                                    className="text-[10px] font-mono text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-2 py-0.5 rounded transition-colors shrink-0"
                                   >
                                     תתי משימות {subtasks.length > 0 ? `(${completedSubtasks}/${subtasks.length})` : "+"}
                                   </button>
                                 </div>
 
-                                <div className="flex items-center gap-3">
+                                <div className="flex items-center gap-2.5 flex-wrap self-end sm:self-auto">
                                   {/* OKR Quantitative Badge */}
                                   {task.okr && task.okr.target > 0 && (
-                                    <div className="text-[10px] bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-2.5 py-1 rounded-md text-zinc-600 dark:text-zinc-400 font-mono flex items-center gap-1.5 shadow-sm" title="תוצאת מפתח כמותית">
+                                    <div className="text-[10px] bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-2 py-0.5 rounded-md text-zinc-600 dark:text-zinc-400 font-mono flex items-center gap-1.5 shadow-sm" title="תוצאת מפתח כמותית">
                                       <span className="text-zinc-500">{task.okr.metric}:</span>
                                       <div className="flex items-center text-zinc-900 dark:text-zinc-100 font-bold">
                                         <input 
@@ -382,7 +382,7 @@ export default function SkeletonDashboard() {
 
                                   {/* Task Slippage / Delay Modifier */}
                                   {task.isBottleneck && (
-                                    <div className="flex items-center gap-1 text-[10px] font-mono bg-white dark:bg-zinc-900 px-2.5 py-1 border border-zinc-200 dark:border-zinc-800 rounded-md shadow-sm" title="עיכוב בצוואר בקבוק המקזז מהבאפר">
+                                    <div className="flex items-center gap-1 text-[10px] font-mono bg-white dark:bg-zinc-900 px-2 py-0.5 border border-zinc-200 dark:border-zinc-800 rounded-md shadow-sm" title="עיכוב בצוואר בקבוק המקזז מהבאפר">
                                       <span className="text-zinc-500">עיכוב:</span>
                                       <input 
                                         type="number"
@@ -398,7 +398,7 @@ export default function SkeletonDashboard() {
 
                               {/* Expandable Subtask List in Dashboard */}
                               {isSubtasksExpanded && (
-                                <div className="mr-8 ml-3 mb-2.5 p-2.5 bg-zinc-100/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-lg space-y-2">
+                                <div className="mr-3 sm:mr-8 ml-2 sm:ml-3 mb-2.5 p-2.5 bg-zinc-100/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-lg space-y-2">
                                   {subtasks.length > 0 && (
                                     <div className="space-y-1">
                                       {subtasks.map((st) => (
@@ -494,7 +494,7 @@ export default function SkeletonDashboard() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={transition}
-            className="fixed top-0 left-0 bottom-0 w-[440px] max-w-full bg-white dark:bg-zinc-950 border-r border-zinc-200 dark:border-zinc-800 p-6 shadow-2xl overflow-y-auto z-40 text-right"
+            className="fixed top-0 left-0 bottom-0 w-full sm:w-[440px] max-w-full bg-white dark:bg-zinc-950 border-r border-zinc-200 dark:border-zinc-800 p-4 sm:p-6 shadow-2xl overflow-y-auto z-40 text-right"
           >
             <div className="flex justify-between items-center mb-6 pb-4 border-b border-zinc-200 dark:border-zinc-800">
               <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-50 tracking-tight">

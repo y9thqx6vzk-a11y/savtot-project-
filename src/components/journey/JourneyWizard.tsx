@@ -45,9 +45,9 @@ export default function JourneyWizard() {
   ];
 
   return (
-    <div className="max-w-2xl mx-auto py-16 px-6 relative font-sans text-right" dir="rtl">
+    <div className="max-w-2xl mx-auto py-8 sm:py-16 px-4 sm:px-6 relative font-sans text-right" dir="rtl">
       {/* Top Bar Actions */}
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-12 border-b border-zinc-200 dark:border-zinc-800 pb-5">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-8 sm:mb-12 border-b border-zinc-200 dark:border-zinc-800 pb-5">
         <div className="flex flex-wrap items-center gap-2">
           <ThemeToggle />
           <ProjectSwitcher />
@@ -61,7 +61,7 @@ export default function JourneyWizard() {
           </button>
         </div>
 
-        <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400">
+        <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 hidden sm:inline-block">
           Stage 1: The Journey
         </span>
       </div>
@@ -71,9 +71,9 @@ export default function JourneyWizard() {
         initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 8 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={transition}
-        className="mb-14"
+        className="mb-8 sm:mb-14"
       >
-        <h1 className="text-3xl font-light tracking-tight text-zinc-950 dark:text-zinc-50">
+        <h1 className="text-2xl sm:text-3xl font-light tracking-tight text-zinc-950 dark:text-zinc-50 break-words">
           חלום למציאות - איך לתכנן את הפרויקט הבא שלי.
         </h1>
         <p className="text-sm text-zinc-500 mt-2 font-light leading-relaxed">

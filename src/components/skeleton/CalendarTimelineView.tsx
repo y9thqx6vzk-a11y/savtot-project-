@@ -169,24 +169,26 @@ export default function CalendarTimelineView({ project }: CalendarViewProps) {
   return (
     <div className="space-y-6">
       {/* Legend & Navigation Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 sm:p-4 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm">
         {/* Navigation */}
-        <div className="flex items-center gap-2">
-          <button 
-            onClick={handlePrevMonth}
-            className="p-1.5 px-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-xs font-mono text-zinc-700 dark:text-zinc-300 transition-colors"
-          >
-            ←
-          </button>
-          <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 min-w-[130px] text-center font-sans">
-            {monthName}
-          </span>
-          <button 
-            onClick={handleNextMonth}
-            className="p-1.5 px-3 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-xs font-mono text-zinc-700 dark:text-zinc-300 transition-colors"
-          >
-            →
-          </button>
+        <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start">
+          <div className="flex items-center gap-1.5">
+            <button 
+              onClick={handlePrevMonth}
+              className="p-1.5 px-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-xs font-mono text-zinc-700 dark:text-zinc-300 transition-colors"
+            >
+              ←
+            </button>
+            <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 min-w-[110px] text-center font-sans">
+              {monthName}
+            </span>
+            <button 
+              onClick={handleNextMonth}
+              className="p-1.5 px-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-xs font-mono text-zinc-700 dark:text-zinc-300 transition-colors"
+            >
+              →
+            </button>
+          </div>
           <button
             onClick={handleToday}
             className="text-xs px-2.5 py-1 rounded border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
@@ -196,17 +198,17 @@ export default function CalendarTimelineView({ project }: CalendarViewProps) {
         </div>
 
         {/* Pastel Color Legend */}
-        <div className="flex items-center gap-4 text-xs font-mono">
+        <div className="flex items-center gap-3 text-xs font-mono flex-wrap justify-center">
           <div className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-sm bg-indigo-100 border border-indigo-300 dark:bg-indigo-950/70 dark:border-indigo-800" />
+            <span className="w-2.5 h-2.5 rounded-sm bg-indigo-100 border border-indigo-300 dark:bg-indigo-950/70 dark:border-indigo-800" />
             <span className="text-zinc-600 dark:text-zinc-400">אפיק</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-sm bg-emerald-100 border border-emerald-300 dark:bg-emerald-950/70 dark:border-emerald-800" />
+            <span className="w-2.5 h-2.5 rounded-sm bg-emerald-100 border border-emerald-300 dark:bg-emerald-950/70 dark:border-emerald-800" />
             <span className="text-zinc-600 dark:text-zinc-400">משימה</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-sm bg-amber-100 border border-amber-300 dark:bg-amber-950/70 dark:border-amber-800" />
+            <span className="w-2.5 h-2.5 rounded-sm bg-amber-100 border border-amber-300 dark:bg-amber-950/70 dark:border-amber-800" />
             <span className="text-zinc-600 dark:text-zinc-400">צוואר בקבוק</span>
           </div>
         </div>
@@ -219,40 +221,41 @@ export default function CalendarTimelineView({ project }: CalendarViewProps) {
         </div>
       )}
 
-      {/* Calendar Grid */}
-      <div className="border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden bg-white dark:bg-zinc-900 shadow-sm">
-        {/* Days Header */}
-        <div className="grid grid-cols-7 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/80 dark:bg-zinc-900/80 text-center text-xs font-medium text-zinc-500 dark:text-zinc-400 py-2.5">
-          <div>א׳</div>
-          <div>ב׳</div>
-          <div>ג׳</div>
-          <div>ד׳</div>
-          <div>ה׳</div>
-          <div>ו׳</div>
-          <div>ש׳</div>
-        </div>
+      {/* Calendar Grid - with smooth horizontal scroll container on mobile */}
+      <div className="overflow-x-auto border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900 shadow-sm no-scrollbar">
+        <div className="min-w-[540px]">
+          {/* Days Header */}
+          <div className="grid grid-cols-7 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/80 dark:bg-zinc-900/80 text-center text-xs font-medium text-zinc-500 dark:text-zinc-400 py-2.5">
+            <div>א׳</div>
+            <div>ב׳</div>
+            <div>ג׳</div>
+            <div>ד׳</div>
+            <div>ה׳</div>
+            <div>ו׳</div>
+            <div>ש׳</div>
+          </div>
 
-        {/* Days Cells */}
-        <div className="grid grid-cols-7 divide-x divide-y divide-zinc-200 dark:divide-zinc-800">
-          {daysGrid.map((dayObj, idx) => {
-            const isToday = dayObj.dateStr === todayStr;
+          {/* Days Cells */}
+          <div className="grid grid-cols-7 divide-x divide-y divide-zinc-200 dark:divide-zinc-800">
+            {daysGrid.map((dayObj, idx) => {
+              const isToday = dayObj.dateStr === todayStr;
 
-            // Find matching items for this day
-            const dayItems = calendarItems.filter((item) => {
-              return dayObj.dateStr >= item.startDate && dayObj.dateStr <= item.endDate;
-            });
+              // Find matching items for this day
+              const dayItems = calendarItems.filter((item) => {
+                return dayObj.dateStr >= item.startDate && dayObj.dateStr <= item.endDate;
+              });
 
-            return (
-              <div
-                key={idx}
-                className={`min-h-[105px] p-1.5 transition-colors flex flex-col justify-between ${
-                  !dayObj.isCurrentMonth
-                    ? "bg-zinc-50/50 dark:bg-zinc-950/30 text-zinc-400 dark:text-zinc-600"
-                    : isToday
-                    ? "bg-indigo-50/20 dark:bg-indigo-950/10"
-                    : "bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200"
-                }`}
-              >
+              return (
+                <div
+                  key={idx}
+                  className={`min-h-[90px] sm:min-h-[105px] p-1.5 transition-colors flex flex-col justify-between ${
+                    !dayObj.isCurrentMonth
+                      ? "bg-zinc-50/50 dark:bg-zinc-950/30 text-zinc-400 dark:text-zinc-600"
+                      : isToday
+                      ? "bg-indigo-50/20 dark:bg-indigo-950/10"
+                      : "bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200"
+                  }`}
+                >
                 {/* Date Header inside cell */}
                 <div className="flex items-center justify-between mb-1">
                   <span
@@ -294,6 +297,7 @@ export default function CalendarTimelineView({ project }: CalendarViewProps) {
               </div>
             );
           })}
+          </div>
         </div>
       </div>
 
