@@ -49,6 +49,10 @@ export const initialProjectState: ProjectData = {
   plannedDurationDays: 0,
   actualDurationDays: 0,
   optimismGapPercent: 0,
+  addedValueText: "",
+  lessonsLearnedText: "",
+  outsideViewNotes: "",
+  referenceScale: "",
   historicalBenchmarks: [],
   totalBufferDays: 0,
 };
@@ -85,6 +89,7 @@ interface AppState {
   updateAvenue: (id: string, data: Partial<Avenue>) => void;
   updateTask: (avenueId: string, taskId: string, data: Partial<Task>) => void;
   addHistoricalBenchmark: (benchmark: Omit<HistoricalBenchmark, "id">) => void;
+  removeHistoricalBenchmark: (id: string) => void;
   
   // Multi-Project Actions
   createProject: (name?: string, initialData?: ProjectData) => string;
@@ -219,6 +224,21 @@ export const useAppStore = create<AppState>()(
         };
       }),
 
+      removeHistoricalBenchmark: (id) => set((state) => {
+        const updatedBenchmarks = (state.project.historicalBenchmarks || []).filter(b => b.id !== id);
+        const updatedProject = { ...state.project, historicalBenchmarks: updatedBenchmarks };
+        const activeId = state.activeProjectId || defaultInitialId;
+        const currentRec = state.projects[activeId];
+
+        return {
+          project: updatedProject,
+          projects: currentRec ? {
+            ...state.projects,
+            [activeId]: { ...currentRec, updatedAt: Date.now(), data: updatedProject },
+          } : state.projects,
+        };
+      }),
+
       // Multi-Project Management
       createProject: (name?: string, initialData?: ProjectData) => {
         const newId = "proj-" + Math.random().toString(36).substring(2, 9);
@@ -336,11 +356,14 @@ export const useAppStore = create<AppState>()(
 
       getAverageOptimismBias: () => {
         const benchmarks = get().project?.historicalBenchmarks || [];
-        if (benchmarks.length === 0) {
+        const timedBenchmarks = benchmarks.filter(
+          b => typeof b.gapPercent === 'number' && !isNaN(b.gapPercent) && b.gapPercent !== 0
+        );
+        if (timedBenchmarks.length === 0) {
           return get().project?.optimismGapPercent || 0;
         }
-        const total = benchmarks.reduce((acc, b) => acc + (b.gapPercent || 0), 0);
-        return Math.round(total / benchmarks.length);
+        const total = timedBenchmarks.reduce((acc, b) => acc + (b.gapPercent || 0), 0);
+        return Math.round(total / timedBenchmarks.length);
       },
 
       getSuggestedBufferDays: () => {

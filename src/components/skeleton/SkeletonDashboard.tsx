@@ -430,6 +430,34 @@ export default function SkeletonDashboard() {
                 </p>
               </div>
 
+              {project.referenceProject && (
+                <div>
+                  <h4 className="text-zinc-500 text-[11px] font-semibold mb-1 uppercase tracking-wider">
+                    מבט מבחוץ (רפרנס מהשוק)
+                  </h4>
+                  <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 rounded text-xs space-y-1.5">
+                    <div className="font-medium text-zinc-900 dark:text-zinc-100">
+                      {project.referenceProject}
+                    </div>
+                    {project.referenceScale && (
+                      <div className="text-[11px] text-zinc-500">
+                        היקף: {project.referenceScale}
+                      </div>
+                    )}
+                    {project.outsideViewNotes && (
+                      <p className="text-[11px] text-zinc-600 dark:text-zinc-400 whitespace-pre-wrap leading-relaxed">
+                        {project.outsideViewNotes}
+                      </p>
+                    )}
+                    {project.addedValueText && (
+                      <div className="text-[11px] text-zinc-700 dark:text-zinc-300 pt-1 border-t border-zinc-200 dark:border-zinc-800">
+                        <span className="font-semibold">היתרון שלנו:</span> {project.addedValueText}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Inline Knowledge Gaps Management */}
               <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800">
                 <div className="flex justify-between items-center mb-3">

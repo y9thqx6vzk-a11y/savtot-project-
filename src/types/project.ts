@@ -34,11 +34,14 @@ export interface Avenue {
 export interface HistoricalBenchmark {
   id: string;
   title: string;
-  plannedDays: number;
-  actualDays: number;
-  gapPercent: number;
+  plannedDays?: number;
+  actualDays?: number;
+  gapPercent?: number;
   lessonsLearned?: string;
   addedValue?: string;
+  teamOrScale?: string; // היקף צוות / סדר גודל (למשל: יחיד, צוות של 3, מוצר קיים בשוק)
+  keyHurdles?: string; // איפה הם הסתבכו או מה הבעיות במוצר שלהם
+  freeNotes?: string; // טקסט חופשי, קישורים, תצפיות
 }
 
 export interface ProjectData {
@@ -62,6 +65,8 @@ export interface ProjectData {
   optimismGapPercent: number;
   addedValueText?: string;
   lessonsLearnedText?: string;
+  outsideViewNotes?: string; // טקסט חופשי לתצפיות שטח, מוצרים מתחרים או מודלים לחיקוי
+  referenceScale?: string; // היקף צוות, סדר גודל או משאבים
   historicalBenchmarks: HistoricalBenchmark[];
 
   // שלב 6: בניית לו״ז וחוצץ ביטחון
