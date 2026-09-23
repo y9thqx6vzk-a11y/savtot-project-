@@ -5,10 +5,31 @@ import { useAppStore } from "@/lib/store";
 import { generateShareUrl } from "@/lib/urlSharing";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function ShareModal() {
+interface ShareModalProps {
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  showTrigger?: boolean;
+}
+
+export default function ShareModal({
+  isOpen: controlledIsOpen,
+  onOpenChange,
+  showTrigger = true,
+}: ShareModalProps = {}) {
   const { project } = useAppStore();
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  const isControlled = controlledIsOpen !== undefined;
+  const isOpen = isControlled ? controlledIsOpen : internalIsOpen;
+
+  const setIsOpen = (open: boolean) => {
+    if (isControlled) {
+      onOpenChange?.(open);
+    } else {
+      setInternalIsOpen(open);
+    }
+  };
 
   const shareUrl = isOpen ? generateShareUrl(project) : "";
 
@@ -22,14 +43,16 @@ export default function ShareModal() {
 
   return (
     <>
-      <button
-        onClick={() => setIsOpen(true)}
-        className="text-xs px-3 py-1.5 rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors shadow-xs flex items-center gap-1.5"
-        title="צור קישור ייחודי לשיתוף הפרויקט"
-      >
-        <span className="font-mono text-zinc-400">↗</span>
-        <span>שתף קישור</span>
-      </button>
+      {showTrigger && (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="text-xs px-3 py-1.5 rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors shadow-xs flex items-center gap-1.5"
+          title="צור קישור ייחודי לשיתוף הפרויקט"
+        >
+          <span className="font-mono text-zinc-400">↗</span>
+          <span>שתף קישור</span>
+        </button>
+      )}
 
       <AnimatePresence>
         {isOpen && (

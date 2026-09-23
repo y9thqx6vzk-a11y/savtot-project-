@@ -6,11 +6,10 @@ import { useState, useEffect } from "react";
 import { Command } from "cmdk";
 import { useAppMotion } from "@/lib/useMotionConfig";
 import { GapCategory } from "@/types/project";
-import ThemeToggle from "@/components/ui/ThemeToggle";
-import JsonUploader from "@/components/ui/JsonUploader";
 import ProjectSwitcher from "@/components/ui/ProjectSwitcher";
 import ShareModal from "@/components/ui/ShareModal";
 import CalendarTimelineView from "@/components/skeleton/CalendarTimelineView";
+import HamburgerMenu from "@/components/ui/HamburgerMenu";
 
 export default function SkeletonDashboard() {
   const { 
@@ -37,6 +36,7 @@ export default function SkeletonDashboard() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [cmdOpen, setCmdOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
   const [expandedDashboardTaskId, setExpandedDashboardTaskId] = useState<string | null>(null);
   const [newSubtaskInputs, setNewSubtaskInputs] = useState<Record<string, string>>({});
 
@@ -207,27 +207,10 @@ export default function SkeletonDashboard() {
               </button>
             </div>
 
-            <ThemeToggle />
+            {/* Project Switcher */}
             <ProjectSwitcher />
-            <ShareModal />
-            <JsonUploader />
 
-            {/* Focus Mode Toggle */}
-            {viewMode === "skeleton" && (
-              <button
-                onClick={() => setFocusMode(!focusMode)}
-                className={`text-xs px-3.5 py-1.5 rounded-md border transition-all ${
-                  focusMode 
-                    ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-medium border-transparent shadow-sm' 
-                    : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:border-zinc-400'
-                }`}
-                title="מיקוד: פתיחת אפיק בודד וסגירת כל השאר כדי למנוע עומס"
-              >
-                מצב מיקוד
-              </button>
-            )}
-
-            {/* MVP ONLY Switch */}
+            {/* MVP ONLY Switch (visible in skeleton mode) */}
             {viewMode === "skeleton" && (
               <div className="flex items-center gap-2.5 bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-md border border-zinc-200 dark:border-zinc-800 shadow-sm">
                 <span className="text-xs font-medium text-zinc-800 dark:text-zinc-200">גרסת חצי הזמן (MVP)</span>
@@ -245,29 +228,20 @@ export default function SkeletonDashboard() {
               </div>
             )}
 
-            {/* Actions */}
-            <div className="flex items-center gap-2">
-              <button 
-                onClick={() => setShortcutsOpen(true)}
-                className="text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-md px-2.5 py-1.5 font-mono shadow-sm"
-                title="קיצורי מקלדת"
-              >
-                ?
-              </button>
-              <button 
-                onClick={() => setStage(1)} 
-                className="text-xs text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-md px-3 py-1.5 font-sans shadow-sm"
-              >
-                עריכת המסע [J]
-              </button>
-              <button 
-                onClick={handleExport}
-                className="text-xs bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-white rounded-md px-3.5 py-1.5 font-sans shadow-sm transition-colors"
-                title="ייצוא קובץ JSON"
-              >
-                ייצוא JSON [E]
-              </button>
-            </div>
+            {/* Hamburger (3-line) Menu with: JSON Export/Import, Focus Mode, Theme Toggle, Share Link, ?, Edit Journey */}
+            <HamburgerMenu
+              onOpenShortcuts={() => setShortcutsOpen(true)}
+              onOpenShareModal={() => setShareModalOpen(true)}
+              focusMode={focusMode}
+              onToggleFocusMode={() => setFocusMode(!focusMode)}
+            />
+
+            {/* Share Modal Dialog */}
+            <ShareModal
+              isOpen={shareModalOpen}
+              onOpenChange={setShareModalOpen}
+              showTrigger={false}
+            />
           </div>
         </div>
 
