@@ -13,7 +13,6 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true);
-    // Sync html class with initial theme
     const root = document.documentElement;
     if (theme === 'dark') {
       root.classList.remove('light');
@@ -23,7 +22,6 @@ export default function Home() {
       root.classList.add('light');
     }
 
-    // Register Service Worker for offline PWA capabilities
     if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').catch((err) => {
@@ -33,13 +31,13 @@ export default function Home() {
     }
   }, [theme]);
 
-  if (!mounted) return <div className="min-h-screen bg-[#fbfaf7] dark:bg-[#0c0c0e]" />;
+  if (!mounted) return <div className="min-h-screen bg-white dark:bg-[#09090b]" />;
 
   return (
-    <main className={`min-h-screen transition-colors duration-300 ${
+    <main className={`min-h-screen transition-colors duration-200 font-sans ${
       theme === 'light' 
-        ? 'bg-[#fbfaf7] text-[#1d1d1f] selection:bg-[#e8e4da]' 
-        : 'bg-[#0c0c0e] text-[#f5f5f7] selection:bg-[#2c2c30]'
+        ? 'bg-[#ffffff] text-zinc-900 selection:bg-zinc-200' 
+        : 'bg-[#09090b] text-zinc-100 selection:bg-zinc-800'
     }`}>
       {stage === 1 ? <JourneyWizard /> : <SkeletonDashboard />}
     </main>

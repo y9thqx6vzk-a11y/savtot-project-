@@ -1,53 +1,56 @@
 @import "tailwindcss";
 
 :root {
-  --traffic-green: #10b981;
-  --traffic-yellow: #f59e0b;
+  --traffic-green: #22c55e;
+  --traffic-yellow: #eab308;
   --traffic-red: #ef4444;
 }
 
-/* Light Mode - Warm Apple Palette */
+/* Linear-inspired Monochromatic Light Palette */
 html.light {
-  --bg-main: #fbfaf7;
+  --bg-main: #ffffff;
   --bg-card: #ffffff;
-  --bg-subtle: #f5f3ee;
-  --border-subtle: #e8e5dc;
-  --border-strong: #d3cfc4;
-  --text-main: #1d1d1f;
-  --text-muted: #6e6e73;
-  --text-faint: #8e8e93;
+  --bg-subtle: #f4f4f5;
+  --border-subtle: #e4e4e7;
+  --border-strong: #d4d4d8;
+  --text-main: #09090b;
+  --text-muted: #71717a;
+  --text-faint: #a1a1aa;
 }
 
-/* Dark Mode - Apple Dark Slate */
+/* Linear-inspired Monochromatic Dark Palette */
 html.dark {
-  --bg-main: #0c0c0e;
-  --bg-card: #161618;
-  --bg-subtle: #212124;
-  --border-subtle: #2c2c30;
-  --border-strong: #3e3e44;
-  --text-main: #f5f5f7;
-  --text-muted: #86868b;
-  --text-faint: #636366;
+  --bg-main: #09090b;
+  --bg-card: #121215;
+  --bg-subtle: #18181b;
+  --border-subtle: #27272a;
+  --border-strong: #3f3f46;
+  --text-main: #fafafa;
+  --text-muted: #a1a1aa;
+  --text-faint: #71717a;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Segoe UI Symbol", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom Scrollbar */
+/* Crisp Minimalist Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(140, 140, 140, 0.25);
-  border-radius: 4px;
+  background: #d4d4d8;
+  border-radius: 2px;
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: #27272a;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(140, 140, 140, 0.45);
+  background: #a1a1aa;
 }

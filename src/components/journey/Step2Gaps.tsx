@@ -16,11 +16,11 @@ export default function Step2Gaps({ isActive, isPast }: { isActive: boolean, isP
   const catLabels: Record<GapCategory, { label: string; desc: string }> = {
     critical: {
       label: "פער קריטי",
-      desc: "חוסר ידע שעלול להביא לביטול הפרויקט (למשל: טכנולוגיה לא בשלה)",
+      desc: "חוסר ידע שעלול להביא לביטול הפרויקט",
     },
     acquired: {
       label: "פער נרכש",
-      desc: "ידע שנלמד ומעמיקים בו תוך כדי תנועה לאורך הפרויקט",
+      desc: "ידע שנלמד ומעמיקים בו תוך כדי תנועה",
     },
   };
 
@@ -51,13 +51,13 @@ export default function Step2Gaps({ isActive, isPast }: { isActive: boolean, isP
     return (
       <motion.div layout transition={transition} className="text-sm space-y-1.5">
         {project.knowledgeGaps.length === 0 ? (
-          <div className="text-[#86868b] italic">לא הוגדרו פערי ידע.</div>
+          <div className="text-zinc-500 italic">לא הוגדרו פערי ידע.</div>
         ) : (
           project.knowledgeGaps.map(g => (
             <div key={g.id} className="flex gap-2 items-center text-xs">
-              <span className={`w-2 h-2 rounded-full ${g.category === 'critical' ? 'bg-red-500' : 'bg-amber-500'}`} />
-              <span className="font-medium text-[#1d1d1f] dark:text-zinc-200 truncate">{g.description}</span>
-              <span className="text-[10px] font-mono text-[#86868b] border border-[#d8d4ca] dark:border-zinc-800 px-1.5 py-0.5 rounded">
+              <span className={`w-1.5 h-1.5 rounded-full ${g.category === 'critical' ? 'bg-red-500' : 'bg-amber-500'}`} />
+              <span className="font-medium text-zinc-900 dark:text-zinc-100 truncate">{g.description}</span>
+              <span className="text-[10px] font-mono text-zinc-500 border border-zinc-200 dark:border-zinc-800 px-1.5 py-0.5 rounded">
                 {catLabels[g.category]?.label || g.category}
               </span>
             </div>
@@ -70,42 +70,42 @@ export default function Step2Gaps({ isActive, isPast }: { isActive: boolean, isP
   return (
     <motion.div layout transition={transition} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
       
-      <div className="space-y-2 text-xs text-[#666] dark:text-zinc-400 font-light leading-relaxed border-r-2 border-[#1d1d1f] dark:border-white pr-3">
+      <div className="space-y-1 text-xs text-zinc-500 font-light leading-relaxed border-r-2 border-zinc-900 dark:border-zinc-100 pr-3">
         <p>
-          <strong>באילו תחומי עניין הפרויקט מתמקד?</strong> אילו הנחות יסוד או טכנולוגיות אני לא יודע בצורה מספקת?
+          באילו תחומי עניין הפרויקט מתמקד? אילו הנחות יסוד או טכנולוגיות אני לא יודע בצורה מספקת?
         </p>
         <p>
-          בשלב זה נחשוב איפה יש לנו פערי ידע שיכולים לגרום לביטול הפרויקט (למשל פתרון בעיה במקום שבו הטכנולוגיה עדיין אינה בשלה). הלמידה היא דינמית ולאורך כל הפרויקט, תוך הבדלה מובהקת בין <strong>״פער קריטי״</strong> לבין <strong>״פער נרכש״</strong>.
+          נחשוב איפה יש לנו פערי ידע שיכולים לגרום לביטול הפרויקט. הבדל בין <strong>״פער קריטי״</strong> לבין <strong>״פער נרכש״</strong>.
         </p>
       </div>
 
       {/* Existing Gaps */}
-      <div className="space-y-2.5">
+      <div className="space-y-2">
         {project.knowledgeGaps.map((gap) => (
-          <div key={gap.id} className="p-3.5 border border-[#e2ded5] dark:border-zinc-800 rounded-xl bg-white/70 dark:bg-zinc-950/70 shadow-sm flex justify-between items-start group">
+          <div key={gap.id} className="p-3 border border-zinc-200 dark:border-zinc-800 rounded bg-white dark:bg-zinc-900/60 flex justify-between items-start group">
             <div>
-              <div className="text-sm text-[#1d1d1f] dark:text-zinc-200 font-medium">{gap.description}</div>
-              <div className="text-xs text-[#86868b] mt-1.5 flex gap-2.5 items-center">
-                <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
+              <div className="text-sm text-zinc-900 dark:text-zinc-100 font-medium">{gap.description}</div>
+              <div className="text-xs text-zinc-500 mt-1 flex gap-2.5 items-center font-mono">
+                <span className={`text-[10px] px-1.5 py-0.5 rounded border ${
                   gap.category === 'critical'
                     ? 'bg-red-50 text-red-600 border-red-200 dark:bg-red-950/30 dark:border-red-900/60'
-                    : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:border-amber-900/60'
+                    : 'bg-zinc-100 text-zinc-600 border-zinc-300 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400'
                 }`}>
                   {catLabels[gap.category]?.label || gap.category}
                 </span>
-                <span>פעולת למידה/אימות: {gap.mitigation}</span>
+                <span>בדיקה: {gap.mitigation}</span>
               </div>
             </div>
-            <button onClick={() => handleRemove(gap.id)} className="text-[#86868b] hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity p-1">✕</button>
+            <button onClick={() => handleRemove(gap.id)} className="text-zinc-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity p-1">✕</button>
           </div>
         ))}
       </div>
 
       {/* New Gap Form */}
-      <div className="bg-[#f7f5ef] dark:bg-zinc-950 p-4 border border-[#e5e1d6] dark:border-zinc-900 rounded-2xl space-y-3">
+      <div className="bg-zinc-50 dark:bg-zinc-900/50 p-4 border border-zinc-200 dark:border-zinc-800 rounded space-y-3">
         <input 
-          className="w-full bg-transparent border-b border-[#dcd8ce] dark:border-zinc-800 pb-2 text-sm text-[#1d1d1f] dark:text-zinc-200 focus:outline-none focus:border-[#1d1d1f] dark:focus:border-white placeholder:text-[#a8a49c]"
-          placeholder="מהו פער הידע או ההנחה הלא ידועה? (טכנולוגיה, פלטפורמה, שיטה)..."
+          className="w-full bg-transparent border-b border-zinc-300 dark:border-zinc-700 pb-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-100 placeholder:text-zinc-400"
+          placeholder="תאר את פער הידע (טכנולוגיה, שיטה, רגולציה)..."
           value={newDesc}
           onChange={(e) => setNewDesc(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && document.getElementById('step2-mit')?.focus()}
@@ -117,21 +117,21 @@ export default function Step2Gaps({ isActive, isPast }: { isActive: boolean, isP
             <button
               key={cat}
               onClick={() => setNewCat(cat)}
-              className={`text-xs px-3.5 py-1.5 rounded-full border transition-all text-right ${
+              className={`text-xs px-3 py-1 rounded border transition-colors font-mono ${
                 newCat === cat 
-                  ? 'bg-[#1d1d1f] text-white dark:bg-white dark:text-black border-transparent font-medium shadow-sm' 
-                  : 'bg-white/80 dark:bg-transparent border-[#dcd8ce] dark:border-zinc-800 text-[#666] hover:text-[#1d1d1f]'
+                  ? 'bg-zinc-900 text-white dark:bg-white dark:text-black border-transparent font-medium' 
+                  : 'bg-white dark:bg-transparent border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white'
               }`}
             >
-              <div className="font-semibold">{catLabels[cat].label}</div>
+              {catLabels[cat].label}
             </button>
           ))}
         </div>
 
         <input 
           id="step2-mit"
-          className="w-full bg-transparent border-b border-[#dcd8ce] dark:border-zinc-800 pb-2 text-sm text-[#1d1d1f] dark:text-zinc-200 focus:outline-none focus:border-[#1d1d1f] dark:focus:border-white placeholder:text-[#a8a49c]"
-          placeholder="תוכנית הלמידה / בדיקה מקדימה (למשל: קריאת עקרונות מספר, ספייק קוד בג'מיני)"
+          className="w-full bg-transparent border-b border-zinc-300 dark:border-zinc-700 pb-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-100 placeholder:text-zinc-400"
+          placeholder="פעולת אימות מקדימה / ניסוי מהיר (ספייק קוד, בדיקה)"
           value={newMit}
           onChange={(e) => setNewMit(e.target.value)}
           onKeyDown={(e) => {
@@ -143,20 +143,23 @@ export default function Step2Gaps({ isActive, isPast }: { isActive: boolean, isP
             }
           }}
         />
-        <button 
-          onClick={handleAdd} 
-          className="text-xs text-[#1d1d1f] dark:text-zinc-300 font-semibold hover:opacity-80 transition-opacity pt-1 block"
-        >
-          + הוסף פער ידע לרשימה
-        </button>
+
+        <div className="flex justify-end pt-1">
+          <button 
+            onClick={handleAdd} 
+            className="text-xs bg-zinc-900 text-white dark:bg-white dark:text-black px-4 py-1.5 rounded font-mono font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
+          >
+            + הוסף פער ידע
+          </button>
+        </div>
       </div>
 
-      {/* Suggested Reading References Accordion/Card */}
-      <div className="p-3 bg-white/70 dark:bg-zinc-950/70 border border-[#e2ded5] dark:border-zinc-800 rounded-xl text-xs text-[#666] dark:text-zinc-400">
-        <span className="font-semibold text-[#1d1d1f] dark:text-white block mb-1">
-          📚 מקורות ידע ומתודולוגיות מומלצות לתכנון הפרויקט:
+      {/* Suggested Reading References */}
+      <div className="p-3 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded text-xs text-zinc-600 dark:text-zinc-400">
+        <span className="font-semibold text-zinc-900 dark:text-zinc-100 block mb-1 font-mono text-[11px] uppercase tracking-wider">
+          עקרונות ומתודולוגיות מומלצות לתכנון הפרויקט:
         </span>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-1 text-[11px] font-mono text-[#86868b]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-1 text-[11px] font-mono text-zinc-500">
           <div>• Thinking, Fast and Slow (Kahneman)</div>
           <div>• The Goal (Eliyahu Goldratt)</div>
           <div>• Making Things Happen (Scott Berkun)</div>
@@ -166,13 +169,13 @@ export default function Step2Gaps({ isActive, isPast }: { isActive: boolean, isP
         </div>
       </div>
 
-      <div className="pt-4 flex items-center justify-between border-t border-[#e8e5dc] dark:border-zinc-900">
-        <div className="text-xs text-[#86868b]">
-          הקש <kbd className="px-2 py-0.5 bg-white dark:bg-zinc-900 border border-[#d8d4ca] dark:border-zinc-800 rounded font-mono text-[11px] shadow-sm">Cmd + Enter</kbd> למעבר
+      <div className="pt-4 flex items-center justify-between border-t border-zinc-200 dark:border-zinc-800">
+        <div className="text-xs text-zinc-400 font-mono">
+          הקש <kbd className="px-1.5 py-0.5 bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded text-zinc-700 dark:text-zinc-300">Enter</kbd> לשמירה ומעבר
         </div>
         <button 
           onClick={() => setActiveStep(3)}
-          className="bg-[#1d1d1f] text-white dark:bg-white dark:text-black px-5 py-2 rounded-full text-xs font-semibold hover:opacity-90 transition-opacity shadow-sm"
+          className="bg-zinc-950 text-white dark:bg-white dark:text-black px-5 py-2 rounded text-xs font-mono font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
         >
           המשך לשלב 3 ←
         </button>

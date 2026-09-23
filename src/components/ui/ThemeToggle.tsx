@@ -22,15 +22,11 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-300 border ${
-        isLight
-          ? 'bg-[#ffffff] text-[#1d1d1f] border-[#e2ded5] shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:bg-[#f6f4ee]'
-          : 'bg-[#1c1c1e] text-[#f5f5f7] border-[#2c2c30] shadow-[0_2px_8px_rgba(0,0,0,0.4)] hover:bg-[#2c2c30]'
-      }`}
-      title="החלף בין מצב בהיר חם למצב כהה"
+      className="flex items-center gap-2 px-3 py-1 rounded text-xs font-mono transition-colors border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:text-black dark:hover:text-white hover:border-zinc-300 dark:hover:border-zinc-700 shadow-xs"
+      title="החלף בין מצב בהיר למצב כהה"
     >
-      <span className="text-sm">{isLight ? '☀️' : '🌙'}</span>
-      <span className="font-mono text-[11px]">{isLight ? 'עיצוב אפל בהיר' : 'עיצוב כהה'}</span>
+      <span className="w-2 h-2 rounded-full border border-zinc-400 dark:border-zinc-500 bg-zinc-200 dark:bg-zinc-700 inline-block" />
+      <span>{isLight ? 'מצב בהיר' : 'מצב כהה'}</span>
     </button>
   );
 }

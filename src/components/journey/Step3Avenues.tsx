@@ -38,12 +38,12 @@ export default function Step3Avenues({ isActive, isPast }: { isActive: boolean, 
     return (
       <motion.div layout transition={transition} className="text-sm space-y-1.5">
         <div className="flex gap-2 text-xs mb-1">
-          <span className="text-[#86868b] font-mono">{project.avenues.length} אפיקי פעולה</span>
+          <span className="text-zinc-500 font-mono">{project.avenues.length} אפיקי פעולה</span>
         </div>
         {project.avenues.map(a => (
           <div key={a.id} className="truncate text-xs flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#86868b]" />
-            <span className="font-medium text-[#1d1d1f] dark:text-zinc-200">{a.title}</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
+            <span className="font-medium text-zinc-900 dark:text-zinc-100">{a.title}</span>
             {a.isCriticalPath && (
               <span className="text-red-600 dark:text-red-400 text-[10px] font-mono border border-red-200 dark:border-red-900/60 bg-red-50 dark:bg-red-950/20 px-1.5 rounded">
                 שלד בסיסי
@@ -58,41 +58,41 @@ export default function Step3Avenues({ isActive, isPast }: { isActive: boolean, 
   return (
     <motion.div layout transition={transition} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
       
-      {/* Explanation from user prompt */}
-      <div className="space-y-2 text-xs text-[#666] dark:text-zinc-400 font-light leading-relaxed border-r-2 border-[#1d1d1f] dark:border-white pr-3">
+      {/* Explanation */}
+      <div className="space-y-2 text-xs text-zinc-500 font-light leading-relaxed border-r-2 border-zinc-900 dark:border-zinc-100 pr-3">
         <p>
-          בשונה מנושאים שמתעסקים ב״מה התוכן״, <strong>אפיקים מתמקדים בדרך הפעולה</strong>. נחלק את הפרויקט לבין <strong>3 עד 7 דרכי פעולה</strong> שונות המספרות את סיפור חוויית המשתמש מהמוצר.
+          בשונה מנושאים שמתעסקים ב״מה התוכן״, <strong>אפיקים מתמקדים בדרך הפעולה</strong> (בין 3 ל-7 דרכים).
         </p>
-        <p className="bg-[#f7f5ef] dark:bg-zinc-900 p-2.5 rounded-xl border border-[#e5e1d6] dark:border-zinc-800 text-[#1d1d1f] dark:text-zinc-200">
-          <strong>כלל זהב לשלד הפרויקט (3-5 צעדים מרכזיים):</strong> אם מוציאים אפילו שלב אחד מהשלד הבסיסי – התהליך כולו נשבר.
+        <p className="bg-zinc-50 dark:bg-zinc-900/40 p-2.5 rounded border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 font-mono text-[11px]">
+          <strong>כלל זהב לשלד הפרויקט (3-5 צעדים מרכזיים):</strong> אם מוציאים אפילו שלב אחד מהשלד הבסיסי – התהליך נשבר.
         </p>
       </div>
 
       {/* Avenues List */}
       <div className="space-y-3">
-        <label className="text-xs tracking-wider uppercase font-semibold text-[#86868b] block">
-          אפיקי פעולה (בין 3 ל-7 אפיקים)
+        <label className="text-xs tracking-wider uppercase font-mono font-medium text-zinc-500 block">
+          אפיקי פעולה (3 עד 7 אפיקים)
         </label>
         
         {project.avenues.map((ave) => (
-          <div key={ave.id} className="p-3.5 border border-[#e2ded5] dark:border-zinc-800 rounded-xl bg-white/70 dark:bg-zinc-950/70 shadow-sm flex justify-between items-center group">
+          <div key={ave.id} className="p-3 border border-zinc-200 dark:border-zinc-800 rounded bg-white dark:bg-zinc-900/50 flex justify-between items-center group">
             <div className="flex items-center gap-3">
-              <span className="text-sm font-medium text-[#1d1d1f] dark:text-white">{ave.title}</span>
+              <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{ave.title}</span>
               {ave.isCriticalPath && (
-                <span className="text-[10px] font-mono text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/20 px-2 py-0.5 rounded-full font-semibold">
-                  צעד חיוני בשלד (Critical)
+                <span className="text-[10px] font-mono text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/20 px-1.5 py-0.5 rounded font-semibold">
+                  צעד חיוני בשלד
                 </span>
               )}
             </div>
-            <button onClick={() => handleRemove(ave.id)} className="text-[#86868b] hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity p-1">✕</button>
+            <button onClick={() => handleRemove(ave.id)} className="text-zinc-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity p-1">✕</button>
           </div>
         ))}
 
-        {/* Add Avenue */}
-        <div className="bg-[#f7f5ef] dark:bg-zinc-950 p-4 border border-[#e5e1d6] dark:border-zinc-900 rounded-2xl space-y-3">
+        {/* Add Avenue Form */}
+        <div className="bg-zinc-50 dark:bg-zinc-900/50 p-4 border border-zinc-200 dark:border-zinc-800 rounded space-y-3">
           <input 
-            className="w-full bg-transparent border-b border-[#dcd8ce] dark:border-zinc-800 pb-2 text-sm text-[#1d1d1f] dark:text-zinc-200 focus:outline-none focus:border-[#1d1d1f] dark:focus:border-white placeholder:text-[#a8a49c]"
-            placeholder="הגדר אפיק פעולה (למשל: קליטת החלום, ניהול לו״ז דינמי, לוח בקרה)..."
+            className="w-full bg-transparent border-b border-zinc-300 dark:border-zinc-700 pb-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-100 placeholder:text-zinc-400"
+            placeholder="הגדר אפיק פעולה חדש..."
             value={newAve}
             onChange={(e) => setNewAve(e.target.value)}
             onKeyDown={(e) => {
@@ -108,46 +108,48 @@ export default function Step3Avenues({ isActive, isPast }: { isActive: boolean, 
               id="crit" 
               checked={isCrit} 
               onChange={e => setIsCrit(e.target.checked)} 
-              className="accent-[#1d1d1f] w-4 h-4 cursor-pointer" 
+              className="accent-zinc-900 dark:accent-white w-4 h-4 cursor-pointer" 
             />
-            <label htmlFor="crit" className="text-xs text-[#555] dark:text-zinc-400 cursor-pointer select-none">
+            <label htmlFor="crit" className="text-xs text-zinc-600 dark:text-zinc-400 cursor-pointer select-none">
               זהו צעד מרכזי בשלד (3-5 צעדים שבלעדיהם התהליך נשבר לחלוטין)
             </label>
           </div>
-          <button 
-            onClick={handleAdd} 
-            className="text-xs text-[#1d1d1f] dark:text-zinc-300 font-semibold hover:opacity-80 transition-opacity pt-1 block"
-          >
-            + הוסף אפיק פעולה
-          </button>
+          <div className="flex justify-end pt-1">
+            <button 
+              onClick={handleAdd} 
+              className="text-xs bg-zinc-900 text-white dark:bg-white dark:text-black px-4 py-1.5 rounded font-mono font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
+            >
+              + הוסף אפיק פעולה
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Pre-mortem Analysis */}
-      <div className="space-y-2 pt-4 border-t border-[#e8e5dc] dark:border-zinc-900">
-        <label className="text-xs tracking-wider uppercase font-semibold text-[#86868b] block">
+      {/* Pre-mortem */}
+      <div className="space-y-2 pt-4 border-t border-zinc-200 dark:border-zinc-800">
+        <label className="text-xs tracking-wider uppercase font-mono font-medium text-zinc-500 block">
           פרה-מורטם לפרויקט (Pre-Mortem Analysis)
         </label>
-        <p className="text-xs text-[#86868b] font-light leading-relaxed">
-          מדמיינים מראש מה יכול להשתבש, מה יגרום ל״מוות״ של הפרויקט. מטרת הפרה-מורטם היא להגדיר כבר עכשיו את הסיכונים והחששות ולתרגם אותם למשימות בשלב הבא:
+        <p className="text-xs text-zinc-500 font-light leading-relaxed">
+          מדמיינים מראש מה יכול להשתבש, מה יגרום ל״מוות״ של הפרויקט כדי לתרגם זאת למשימות מנע:
         </p>
         <textarea 
-          className="w-full bg-white/70 dark:bg-zinc-950/70 border border-[#e2ded5] dark:border-zinc-800 focus:border-[#1d1d1f] dark:focus:border-zinc-500 rounded-xl p-3 text-sm text-[#1d1d1f] dark:text-zinc-200 focus:outline-none transition-colors resize-none placeholder:text-[#a8a49c] dark:placeholder:text-zinc-700 shadow-sm"
+          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded p-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors resize-none placeholder:text-zinc-400"
           rows={3}
-          placeholder="מה יגרום למוות של הפרויקט? (למשל: בלאגן בריבוי פיצ'רים, חוסר אימוץ על ידי משתמשים עקב מורכבות)..."
+          placeholder="מה יגרום למוות של הפרויקט אם לא ניערך לכך?..."
           value={project.preMortem}
           onChange={(e) => updateProject({ preMortem: e.target.value })}
           onKeyDown={handleKeyDown}
         />
       </div>
 
-      <div className="pt-4 flex items-center justify-between border-t border-[#e8e5dc] dark:border-zinc-900">
-        <div className="text-xs text-[#86868b]">
-          הקש <kbd className="px-2 py-0.5 bg-white dark:bg-zinc-900 border border-[#d8d4ca] dark:border-zinc-800 rounded font-mono text-[11px] shadow-sm">Cmd + Enter</kbd> למעבר
+      <div className="pt-4 flex items-center justify-between border-t border-zinc-200 dark:border-zinc-800">
+        <div className="text-xs text-zinc-400 font-mono">
+          הקש <kbd className="px-1.5 py-0.5 bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded text-zinc-700 dark:text-zinc-300">Enter</kbd> לשמירה ומעבר
         </div>
         <button 
           onClick={() => setActiveStep(4)}
-          className="bg-[#1d1d1f] text-white dark:bg-white dark:text-black px-5 py-2 rounded-full text-xs font-semibold hover:opacity-90 transition-opacity shadow-sm"
+          className="bg-zinc-950 text-white dark:bg-white dark:text-black px-5 py-2 rounded text-xs font-mono font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
         >
           המשך לשלב 4 ←
         </button>
