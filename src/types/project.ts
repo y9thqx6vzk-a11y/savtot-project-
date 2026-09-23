@@ -31,6 +31,14 @@ export interface Avenue {
   tasks: Task[];
 }
 
+export interface HistoricalBenchmark {
+  id: string;
+  title: string;
+  plannedDays: number;
+  actualDays: number;
+  gapPercent: number;
+}
+
 export interface ProjectData {
   // Step 1
   oneLiner: string;
@@ -50,6 +58,7 @@ export interface ProjectData {
   plannedDurationDays: number;
   actualDurationDays: number;
   optimismGapPercent: number;
+  historicalBenchmarks: HistoricalBenchmark[];
 
   // Step 6
   totalBufferDays: number;

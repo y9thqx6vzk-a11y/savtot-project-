@@ -26,7 +26,7 @@ export const sampleProject: ProjectData = {
           isBottleneck: false,
           delayDays: 0,
           completed: true,
-          okr: { metric: "Setup Time", current: 0, target: 1, unit: "days" }
+          okr: { metric: "Setup Time", current: 1, target: 1, unit: "days" }
         },
         {
           id: "t-2",
@@ -51,7 +51,7 @@ export const sampleProject: ProjectData = {
           isBottleneck: false,
           delayDays: 0,
           completed: false,
-          okr: { metric: "Render Time", current: 50, target: 16, unit: "ms" }
+          okr: { metric: "Render Time", current: 16, target: 16, unit: "ms" }
         },
         {
           id: "t-4",
@@ -60,7 +60,7 @@ export const sampleProject: ProjectData = {
           isBottleneck: false,
           delayDays: 0,
           completed: false,
-          okr: { metric: "Lines of Code", current: 0, target: 50, unit: "lines max" }
+          okr: { metric: "Lines of Code", current: 35, target: 50, unit: "lines max" }
         }
       ]
     }
@@ -70,5 +70,21 @@ export const sampleProject: ProjectData = {
   plannedDurationDays: 14,
   actualDurationDays: 21,
   optimismGapPercent: 50,
+  historicalBenchmarks: [
+    {
+      id: 'bench-1',
+      title: 'Auth & Billing Redesign',
+      plannedDays: 14,
+      actualDays: 20,
+      gapPercent: 43,
+    },
+    {
+      id: 'bench-2',
+      title: 'Realtime Sync Engine',
+      plannedDays: 30,
+      actualDays: 40,
+      gapPercent: 33,
+    }
+  ],
   totalBufferDays: 7,
 };

@@ -10,8 +10,17 @@ export default function Home() {
   
   // Prevent hydration mismatch for persisted store
   const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
     setMounted(true);
+    // Register Service Worker for offline PWA capabilities
+    if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch((err) => {
+          console.warn('Service worker registration failed:', err);
+        });
+      });
+    }
   }, []);
 
   if (!mounted) return <div className="min-h-screen bg-black" />;
