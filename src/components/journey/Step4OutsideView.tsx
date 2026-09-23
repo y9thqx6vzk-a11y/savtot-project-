@@ -11,7 +11,6 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
     project, 
     updateProject, 
     setActiveStep, 
-    getAverageOptimismBias, 
     removeHistoricalBenchmark 
   } = useAppStore();
   const { transition } = useAppMotion();
@@ -75,8 +74,6 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
     }
   };
 
-  const avgBias = getAverageOptimismBias();
-
   if (!isActive && isPast) {
     return (
       <motion.div layout transition={transition} className="text-sm space-y-1">
@@ -85,7 +82,7 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
         </div>
         <div className="text-xs text-zinc-500 font-mono">
           {project.plannedDurationDays > 0 && project.actualDurationDays > 0 ? (
-            <>תוכנן: {project.plannedDurationDays} ימים | בפועל: {project.actualDurationDays} ימים | פער: <span className={project.optimismGapPercent > 20 ? 'text-zinc-950 dark:text-white font-bold' : 'text-zinc-500'}>+{project.optimismGapPercent}%</span></>
+            <span>תוכנן: {project.plannedDurationDays} ימים | בפועל: {project.actualDurationDays} ימים</span>
           ) : (
             <span>ניתוח איכותני ותצפיות שטח מהמתחרים/השוק</span>
           )}
@@ -103,7 +100,7 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
           מבט מבחוץ (Outside View) – למידה מהשטח ומהשוק
         </div>
         <p className="text-xs text-zinc-500 dark:text-zinc-400 font-light leading-relaxed">
-          כשאנחנו מתכננים פרויקט רק מהראש שלנו, אנחנו נוטים לאופטימיות יתר. כאן בוחנים מה קרה בפועל בפרויקטים דומים, אצל מתחרים או בגרסאות קודמות.
+          כשאנחנו מתכננים פרויקט רק מהראש שלנו, אנחנו נוטים לראות הכל ורוד. כאן בוחנים מה קרה בפועל בפרויקטים דומים, אצל מתחרים או בגרסאות קודמות.
           <br />
           <span className="font-normal text-zinc-700 dark:text-zinc-300">
             אין לכם נתוני זמנים מדויקים? זה טבעי לגמרי.
@@ -111,27 +108,6 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
           השתמשו בשדות הטקסט החופשי, המשאבים והתצפיות כדי ללמוד מניסיון של אחרים.
         </p>
       </div>
-
-      {/* Aggregate Bias Highlight (if available) */}
-      {project.historicalBenchmarks && project.historicalBenchmarks.length > 0 && (
-        <div className="p-3.5 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded flex items-center justify-between">
-          <div>
-            <div className="text-[10px] uppercase tracking-wider text-zinc-400 font-mono font-semibold">
-              מאגר פרויקטי השוואה שמורים ({project.historicalBenchmarks.length})
-            </div>
-            <div className="text-xs text-zinc-800 dark:text-zinc-200 mt-0.5">
-              {avgBias > 0 ? (
-                <>ממוצע סטיית הזמנים שלך מפרויקטי עבר: <span className="font-mono font-bold text-zinc-950 dark:text-white">+{avgBias}%</span></>
-              ) : (
-                <span>נשמרו תובנות איכותיות ורפרנסים למאגר הפרויקט</span>
-              )}
-            </div>
-          </div>
-          <span className="text-[11px] font-mono text-zinc-600 dark:text-zinc-400 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 px-2 py-0.5 rounded">
-            מבט מבחוץ
-          </span>
-        </div>
-      )}
 
       {/* 1. Reference Project Name */}
       <div className="space-y-2">
@@ -226,10 +202,10 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
         <div className="flex items-center justify-between">
           <div>
             <div className="text-xs font-mono font-semibold uppercase tracking-wider text-zinc-800 dark:text-zinc-200 flex items-center gap-1.5">
-              <span>⏱️</span> השוואת זמנים והטיית אופטימיות (אופציונלי)
+              <span>⏱️</span> לוחות זמנים (אופציונלי)
             </div>
             <div className="text-[11px] text-zinc-500 font-light mt-0.5">
-              רלוונטי בעיקר לפרויקט עבר אישי שלך שבו ידועים זמני התכנון מול הביצוע.
+              רלוונטי אם ידועים לכם נתוני זמנים של הפרויקט להשוואה.
             </div>
           </div>
           <button 
@@ -288,19 +264,6 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
                 />
               </div>
             </div>
-
-            {/* Gap Display */}
-            {project.optimismGapPercent > 0 && (
-              <div className="bg-white dark:bg-zinc-900 p-3 border border-zinc-200 dark:border-zinc-800 rounded flex justify-between items-center">
-                <div>
-                  <div className="text-[10px] uppercase font-mono text-zinc-400 font-semibold">הטיית האופטימיות שחושבה</div>
-                  <div className="text-base font-mono text-zinc-950 dark:text-white">+{project.optimismGapPercent}% מעבר למתוכנן</div>
-                </div>
-                <span className="text-xs font-mono text-zinc-500">
-                  תוספת באפר מומלצת: כ-{Math.ceil((plannedParsed?.days || 14) * (project.optimismGapPercent / 100))} ימים
-                </span>
-              </div>
-            )}
           </div>
         )}
       </div>
@@ -343,11 +306,11 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
                         {bench.freeNotes}
                       </div>
                     )}
-                    {typeof bench.gapPercent === 'number' && bench.gapPercent > 0 && (
+                    {bench.plannedDays && bench.actualDays ? (
                       <div className="text-[11px] font-mono text-zinc-500">
-                        תוכנן: {bench.plannedDays} ימים | בפועל: {bench.actualDays} ימים | פער: +{bench.gapPercent}%
+                        תוכנן: {bench.plannedDays} ימים | בפועל: {bench.actualDays} ימים
                       </div>
-                    )}
+                    ) : null}
                   </div>
                   <button
                     type="button"

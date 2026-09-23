@@ -7,7 +7,7 @@ import { parseDuration } from "@/lib/durationParser";
 import { useAppMotion } from "@/lib/useMotionConfig";
 
 export default function Step6Buffers({ isActive, isPast }: { isActive: boolean, isPast: boolean }) {
-  const { project, updateProject, setActiveStep, updateTask, getSuggestedBufferDays, getAverageOptimismBias } = useAppStore();
+  const { project, updateProject, setActiveStep, updateTask } = useAppStore();
   const { transition } = useAppMotion();
 
   const [bufferText, setBufferText] = useState(
@@ -28,13 +28,6 @@ export default function Step6Buffers({ isActive, isPast }: { isActive: boolean, 
 
   const allTasks = project.avenues.flatMap(a => a.tasks.map(t => ({ ...t, aveId: a.id })));
   const bottleneckTasks = allTasks.filter(t => t.isBottleneck);
-  const suggestedDays = getSuggestedBufferDays();
-  const avgBias = getAverageOptimismBias();
-
-  const handleApplySuggested = () => {
-    setBufferText(`${suggestedDays} ימים`);
-    updateProject({ totalBufferDays: suggestedDays });
-  };
 
   if (!isActive && isPast) {
     return (
@@ -92,25 +85,11 @@ export default function Step6Buffers({ isActive, isPast }: { isActive: boolean, 
         <input 
           type="text"
           dir="rtl"
-          className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded-md px-3 py-2 text-xl focus:outline-none font-mono text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 transition-colors"
+          className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded-md px-3 py-2 text-xl focus:outline-none font-mono text-zinc-950 dark:text-zinc-50 placeholder:text-zinc-400 transition-colors"
           placeholder="למשל: שבוע, 7 ימים, 48 שעות"
           value={bufferText}
           onChange={(e) => setBufferText(e.target.value)}
         />
-
-        {suggestedDays > 0 && (
-          <div className="pt-1 flex items-center justify-between">
-            <span className="text-xs text-zinc-600 dark:text-zinc-400">
-              המלצה לפי הטיית עבר (+{avgBias}%): <strong className="text-zinc-900 dark:text-zinc-100 font-mono">{suggestedDays} ימים</strong>
-            </span>
-            <button
-              onClick={handleApplySuggested}
-              className="text-xs text-zinc-800 dark:text-zinc-200 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 hover:border-zinc-400 px-3 py-1 rounded-md transition-colors font-medium shadow-sm"
-            >
-              החל באפר מוצע
-            </button>
-          </div>
-        )}
       </div>
 
       {/* Bottlenecks Tagging */}
