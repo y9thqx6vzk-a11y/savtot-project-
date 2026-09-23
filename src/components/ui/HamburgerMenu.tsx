@@ -9,6 +9,7 @@ interface HamburgerMenuProps {
   onOpenShareModal: () => void;
   focusMode: boolean;
   onToggleFocusMode: () => void;
+  align?: "right" | "left";
 }
 
 export default function HamburgerMenu({
@@ -16,6 +17,7 @@ export default function HamburgerMenu({
   onOpenShareModal,
   focusMode,
   onToggleFocusMode,
+  align = "right",
 }: HamburgerMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -106,7 +108,7 @@ export default function HamburgerMenu({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 4, scale: 0.98 }}
             transition={{ duration: 0.12 }}
-            className="absolute left-0 mt-2 w-56 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-xl py-1.5 z-50 text-right"
+            className={`absolute ${align === "right" ? "right-0" : "left-0"} mt-2 w-56 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-xl py-1.5 z-50 text-right`}
           >
             {/* 1. יצוא JSON */}
             <button

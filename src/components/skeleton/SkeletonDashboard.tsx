@@ -153,64 +153,76 @@ export default function SkeletonDashboard() {
     <div className="min-h-screen flex justify-center py-12 px-6 select-none font-sans text-right" dir="rtl">
       
       <div className="w-full max-w-4xl">
-        {/* Top Bar with Status & Actions */}
-        <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-10 border-b border-zinc-200 dark:border-zinc-800 pb-6 gap-6">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-3xl font-light tracking-tight text-zinc-950 dark:text-zinc-50">
-                {project.oneLiner || "לוח השלד (The Skeleton)"}
-              </h1>
-              {/* Traffic Light Dot (ONLY color on canvas) */}
-              <div 
-                title={`באפר ביטחון: ${consumedDays}/${totalDays} ימים (${bufferPct}%) - ${bufferStatusText}`}
-                className="relative cursor-help"
-              >
-                <div className={`w-3.5 h-3.5 rounded-full ${bufferColor} transition-all duration-300`} />
-              </div>
-            </div>
-
-            <div className="text-xs text-zinc-500 dark:text-zinc-400 flex items-center gap-4 font-mono">
-              <span>{project.avenues.length} אפיקי פעולה</span>
-              <span>באפר: {consumedDays} / {totalDays} ימים ({bufferPct}%)</span>
-              <button 
-                onClick={() => setDrawerOpen(true)} 
-                className="text-zinc-900 dark:text-zinc-100 underline underline-offset-4 decoration-zinc-300 hover:text-zinc-600 transition-colors font-sans"
-              >
-                סיפור, פערי ידע ופרה-מורטם [S]
-              </button>
+        {/* Top Header Section: Clean Vertical Hierarchy */}
+        <div className="mb-8 border-b border-zinc-200 dark:border-zinc-800 pb-5 space-y-4">
+          {/* Row 1: Title */}
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-light tracking-tight text-zinc-950 dark:text-zinc-50">
+              {project.oneLiner || "לוח השלד (The Skeleton)"}
+            </h1>
+            {/* Traffic Light Dot (ONLY color on canvas) */}
+            <div 
+              title={`באפר ביטחון: ${consumedDays}/${totalDays} ימים (${bufferPct}%) - ${bufferStatusText}`}
+              className="relative cursor-help"
+            >
+              <div className={`w-3.5 h-3.5 rounded-full ${bufferColor} transition-all duration-300`} />
             </div>
           </div>
-          
-          <div className="flex items-center gap-2.5 flex-wrap">
-            {/* View Mode Toggle */}
-            <div className="flex items-center bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-zinc-200 dark:border-zinc-700">
-              <button
-                onClick={() => setViewMode("skeleton")}
-                className={`text-xs px-3 py-1.5 rounded-md font-medium transition-all ${
-                  viewMode === "skeleton"
-                    ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 shadow-sm"
-                    : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
-                }`}
-              >
-                לוח שלד
-              </button>
-              <button
-                onClick={() => setViewMode("calendar")}
-                className={`text-xs px-3 py-1.5 rounded-md font-medium transition-all flex items-center gap-1.5 ${
-                  viewMode === "calendar"
-                    ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 shadow-sm"
-                    : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
-                }`}
-              >
-                <span>לוח שנה ולוח זמנים</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-              </button>
+
+          {/* Row 2: Description & Details */}
+          <div className="text-xs text-zinc-500 dark:text-zinc-400 flex items-center gap-4 font-mono flex-wrap">
+            <span>{project.avenues.length} אפיקי פעולה</span>
+            <span>באפר: {consumedDays} / {totalDays} ימים ({bufferPct}%)</span>
+            <button 
+              onClick={() => setDrawerOpen(true)} 
+              className="text-zinc-900 dark:text-zinc-100 underline underline-offset-4 decoration-zinc-300 hover:text-zinc-600 transition-colors font-sans"
+            >
+              סיפור, פערי ידע ופרה-מורטם [S]
+            </button>
+          </div>
+
+          {/* Row 3: Action Controls Bar (Menu first on the right in RTL) */}
+          <div className="pt-2 flex items-center justify-between gap-3 flex-wrap">
+            <div className="flex items-center gap-2.5 flex-wrap">
+              {/* 1. תפריט 3 פסים בצד ימין ראשון */}
+              <HamburgerMenu
+                onOpenShortcuts={() => setShortcutsOpen(true)}
+                onOpenShareModal={() => setShareModalOpen(true)}
+                focusMode={focusMode}
+                onToggleFocusMode={() => setFocusMode(!focusMode)}
+                align="right"
+              />
+
+              {/* 2. מתג לוח שלד / לוח שנה */}
+              <div className="flex items-center bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-zinc-200 dark:border-zinc-700">
+                <button
+                  onClick={() => setViewMode("skeleton")}
+                  className={`text-xs px-3 py-1.5 rounded-md font-medium transition-all ${
+                    viewMode === "skeleton"
+                      ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 shadow-sm"
+                      : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                  }`}
+                >
+                  לוח שלד
+                </button>
+                <button
+                  onClick={() => setViewMode("calendar")}
+                  className={`text-xs px-3 py-1.5 rounded-md font-medium transition-all flex items-center gap-1.5 ${
+                    viewMode === "calendar"
+                      ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 shadow-sm"
+                      : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                  }`}
+                >
+                  <span>לוח שנה ולוח זמנים</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+                </button>
+              </div>
+
+              {/* 3. בחירת / החלפת / פרויקט חדש */}
+              <ProjectSwitcher />
             </div>
 
-            {/* Project Switcher */}
-            <ProjectSwitcher />
-
-            {/* MVP ONLY Switch (visible in skeleton mode) */}
+            {/* 4. גרסת חצי הזמן (MVP) בצד הנגדי */}
             {viewMode === "skeleton" && (
               <div className="flex items-center gap-2.5 bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-md border border-zinc-200 dark:border-zinc-800 shadow-sm">
                 <span className="text-xs font-medium text-zinc-800 dark:text-zinc-200">גרסת חצי הזמן (MVP)</span>
@@ -228,15 +240,7 @@ export default function SkeletonDashboard() {
               </div>
             )}
 
-            {/* Hamburger (3-line) Menu with: JSON Export/Import, Focus Mode, Theme Toggle, Share Link, ?, Edit Journey */}
-            <HamburgerMenu
-              onOpenShortcuts={() => setShortcutsOpen(true)}
-              onOpenShareModal={() => setShareModalOpen(true)}
-              focusMode={focusMode}
-              onToggleFocusMode={() => setFocusMode(!focusMode)}
-            />
-
-            {/* Share Modal Dialog */}
+            {/* Share Modal Dialog (Controlled) */}
             <ShareModal
               isOpen={shareModalOpen}
               onOpenChange={setShareModalOpen}
