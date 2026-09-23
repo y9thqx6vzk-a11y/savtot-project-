@@ -10,6 +10,7 @@ import ThemeToggle from "@/components/ui/ThemeToggle";
 import JsonUploader from "@/components/ui/JsonUploader";
 import ProjectSwitcher from "@/components/ui/ProjectSwitcher";
 import ShareModal from "@/components/ui/ShareModal";
+import CalendarTimelineView from "@/components/skeleton/CalendarTimelineView";
 
 export default function SkeletonDashboard() {
   const { 
@@ -17,6 +18,9 @@ export default function SkeletonDashboard() {
     setStage, 
     updateProject,
     updateTask, 
+    addSubtask,
+    toggleSubtask,
+    removeSubtask,
     getBufferStatus, 
     getConsumedBufferDays, 
     exportJSON,
@@ -27,11 +31,14 @@ export default function SkeletonDashboard() {
 
   const { transition, shouldReduceMotion } = useAppMotion();
 
+  const [viewMode, setViewMode] = useState<"skeleton" | "calendar">("skeleton");
   const [mvpOnly, setMvpOnly] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [cmdOpen, setCmdOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  const [expandedDashboardTaskId, setExpandedDashboardTaskId] = useState<string | null>(null);
+  const [newSubtaskInputs, setNewSubtaskInputs] = useState<Record<string, string>>({});
 
   // Inline gap creation state inside drawer
   const [newGapDesc, setNewGapDesc] = useState("");
@@ -175,39 +182,68 @@ export default function SkeletonDashboard() {
           </div>
           
           <div className="flex items-center gap-2.5 flex-wrap">
+            {/* View Mode Toggle */}
+            <div className="flex items-center bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-zinc-200 dark:border-zinc-700">
+              <button
+                onClick={() => setViewMode("skeleton")}
+                className={`text-xs px-3 py-1.5 rounded-md font-medium transition-all ${
+                  viewMode === "skeleton"
+                    ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 shadow-sm"
+                    : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                }`}
+              >
+                לוח שלד
+              </button>
+              <button
+                onClick={() => setViewMode("calendar")}
+                className={`text-xs px-3 py-1.5 rounded-md font-medium transition-all flex items-center gap-1.5 ${
+                  viewMode === "calendar"
+                    ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 shadow-sm"
+                    : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                }`}
+              >
+                <span>לוח שנה ולוח זמנים</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+              </button>
+            </div>
+
             <ThemeToggle />
             <ProjectSwitcher />
             <ShareModal />
             <JsonUploader />
 
             {/* Focus Mode Toggle */}
-            <button
-              onClick={() => setFocusMode(!focusMode)}
-              className={`text-xs px-3.5 py-1.5 rounded-md border transition-all ${
-                focusMode 
-                  ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-medium border-transparent shadow-sm' 
-                  : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:border-zinc-400'
-              }`}
-              title="מיקוד: פתיחת אפיק בודד וסגירת כל השאר כדי למנוע עומס"
-            >
-              מצב מיקוד
-            </button>
+            {viewMode === "skeleton" && (
+              <button
+                onClick={() => setFocusMode(!focusMode)}
+                className={`text-xs px-3.5 py-1.5 rounded-md border transition-all ${
+                  focusMode 
+                    ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-medium border-transparent shadow-sm' 
+                    : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:border-zinc-400'
+                }`}
+                title="מיקוד: פתיחת אפיק בודד וסגירת כל השאר כדי למנוע עומס"
+              >
+                מצב מיקוד
+              </button>
+            )}
 
             {/* MVP ONLY Switch */}
-            <div className="flex items-center gap-2.5 bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-md border border-zinc-200 dark:border-zinc-800 shadow-sm">
-              <span className="text-xs font-medium text-zinc-800 dark:text-zinc-200">גרסת חצי הזמן (MVP)</span>
-              <button 
-                onClick={() => setMvpOnly(!mvpOnly)}
-                className={`relative w-8 h-4 rounded-full transition-colors ${mvpOnly ? 'bg-zinc-900 dark:bg-zinc-100' : 'bg-zinc-200 dark:bg-zinc-700'}`}
-                aria-label="סנן משימות הכרחיות בלבד"
-              >
-                <motion.div 
-                  layout
-                  transition={transition}
-                  className={`absolute top-0.5 right-0.5 w-3 h-3 rounded-full ${mvpOnly ? 'bg-white dark:bg-zinc-900 translate-x-[-16px]' : 'bg-white dark:bg-zinc-400'}`}
-                />
-              </button>
-            </div>
+            {viewMode === "skeleton" && (
+              <div className="flex items-center gap-2.5 bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-md border border-zinc-200 dark:border-zinc-800 shadow-sm">
+                <span className="text-xs font-medium text-zinc-800 dark:text-zinc-200">גרסת חצי הזמן (MVP)</span>
+                <button 
+                  onClick={() => setMvpOnly(!mvpOnly)}
+                  className={`relative w-8 h-4 rounded-full transition-colors ${mvpOnly ? 'bg-zinc-900 dark:bg-zinc-100' : 'bg-zinc-200 dark:bg-zinc-700'}`}
+                  aria-label="סנן משימות הכרחיות בלבד"
+                >
+                  <motion.div 
+                    layout
+                    transition={transition}
+                    className={`absolute top-0.5 right-0.5 w-3 h-3 rounded-full ${mvpOnly ? 'bg-white dark:bg-zinc-900 translate-x-[-16px]' : 'bg-white dark:bg-zinc-400'}`}
+                  />
+                </button>
+              </div>
+            )}
 
             {/* Actions */}
             <div className="flex items-center gap-2">
@@ -235,8 +271,12 @@ export default function SkeletonDashboard() {
           </div>
         </div>
 
-        {/* Tree Structure */}
-        <div className="space-y-5">
+        {/* View Mode Switching: Skeleton vs Calendar */}
+        {viewMode === "calendar" ? (
+          <CalendarTimelineView project={project} />
+        ) : (
+          /* Tree Structure */
+          <div className="space-y-5">
           {project.avenues.map(ave => {
             const visibleTasks = mvpOnly ? ave.tasks.filter(t => t.isEssential) : ave.tasks;
             const isCollapsed = collapsedAvenueIds.includes(ave.id);
@@ -288,82 +328,159 @@ export default function SkeletonDashboard() {
                       ) : (
                         visibleTasks.map(task => {
                           const isCriticalTask = ave.isCriticalPath || task.isBottleneck;
+                          const subtasks = task.subtasks || [];
+                          const completedSubtasks = subtasks.filter(st => st.completed).length;
+                          const isSubtasksExpanded = expandedDashboardTaskId === task.id;
 
                           return (
                             <motion.div 
                               key={task.id}
                               layout
                               transition={transition}
-                              className={`flex items-center justify-between py-2.5 pl-3 pr-3 rounded-md transition-all group ${
+                              className={`rounded-md transition-all group ${
                                 isCriticalTask 
                                   ? 'border-r-2 border-zinc-900 dark:border-zinc-100 bg-zinc-50 dark:bg-zinc-850/50' 
                                   : 'border-r-2 border-transparent hover:bg-zinc-50 dark:hover:bg-zinc-850/30'
                               }`}
                             >
-                              <div className="flex items-center gap-3">
-                                <button 
-                                  onClick={() => toggleTaskComplete(ave.id, task.id, task.completed)}
-                                  className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${
+                              <div className="flex items-center justify-between py-2.5 pl-3 pr-3">
+                                <div className="flex items-center gap-3">
+                                  <button 
+                                    onClick={() => toggleTaskComplete(ave.id, task.id, task.completed)}
+                                    className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${
+                                      task.completed 
+                                        ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 border-transparent shadow-sm' 
+                                        : 'border-zinc-300 dark:border-zinc-700 hover:border-zinc-500'
+                                    }`}
+                                  >
+                                    {task.completed && <span className="text-[10px] font-bold">✓</span>}
+                                  </button>
+
+                                  <span className={`text-sm transition-colors ${
                                     task.completed 
-                                      ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 border-transparent shadow-sm' 
-                                      : 'border-zinc-300 dark:border-zinc-700 hover:border-zinc-500'
-                                  }`}
-                                >
-                                  {task.completed && <span className="text-[10px] font-bold">✓</span>}
-                                </button>
-
-                                <span className={`text-sm transition-colors ${
-                                  task.completed 
-                                    ? 'text-zinc-400 line-through' 
-                                    : 'text-zinc-900 dark:text-zinc-100 font-medium'
-                                }`}>
-                                  {task.title}
-                                </span>
-
-                                {isCriticalTask && (
-                                  <span className="text-[9px] font-mono text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">
-                                    קריטי
+                                      ? 'text-zinc-400 line-through' 
+                                      : 'text-zinc-900 dark:text-zinc-100 font-medium'
+                                  }`}>
+                                    {task.title}
                                   </span>
-                                )}
 
-                                {!task.isEssential && !mvpOnly && (
-                                  <span className="text-[9px] font-mono text-zinc-400 border border-zinc-200 dark:border-zinc-800 px-1.5 py-0.5 rounded">
-                                    תוספת
-                                  </span>
-                                )}
-                              </div>
+                                  {isCriticalTask && (
+                                    <span className="text-[9px] font-mono text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">
+                                      קריטי
+                                    </span>
+                                  )}
 
-                              <div className="flex items-center gap-3">
-                                {/* OKR Quantitative Badge */}
-                                {task.okr && task.okr.target > 0 && (
-                                  <div className="text-[10px] bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-2.5 py-1 rounded-md text-zinc-600 dark:text-zinc-400 font-mono flex items-center gap-1.5 shadow-sm" title="תוצאת מפתח כמותית">
-                                    <span className="text-zinc-500">{task.okr.metric}:</span>
-                                    <div className="flex items-center text-zinc-900 dark:text-zinc-100 font-bold">
+                                  {!task.isEssential && !mvpOnly && (
+                                    <span className="text-[9px] font-mono text-zinc-400 border border-zinc-200 dark:border-zinc-800 px-1.5 py-0.5 rounded">
+                                      תוספת
+                                    </span>
+                                  )}
+
+                                  {/* Subtasks expand toggle */}
+                                  <button
+                                    onClick={() => setExpandedDashboardTaskId(isSubtasksExpanded ? null : task.id)}
+                                    className="text-[10px] font-mono text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-2 py-0.5 rounded transition-colors"
+                                  >
+                                    תתי משימות {subtasks.length > 0 ? `(${completedSubtasks}/${subtasks.length})` : "+"}
+                                  </button>
+                                </div>
+
+                                <div className="flex items-center gap-3">
+                                  {/* OKR Quantitative Badge */}
+                                  {task.okr && task.okr.target > 0 && (
+                                    <div className="text-[10px] bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-2.5 py-1 rounded-md text-zinc-600 dark:text-zinc-400 font-mono flex items-center gap-1.5 shadow-sm" title="תוצאת מפתח כמותית">
+                                      <span className="text-zinc-500">{task.okr.metric}:</span>
+                                      <div className="flex items-center text-zinc-900 dark:text-zinc-100 font-bold">
+                                        <input 
+                                          type="number"
+                                          className="bg-transparent w-8 text-center focus:outline-none focus:underline font-mono" 
+                                          value={task.okr.current} 
+                                          onChange={(e) => updateTask(ave.id, task.id, { okr: { ...task.okr, current: Number(e.target.value) } })}
+                                        />
+                                        <span className="text-zinc-500 font-normal mr-0.5">/ {task.okr.target} {task.okr.unit}</span>
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {/* Task Slippage / Delay Modifier */}
+                                  {task.isBottleneck && (
+                                    <div className="flex items-center gap-1 text-[10px] font-mono bg-white dark:bg-zinc-900 px-2.5 py-1 border border-zinc-200 dark:border-zinc-800 rounded-md shadow-sm" title="עיכוב בצוואר בקבוק המקזז מהבאפר">
+                                      <span className="text-zinc-500">עיכוב:</span>
                                       <input 
                                         type="number"
-                                        className="bg-transparent w-8 text-center focus:outline-none focus:underline font-mono" 
-                                        value={task.okr.current} 
-                                        onChange={(e) => updateTask(ave.id, task.id, { okr: { ...task.okr, current: Number(e.target.value) } })}
+                                        className="bg-transparent border border-zinc-300 dark:border-zinc-700 rounded px-1 w-8 text-center text-zinc-900 dark:text-zinc-100 focus:outline-none font-mono font-bold" 
+                                        value={task.delayDays} 
+                                        onChange={(e) => updateTask(ave.id, task.id, { delayDays: Number(e.target.value) })}
                                       />
-                                      <span className="text-zinc-500 font-normal mr-0.5">/ {task.okr.target} {task.okr.unit}</span>
+                                      <span className="text-zinc-500">ימים</span>
                                     </div>
-                                  </div>
-                                )}
-
-                                {/* Task Slippage / Delay Modifier */}
-                                {task.isBottleneck && (
-                                  <div className="flex items-center gap-1 text-[10px] font-mono bg-white dark:bg-zinc-900 px-2.5 py-1 border border-zinc-200 dark:border-zinc-800 rounded-md shadow-sm" title="עיכוב בצוואר בקבוק המקזז מהבאפר">
-                                    <span className="text-zinc-500">עיכוב:</span>
-                                    <input 
-                                      type="number"
-                                      className="bg-transparent border border-zinc-300 dark:border-zinc-700 rounded px-1 w-8 text-center text-zinc-900 dark:text-zinc-100 focus:outline-none font-mono font-bold" 
-                                      value={task.delayDays} 
-                                      onChange={(e) => updateTask(ave.id, task.id, { delayDays: Number(e.target.value) })}
-                                    />
-                                    <span className="text-zinc-500">ימים</span>
-                                  </div>
-                                )}
+                                  )}
+                                </div>
                               </div>
+
+                              {/* Expandable Subtask List in Dashboard */}
+                              {isSubtasksExpanded && (
+                                <div className="mr-8 ml-3 mb-2.5 p-2.5 bg-zinc-100/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-lg space-y-2">
+                                  {subtasks.length > 0 && (
+                                    <div className="space-y-1">
+                                      {subtasks.map((st) => (
+                                        <div key={st.id} className="flex items-center justify-between text-xs py-1 px-2 rounded bg-white dark:bg-zinc-850 group/st">
+                                          <label className="flex items-center gap-2 cursor-pointer flex-1">
+                                            <input 
+                                              type="checkbox" 
+                                              checked={st.completed} 
+                                              onChange={() => toggleSubtask(ave.id, task.id, st.id)}
+                                              className="accent-zinc-900 dark:accent-white w-3.5 h-3.5 rounded"
+                                            />
+                                            <span className={st.completed ? 'line-through text-zinc-400' : 'text-zinc-800 dark:text-zinc-200'}>
+                                              {st.title}
+                                            </span>
+                                          </label>
+                                          <button 
+                                            onClick={() => removeSubtask(ave.id, task.id, st.id)}
+                                            className="text-zinc-400 hover:text-red-500 opacity-0 group-hover/st:opacity-100 transition-opacity text-[11px]"
+                                          >
+                                            ✕
+                                          </button>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
+
+                                  {/* Quick Subtask Adder */}
+                                  <div className="flex items-center gap-2 pt-1">
+                                    <input 
+                                      dir="rtl"
+                                      className="flex-1 bg-white dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded px-2.5 py-1 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none placeholder:text-zinc-400"
+                                      placeholder="הוסף תת-משימה..."
+                                      value={newSubtaskInputs[task.id] || ""}
+                                      onChange={(e) => setNewSubtaskInputs({ ...newSubtaskInputs, [task.id]: e.target.value })}
+                                      onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                          e.preventDefault();
+                                          const val = (newSubtaskInputs[task.id] || "").trim();
+                                          if (val) {
+                                            addSubtask(ave.id, task.id, val);
+                                            setNewSubtaskInputs({ ...newSubtaskInputs, [task.id]: "" });
+                                          }
+                                        }
+                                      }}
+                                    />
+                                    <button 
+                                      onClick={() => {
+                                        const val = (newSubtaskInputs[task.id] || "").trim();
+                                        if (val) {
+                                          addSubtask(ave.id, task.id, val);
+                                          setNewSubtaskInputs({ ...newSubtaskInputs, [task.id]: "" });
+                                        }
+                                      }}
+                                      className="text-xs bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 px-2.5 py-1 rounded font-medium hover:bg-zinc-800 dark:hover:bg-white transition-colors"
+                                    >
+                                      + הוסף
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
                             </motion.div>
                           );
                         })
@@ -375,6 +492,7 @@ export default function SkeletonDashboard() {
             );
           })}
         </div>
+        )}
 
         {/* Minimal Footer */}
         <div className="mt-14 pt-6 border-t border-zinc-200 dark:border-zinc-800 flex justify-between items-center text-xs text-zinc-500 dark:text-zinc-400 font-mono">

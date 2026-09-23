@@ -88,6 +88,9 @@ interface AppState {
   updateProject: (data: Partial<ProjectData>) => void;
   updateAvenue: (id: string, data: Partial<Avenue>) => void;
   updateTask: (avenueId: string, taskId: string, data: Partial<Task>) => void;
+  addSubtask: (avenueId: string, taskId: string, title: string) => void;
+  toggleSubtask: (avenueId: string, taskId: string, subtaskId: string) => void;
+  removeSubtask: (avenueId: string, taskId: string, subtaskId: string) => void;
   addHistoricalBenchmark: (benchmark: Omit<HistoricalBenchmark, "id">) => void;
   removeHistoricalBenchmark: (id: string) => void;
   
@@ -188,6 +191,107 @@ export const useAppStore = create<AppState>()(
             return {
               ...a,
               tasks: a.tasks.map((t) => t.id === taskId ? { ...t, ...data } : t)
+            };
+          }
+          return a;
+        });
+        const updatedProject = { ...state.project, avenues: updatedAvenues };
+        const activeId = state.activeProjectId || defaultInitialId;
+        const currentRec = state.projects[activeId];
+
+        return {
+          project: updatedProject,
+          projects: currentRec ? {
+            ...state.projects,
+            [activeId]: { ...currentRec, updatedAt: Date.now(), data: updatedProject },
+          } : state.projects,
+        };
+      }),
+
+      addSubtask: (avenueId, taskId, title) => set((state) => {
+        if (!title.trim()) return {};
+        const newSubtask = {
+          id: Math.random().toString(36).substring(2, 9),
+          title: title.trim(),
+          completed: false,
+        };
+        const updatedAvenues = state.project.avenues.map((a) => {
+          if (a.id === avenueId) {
+            return {
+              ...a,
+              tasks: a.tasks.map((t) => {
+                if (t.id === taskId) {
+                  return {
+                    ...t,
+                    subtasks: [...(t.subtasks || []), newSubtask]
+                  };
+                }
+                return t;
+              })
+            };
+          }
+          return a;
+        });
+        const updatedProject = { ...state.project, avenues: updatedAvenues };
+        const activeId = state.activeProjectId || defaultInitialId;
+        const currentRec = state.projects[activeId];
+
+        return {
+          project: updatedProject,
+          projects: currentRec ? {
+            ...state.projects,
+            [activeId]: { ...currentRec, updatedAt: Date.now(), data: updatedProject },
+          } : state.projects,
+        };
+      }),
+
+      toggleSubtask: (avenueId, taskId, subtaskId) => set((state) => {
+        const updatedAvenues = state.project.avenues.map((a) => {
+          if (a.id === avenueId) {
+            return {
+              ...a,
+              tasks: a.tasks.map((t) => {
+                if (t.id === taskId) {
+                  return {
+                    ...t,
+                    subtasks: (t.subtasks || []).map((st) => 
+                      st.id === subtaskId ? { ...st, completed: !st.completed } : st
+                    )
+                  };
+                }
+                return t;
+              })
+            };
+          }
+          return a;
+        });
+        const updatedProject = { ...state.project, avenues: updatedAvenues };
+        const activeId = state.activeProjectId || defaultInitialId;
+        const currentRec = state.projects[activeId];
+
+        return {
+          project: updatedProject,
+          projects: currentRec ? {
+            ...state.projects,
+            [activeId]: { ...currentRec, updatedAt: Date.now(), data: updatedProject },
+          } : state.projects,
+        };
+      }),
+
+      removeSubtask: (avenueId, taskId, subtaskId) => set((state) => {
+        const updatedAvenues = state.project.avenues.map((a) => {
+          if (a.id === avenueId) {
+            return {
+              ...a,
+              tasks: a.tasks.map((t) => {
+                if (t.id === taskId) {
+                  return {
+                    ...t,
+                    subtasks: (t.subtasks || []).filter((st) => st.id !== subtaskId)
+                  };
+                }
+                return t;
+              })
             };
           }
           return a;

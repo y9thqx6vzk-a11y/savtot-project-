@@ -7,7 +7,7 @@ import { parseDuration } from "@/lib/durationParser";
 import { useAppMotion } from "@/lib/useMotionConfig";
 
 export default function Step6Buffers({ isActive, isPast }: { isActive: boolean, isPast: boolean }) {
-  const { project, updateProject, setActiveStep, updateTask } = useAppStore();
+  const { project, updateProject, setActiveStep, updateTask, updateAvenue } = useAppStore();
   const { transition } = useAppMotion();
 
   const [bufferText, setBufferText] = useState(
@@ -69,27 +69,124 @@ export default function Step6Buffers({ isActive, isPast }: { isActive: boolean, 
         </div>
       </div>
 
-      {/* Input Total Buffer */}
-      <div className="space-y-3">
-        <div className="flex justify-between items-baseline">
-          <label className="text-xs tracking-wider uppercase font-semibold text-zinc-500 dark:text-zinc-400 block">
-            תקציב חוצץ ביטחון כולל (ימים / שבועות)
+      {/* Project Dates & Total Buffer */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-lg bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800">
+        <div className="space-y-2">
+          <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block">
+            לוח זמנים כללי לפרויקט
           </label>
-          {parsed && (
-            <span className="text-xs font-mono text-zinc-700 dark:text-zinc-300">
-              פוענח: {parsed.formatted}
-            </span>
-          )}
+          <div className="grid grid-cols-2 gap-2 text-xs">
+            <div>
+              <span className="text-[11px] text-zinc-500 block mb-1">תאריך התחלה</span>
+              <input 
+                type="date"
+                className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded px-2.5 py-1.5 text-zinc-900 dark:text-zinc-100 font-mono text-xs focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-300"
+                value={project.startDate || ""}
+                onChange={(e) => updateProject({ startDate: e.target.value })}
+              />
+            </div>
+            <div>
+              <span className="text-[11px] text-zinc-500 block mb-1">תאריך יעד לסיום</span>
+              <input 
+                type="date"
+                className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded px-2.5 py-1.5 text-zinc-900 dark:text-zinc-100 font-mono text-xs focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-300"
+                value={project.endDate || ""}
+                onChange={(e) => updateProject({ endDate: e.target.value })}
+              />
+            </div>
+          </div>
         </div>
 
-        <input 
-          type="text"
-          dir="rtl"
-          className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded-md px-3 py-2 text-xl focus:outline-none font-mono text-zinc-950 dark:text-zinc-50 placeholder:text-zinc-400 transition-colors"
-          placeholder="למשל: שבוע, 7 ימים, 48 שעות"
-          value={bufferText}
-          onChange={(e) => setBufferText(e.target.value)}
-        />
+        <div className="space-y-2">
+          <div className="flex justify-between items-baseline">
+            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block">
+              תקציב חוצץ ביטחון כולל
+            </label>
+            {parsed && (
+              <span className="text-[11px] font-mono text-zinc-500">
+                פוענח: {parsed.formatted}
+              </span>
+            )}
+          </div>
+          <input 
+            type="text"
+            dir="rtl"
+            className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded px-3 py-1.5 text-base focus:outline-none font-mono text-zinc-950 dark:text-zinc-50 placeholder:text-zinc-400 transition-colors"
+            placeholder="למשל: שבוע, 7 ימים, 48 שעות"
+            value={bufferText}
+            onChange={(e) => setBufferText(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {/* Avenue & Task Milestones / Dates Scheduling */}
+      <div className="space-y-3 pt-2">
+        <div className="flex items-center justify-between">
+          <label className="text-xs tracking-wider uppercase font-semibold text-zinc-500 dark:text-zinc-400 block">
+            הגדרת זמנים לאפיקים ולמשימות (יוצגו בלוח השנה)
+          </label>
+          <span className="text-[11px] text-zinc-400 font-mono">אופציונלי</span>
+        </div>
+
+        <div className="space-y-3 max-h-72 overflow-y-auto pr-1 no-scrollbar">
+          {project.avenues.map((ave) => (
+            <div key={ave.id} className="p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 space-y-2.5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <span className="text-xs font-semibold text-indigo-700 dark:text-indigo-400 font-mono">
+                  אפיק: {ave.title}
+                </span>
+                <div className="flex items-center gap-2 text-xs">
+                  <input 
+                    type="date"
+                    className="bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-700 rounded px-2 py-1 text-[11px] text-zinc-800 dark:text-zinc-200 font-mono"
+                    value={ave.startDate || ""}
+                    onChange={(e) => updateAvenue(ave.id, { startDate: e.target.value })}
+                    title="התחלת האפיק"
+                  />
+                  <span className="text-zinc-400">עד</span>
+                  <input 
+                    type="date"
+                    className="bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-700 rounded px-2 py-1 text-[11px] text-zinc-800 dark:text-zinc-200 font-mono"
+                    value={ave.endDate || ""}
+                    onChange={(e) => updateAvenue(ave.id, { endDate: e.target.value })}
+                    title="סיום האפיק"
+                  />
+                </div>
+              </div>
+
+              {/* Tasks under avenue with date selection */}
+              <div className="mr-3 border-r border-zinc-200 dark:border-zinc-800 pr-3 space-y-1.5">
+                {ave.tasks.map((task) => (
+                  <div key={task.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 py-1 text-xs">
+                    <span className="text-zinc-700 dark:text-zinc-300 truncate max-w-[200px] sm:max-w-xs">
+                      • {task.title}
+                      {task.isBottleneck && (
+                        <span className="mr-1 text-[10px] text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-1 rounded">צוואר בקבוק</span>
+                      )}
+                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <input 
+                        type="date"
+                        className="bg-transparent border border-zinc-200 dark:border-zinc-700 rounded px-1.5 py-0.5 text-[10px] text-zinc-800 dark:text-zinc-200 font-mono"
+                        value={task.startDate || ""}
+                        onChange={(e) => updateTask(ave.id, task.id, { startDate: e.target.value })}
+                        title="תאריך התחלה"
+                      />
+                      <span className="text-zinc-400 text-[10px]">עד</span>
+                      <input 
+                        type="date"
+                        className="bg-transparent border border-zinc-200 dark:border-zinc-700 rounded px-1.5 py-0.5 text-[10px] text-zinc-800 dark:text-zinc-200 font-mono"
+                        value={task.endDate || ""}
+                        onChange={(e) => updateTask(ave.id, task.id, { endDate: e.target.value })}
+                        title="תאריך יעד"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Bottlenecks Tagging */}

@@ -7,6 +7,12 @@ export interface KnowledgeGap {
   mitigation: string;
 }
 
+export interface SubTask {
+  id: string;
+  title: string;
+  completed: boolean;
+}
+
 export interface TaskOKR {
   metric: string; // יעד ומדד כמותי
   target: number; // מספר היעד
@@ -22,6 +28,9 @@ export interface Task {
   delayDays: number; // ימי עיכוב
   okr: TaskOKR;
   completed: boolean;
+  subtasks?: SubTask[]; // תתי משימות
+  startDate?: string; // YYYY-MM-DD
+  endDate?: string; // YYYY-MM-DD
 }
 
 export interface Avenue {
@@ -29,6 +38,8 @@ export interface Avenue {
   title: string;
   isCriticalPath: boolean; // שלד בסיסי: 3-5 צעדים שבלעדיהם התהליך נשבר
   tasks: Task[];
+  startDate?: string; // YYYY-MM-DD
+  endDate?: string; // YYYY-MM-DD
 }
 
 export interface HistoricalBenchmark {
@@ -70,6 +81,8 @@ export interface ProjectData {
   historicalBenchmarks: HistoricalBenchmark[];
 
   // שלב 6: בניית לו״ז וחוצץ ביטחון
+  startDate?: string; // תאריך התחלת הפרויקט
+  endDate?: string; // תאריך סיום הפרויקט
   totalBufferDays: number;
   bottleneckBufferDays?: number;
   subBranchBufferDays?: number;
