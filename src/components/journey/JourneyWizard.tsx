@@ -32,13 +32,13 @@ export default function JourneyWizard() {
   };
 
   const steps = [
-    { id: 1, component: Step1Story, title: "1. הסיפור והחזון" },
-    { id: 2, component: Step2Gaps, title: "2. פערי ידע ואי-ודאות" },
-    { id: 3, component: Step3Avenues, title: "3. אפיקים ופרה-מורטם" },
-    { id: 4, component: Step4OutsideView, title: "4. המבט מבחוץ וכיול זמנים" },
-    { id: 5, component: Step5Tasks, title: "5. פירוק משימות ותיוג MVP" },
-    { id: 6, component: Step6Buffers, title: "6. לוח זמנים ובאפר רמזור" },
-    { id: 7, component: Step7OKRs, title: "7. ערך ומדדי תוצאה (OKRs)" },
+    { id: 1, component: Step1Story, title: "שלב 1: סיפור" },
+    { id: 2, component: Step2Gaps, title: "שלב 2: חלוקה לנושאים ולמידה" },
+    { id: 3, component: Step3Avenues, title: "שלב 3: חלוקה לאפיקים + פרה-מורטם" },
+    { id: 4, component: Step4OutsideView, title: "שלב 4: מבט מבחוץ" },
+    { id: 5, component: Step5Tasks, title: "שלב 5: פירוק משימות ותעדוף" },
+    { id: 6, component: Step6Buffers, title: "שלב 6: בניית לו״ז וחוצץ ביטחון" },
+    { id: 7, component: Step7OKRs, title: "שלב 7: מדד ערך וזיהוי בעיות" },
   ];
 
   const isLight = theme === 'light';
@@ -46,7 +46,7 @@ export default function JourneyWizard() {
   return (
     <div className="max-w-2xl mx-auto py-16 px-6 relative font-sans text-right" dir="rtl">
       {/* Header Controls */}
-      <div className="flex items-center justify-between mb-12">
+      <div className="flex items-center justify-between mb-10">
         <div className="flex items-center gap-3">
           <ThemeToggle />
           <button 
@@ -57,26 +57,27 @@ export default function JourneyWizard() {
                 : 'bg-[#1c1c1e] text-[#86868b] border-[#2c2c30] hover:text-white hover:border-[#3e3e44]'
             }`}
           >
-            טען תוכנית דוגמה (1-Click Blueprint)
+            טען תוכנית לדוגמה
           </button>
         </div>
 
         <span className="text-[11px] font-mono uppercase tracking-widest text-[#86868b]">
-          שלב 1 מתוך 2: המסע
+          חלק ראשון: תכנון וניהול ״הפרויקט שלי״
         </span>
       </div>
 
+      {/* Main Header with Exact User Wording */}
       <motion.div 
         initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 8 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={transition}
-        className="mb-14"
+        className="mb-12"
       >
-        <h1 className="text-3xl font-normal tracking-tight text-[#1d1d1f] dark:text-[#f5f5f7]">
-          המסע לתכנון שקט
+        <h1 className="text-3xl font-light tracking-tight text-[#1d1d1f] dark:text-[#f5f5f7]">
+          חלום למציאות - איך לתכנן את הפרויקט הבא שלי.
         </h1>
-        <p className="text-sm text-[#86868b] dark:text-[#a1a1aa] mt-1.5 font-light leading-relaxed">
-          שבעה צעדים רציפים מונחי-מקלדת שמפרקים עומס קוגניטיבי והופכים רעיון מופשט לשלד עבודה ברור.
+        <p className="text-sm text-[#86868b] dark:text-[#a1a1aa] mt-2 font-light leading-relaxed">
+          כל פרויקט, כמו הפרויקט הנוכחי - מתחיל בסיפור פשוט, חלום, איזשהו דמיון שיש לי. בחלק הראשון של תכנון וניהול ״הפרויקט שלי״ נעבור שלב אחר שלב עם שאלות להכוונה, ללא עומס ובלאגן.
         </p>
       </motion.div>
 
@@ -126,7 +127,7 @@ export default function JourneyWizard() {
             onClick={() => setStage(2)}
             className="bg-[#1d1d1f] text-white dark:bg-white dark:text-black px-8 py-3.5 rounded-full font-medium transition-all shadow-[0_4px_20px_rgba(0,0,0,0.12)] hover:scale-[1.02] text-sm"
           >
-            חולל את לוח השלד (The Skeleton) ←
+            עבור ללוח השלד (The Skeleton) ←
           </button>
         </motion.div>
       )}

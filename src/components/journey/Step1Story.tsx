@@ -21,7 +21,7 @@ export default function Step1Story({ isActive, isPast }: { isActive: boolean, is
           {project.oneLiner || "פרויקט ללא שם"}
         </div>
         <div className="text-xs text-[#86868b] truncate">
-          קהל יעד: {project.targetAudience || "טרם הוגדר"}
+          עבור: {project.targetAudience || "טרם הוגדר"}
         </div>
       </motion.div>
     );
@@ -29,54 +29,63 @@ export default function Step1Story({ isActive, isPast }: { isActive: boolean, is
 
   return (
     <motion.div layout transition={transition} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+      
+      <div className="text-xs text-[#86868b] leading-relaxed font-light border-r-2 border-[#1d1d1f] dark:border-white pr-3">
+        כל פרויקט מתחיל בסיפור פשוט, חלום, איזשהו דמיון שיש לי. כאן נכתוב אותו בעזרת 4 שאלות הכוונה:
+      </div>
+
+      {/* שאלה 1: תאר את הפרויקט במשפט אחד */}
       <div className="space-y-2">
         <label className="text-xs tracking-wider uppercase font-semibold text-[#86868b] block">
-          משפט מחץ לפרויקט (One-Liner)
+          מה הפרויקט שאני רוצה לבצע? (תאר את הפרויקט במשפט אחד)
         </label>
         <input 
           autoFocus
-          className="w-full bg-transparent border-b border-[#d8d4ca] dark:border-zinc-800 pb-2 text-xl font-light text-[#1d1d1f] dark:text-white focus:outline-none focus:border-[#1d1d1f] dark:focus:border-white transition-colors placeholder:text-[#a8a49c] dark:placeholder:text-zinc-700"
-          placeholder="למשל: כלי תכנון פרויקטים נקי להפחתת עומס קוגניטיבי"
+          className="w-full bg-transparent border-b border-[#d8d4ca] dark:border-zinc-800 pb-2 text-lg font-light text-[#1d1d1f] dark:text-white focus:outline-none focus:border-[#1d1d1f] dark:focus:border-white transition-colors placeholder:text-[#a8a49c] dark:placeholder:text-zinc-700"
+          placeholder="למשל: אפליקציית רשת להנגשת עולם ניהול הפרויקטים ומעקב יומיומי ללא עומס"
           value={project.oneLiner}
           onChange={(e) => updateProject({ oneLiner: e.target.value })}
           onKeyDown={(e) => e.key === 'Enter' && document.getElementById('step1-prob')?.focus()}
         />
       </div>
 
+      {/* שאלה 2: מה הבעיה העיקרית שאני בא לפתור? */}
       <div className="space-y-2">
         <label className="text-xs tracking-wider uppercase font-semibold text-[#86868b] block">
-          הבעיה המרכזית (The Problem)
+          מה הבעיה העיקרית שאני בא לפתור?
         </label>
         <textarea 
           id="step1-prob"
           className="w-full bg-white/70 dark:bg-zinc-950/70 border border-[#e2ded5] dark:border-zinc-800 focus:border-[#1d1d1f] dark:focus:border-zinc-500 rounded-xl p-3 text-sm text-[#1d1d1f] dark:text-zinc-200 focus:outline-none transition-colors resize-none placeholder:text-[#a8a49c] dark:placeholder:text-zinc-700 shadow-sm"
-          rows={2}
-          placeholder="איזה כאב חד הפרויקט בא לעקור מהשורש?"
+          rows={3}
+          placeholder="למשל: העומס שיש הרבה פעמים בפרויקטים, וכתוצאה מאותו עומס נוצר בלאגן, ודחייה או ביטול של הפרויקט."
           value={project.problem}
           onChange={(e) => updateProject({ problem: e.target.value })}
         />
       </div>
 
+      {/* שאלה 3: עבור מי? */}
       <div className="space-y-2">
         <label className="text-xs tracking-wider uppercase font-semibold text-[#86868b] block">
-          קהל היעד (Target Audience)
+          עבור מי? (קהל היעד)
         </label>
         <input 
           className="w-full bg-transparent border-b border-[#d8d4ca] dark:border-zinc-800 pb-2 text-sm text-[#1d1d1f] dark:text-zinc-200 focus:outline-none focus:border-[#1d1d1f] dark:focus:border-white transition-colors placeholder:text-[#a8a49c] dark:placeholder:text-zinc-700"
-          placeholder="עבור מי בדיוק הפרויקט מיועד?"
+          placeholder="למשל: לכל אחד שרוצה בצורה מקצועית ופשוטה לייצר תוכנית עבודה, ואז מקום לעקוב אחרי הביצועים שלו בצורה יומיומית."
           value={project.targetAudience}
           onChange={(e) => updateProject({ targetAudience: e.target.value })}
         />
       </div>
 
+      {/* שאלה 4: איך נראה יום בחיי משתמש, אחרי שהכל מוכן? */}
       <div className="space-y-2">
         <label className="text-xs tracking-wider uppercase font-semibold text-[#86868b] block">
-          היום שאחרי ההשקה (Day in the Life)
+          איך נראה יום בחיי משתמש, אחרי שהכל מוכן?
         </label>
         <textarea 
           className="w-full bg-white/70 dark:bg-zinc-950/70 border border-[#e2ded5] dark:border-zinc-800 focus:border-[#1d1d1f] dark:focus:border-zinc-500 rounded-xl p-3 text-sm text-[#1d1d1f] dark:text-zinc-200 focus:outline-none transition-colors resize-none placeholder:text-[#a8a49c] dark:placeholder:text-zinc-700 shadow-sm"
           rows={2}
-          placeholder="תאר איך נראית המציאות לאחר שהפרויקט פועל בהצלחה..."
+          placeholder="למשל: המשתמש מבין בכמה שלבים פשוטים איך להתחיל, מתכנן בצורה נכונה, ומנהל מעקב יומיומי רגוע ללא בלאגן."
           value={project.dayInTheLife}
           onChange={(e) => updateProject({ dayInTheLife: e.target.value })}
           onKeyDown={handleKeyDown}
@@ -91,7 +100,7 @@ export default function Step1Story({ isActive, isPast }: { isActive: boolean, is
           onClick={() => setActiveStep(2)}
           className="bg-[#1d1d1f] text-white dark:bg-white dark:text-black px-5 py-2 rounded-full text-xs font-semibold hover:opacity-90 transition-opacity shadow-sm"
         >
-          המשך לשלב הבא ←
+          המשך לשלב 2 ←
         </button>
       </div>
     </motion.div>

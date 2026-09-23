@@ -32,13 +32,12 @@ export default function SkeletonDashboard() {
 
   // Inline gap creation state inside drawer
   const [newGapDesc, setNewGapDesc] = useState("");
-  const [newGapCat, setNewGapCat] = useState<GapCategory>("tech");
+  const [newGapCat, setNewGapCat] = useState<GapCategory>("critical");
   const [newGapMit, setNewGapMit] = useState("");
 
   const catLabels: Record<GapCategory, string> = {
-    tech: "טכנולוגי",
-    market: "שוק / מוצר",
-    execution: "ביצוע / תפעול",
+    critical: "פער קריטי (סיכון לפרויקט)",
+    acquired: "פער נרכש (נלמד תוך כדי)",
   };
 
   // Keyboard Shortcuts Listener
@@ -110,7 +109,7 @@ export default function SkeletonDashboard() {
       id: Math.random().toString(36).substring(2, 9),
       description: newGapDesc,
       category: newGapCat,
-      mitigation: newGapMit || "דרושה בדיקה",
+      mitigation: newGapMit || "בדיקה מקדימה",
     };
     updateProject({ knowledgeGaps: [...project.knowledgeGaps, newGap] });
     setNewGapDesc("");
@@ -126,6 +125,12 @@ export default function SkeletonDashboard() {
                       bufferStatus === 'yellow' ? 'bg-[#f59e0b] shadow-[0_0_12px_rgba(245,158,11,0.5)]' : 
                       'bg-[#ef4444] shadow-[0_0_12px_rgba(239,68,68,0.5)]';
 
+  const bufferStatusText = bufferStatus === 'green'
+    ? 'ירוק (< 33%): אין צורך בהתערבות'
+    : bufferStatus === 'yellow'
+    ? 'צהוב (33%-66%): מעקב מקרוב וזיהוי מגמות עיכוב'
+    : 'אדום (> 66%): איתור חסמים והתערבות ממוקדת!';
+
   const consumedDays = getConsumedBufferDays();
   const totalDays = project.totalBufferDays;
   const bufferPct = totalDays > 0 ? Math.round((consumedDays / totalDays) * 100) : 0;
@@ -133,8 +138,6 @@ export default function SkeletonDashboard() {
   const toggleTaskComplete = (aveId: string, taskId: string, completed: boolean) => {
     updateTask(aveId, taskId, { completed: !completed });
   };
-
-  const isLight = theme === 'light';
 
   return (
     <div className="min-h-screen flex justify-center py-12 px-6 select-none font-sans text-right" dir="rtl">
@@ -149,7 +152,7 @@ export default function SkeletonDashboard() {
               </h1>
               {/* Traffic Light Dot (ONLY color on canvas) */}
               <div 
-                title={`באפר: ${consumedDays}/${totalDays} ימים נוצלו (${bufferPct}%) - ${bufferStatus === 'green' ? 'תקין' : bufferStatus === 'yellow' ? 'זהירות' : 'קריטי'}`}
+                title={`באפר ביטחון: ${consumedDays}/${totalDays} ימים (${bufferPct}%) - ${bufferStatusText}`}
                 className="relative cursor-help"
               >
                 <div className={`w-3.5 h-3.5 rounded-full ${bufferColor} transition-all duration-300`} />
@@ -157,13 +160,13 @@ export default function SkeletonDashboard() {
             </div>
 
             <div className="text-xs text-[#86868b] flex items-center gap-4 font-mono">
-              <span>{project.avenues.length} אפיקי עבודה</span>
+              <span>{project.avenues.length} אפיקי פעולה</span>
               <span>באפר: {consumedDays} / {totalDays} ימים ({bufferPct}%)</span>
               <button 
                 onClick={() => setDrawerOpen(true)} 
                 className="text-[#1d1d1f] dark:text-white underline underline-offset-4 decoration-[#c5c0b5] hover:opacity-80 transition-opacity font-sans"
               >
-                סיפור וסיכונים [S]
+                סיפור, פערי ידע ופרה-מורטם [S]
               </button>
             </div>
           </div>
@@ -179,18 +182,18 @@ export default function SkeletonDashboard() {
                   ? 'bg-[#1d1d1f] text-white dark:bg-white dark:text-black font-semibold border-transparent shadow-sm' 
                   : 'bg-white/80 dark:bg-zinc-900 border-[#e2ded5] dark:border-zinc-800 text-[#666] hover:text-[#1d1d1f]'
               }`}
-              title="מיקוד: פתיחת אפיק בודד וסגירת כל השאר"
+              title="מיקוד: פתיחת אפיק בודד וסגירת כל השאר כדי למנוע עומס"
             >
               מצב מיקוד
             </button>
 
             {/* MVP ONLY Switch */}
             <div className="flex items-center gap-2.5 bg-white/80 dark:bg-zinc-900 px-3.5 py-1 rounded-full border border-[#e2ded5] dark:border-zinc-800 shadow-sm">
-              <span className="text-xs font-semibold text-[#1d1d1f] dark:text-zinc-300">MVP בלבד</span>
+              <span className="text-xs font-semibold text-[#1d1d1f] dark:text-zinc-300">גרסת חצי הזמן (MVP)</span>
               <button 
                 onClick={() => setMvpOnly(!mvpOnly)}
                 className={`relative w-9 h-5 rounded-full transition-colors ${mvpOnly ? 'bg-[#1d1d1f] dark:bg-white' : 'bg-[#e2ded5] dark:bg-zinc-800'}`}
-                aria-label="סנן משימות MVP"
+                aria-label="סנן משימות הכרחיות בלבד"
               >
                 <motion.div 
                   layout
@@ -244,7 +247,7 @@ export default function SkeletonDashboard() {
                     </h3>
                     {ave.isCriticalPath && (
                       <span className="text-[9px] font-mono border border-red-200 dark:border-red-900/60 bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full uppercase font-bold">
-                        נתיב קריטי
+                        שלד בסיסי
                       </span>
                     )}
                   </div>
@@ -267,7 +270,7 @@ export default function SkeletonDashboard() {
                     >
                       {visibleTasks.length === 0 ? (
                         <div className="text-xs text-[#86868b] italic py-2">
-                          {mvpOnly ? "אין משימות MVP הכרחיות באפיק זה." : "לא נוספו משימות לאפיק זה."}
+                          {mvpOnly ? "אין משימות חיוניות לגרסת חצי הזמן באפיק זה." : "לא נוספו משימות לאפיק זה."}
                         </div>
                       ) : (
                         visibleTasks.map(task => {
@@ -312,15 +315,15 @@ export default function SkeletonDashboard() {
 
                                 {!task.isEssential && !mvpOnly && (
                                   <span className="text-[9px] font-mono text-[#86868b] border border-[#e2ded5] dark:border-zinc-800 px-1.5 py-0.5 rounded">
-                                    רשות
+                                    תוספת
                                   </span>
                                 )}
                               </div>
 
                               <div className="flex items-center gap-3">
-                                {/* OKR Quantitative Badge */}
+                                {/* OKR Quantitative Badge: יש מספר = לא ניתן לפרשנות */}
                                 {task.okr && task.okr.target > 0 && (
-                                  <div className="text-[10px] bg-white dark:bg-zinc-900 border border-[#e2ded5] dark:border-zinc-800 px-2.5 py-1 rounded-full text-[#555] dark:text-zinc-400 font-mono flex items-center gap-1.5 shadow-sm">
+                                  <div className="text-[10px] bg-white dark:bg-zinc-900 border border-[#e2ded5] dark:border-zinc-800 px-2.5 py-1 rounded-full text-[#555] dark:text-zinc-400 font-mono flex items-center gap-1.5 shadow-sm" title="תוצאת מפתח כמותית">
                                     <span className="text-[#86868b]">{task.okr.metric}:</span>
                                     <div className="flex items-center text-[#1d1d1f] dark:text-zinc-200 font-bold">
                                       <input 
@@ -336,7 +339,7 @@ export default function SkeletonDashboard() {
 
                                 {/* Task Slippage / Delay Modifier */}
                                 {task.isBottleneck && (
-                                  <div className="flex items-center gap-1 text-[10px] font-mono bg-white dark:bg-zinc-900 px-2.5 py-1 border border-[#e2ded5] dark:border-zinc-800 rounded-full shadow-sm">
+                                  <div className="flex items-center gap-1 text-[10px] font-mono bg-white dark:bg-zinc-900 px-2.5 py-1 border border-[#e2ded5] dark:border-zinc-800 rounded-full shadow-sm" title="עיכוב בצוואר בקבוק המקזז מהבאפר">
                                     <span className="text-[#86868b]">עיכוב:</span>
                                     <input 
                                       type="number"
@@ -382,10 +385,12 @@ export default function SkeletonDashboard() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={transition}
-            className="fixed top-0 left-0 bottom-0 w-[420px] max-w-full bg-[#fbfaf7] dark:bg-zinc-950 border-r border-[#e8e5dc] dark:border-zinc-800 p-6 shadow-2xl overflow-y-auto z-40 text-right"
+            className="fixed top-0 left-0 bottom-0 w-[440px] max-w-full bg-[#fbfaf7] dark:bg-zinc-950 border-r border-[#e8e5dc] dark:border-zinc-800 p-6 shadow-2xl overflow-y-auto z-40 text-right"
           >
             <div className="flex justify-between items-center mb-6 pb-4 border-b border-[#e8e5dc] dark:border-zinc-900">
-              <h2 className="text-base font-semibold text-[#1d1d1f] dark:text-white tracking-tight">סיפור הפרויקט והסיכונים</h2>
+              <h2 className="text-base font-semibold text-[#1d1d1f] dark:text-white tracking-tight">
+                סיפור, פערי ידע ופרה-מורטם
+              </h2>
               <button onClick={() => setDrawerOpen(false)} className="text-xs font-mono text-[#86868b] hover:text-[#1d1d1f]">סגור (ESC)</button>
             </div>
             
@@ -428,7 +433,11 @@ export default function SkeletonDashboard() {
                         <button onClick={() => handleRemoveDrawerGap(g.id)} className="text-[#86868b] hover:text-red-500 text-xs opacity-0 group-hover:opacity-100 p-0.5">✕</button>
                       </div>
                       <div className="text-[10px] text-[#86868b] mt-1.5 flex gap-2 items-center">
-                        <span className="font-mono bg-[#f5f3ee] dark:bg-zinc-900 px-1.5 py-0.5 rounded text-[#555] dark:text-zinc-400">
+                        <span className={`font-mono px-1.5 py-0.5 rounded ${
+                          g.category === 'critical'
+                            ? 'bg-red-50 text-red-600 border border-red-200 dark:bg-red-950/30'
+                            : 'bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950/30'
+                        }`}>
                           {catLabels[g.category]}
                         </span>
                         <span>בדיקה: {g.mitigation}</span>
@@ -446,23 +455,23 @@ export default function SkeletonDashboard() {
                     onChange={(e) => setNewGapDesc(e.target.value)}
                   />
                   <div className="flex gap-1.5 pt-1">
-                    {(['tech', 'market', 'execution'] as GapCategory[]).map(c => (
+                    {(['critical', 'acquired'] as GapCategory[]).map(c => (
                       <button
                         key={c}
                         onClick={() => setNewGapCat(c)}
-                        className={`text-[10px] px-2 py-0.5 rounded-full border ${
+                        className={`text-[10px] px-2.5 py-0.5 rounded-full border ${
                           newGapCat === c 
                             ? 'bg-[#1d1d1f] text-white dark:bg-white dark:text-black border-transparent font-medium' 
                             : 'border-[#dcd8ce] dark:border-zinc-800 text-[#666]'
                         }`}
                       >
-                        {catLabels[c]}
+                        {c === 'critical' ? 'פער קריטי' : 'פער נרכש'}
                       </button>
                     ))}
                   </div>
                   <input 
                     className="w-full bg-transparent border-b border-[#dcd8ce] dark:border-zinc-800 pb-1 text-xs text-[#1d1d1f] dark:text-white placeholder:text-[#a8a49c] focus:outline-none focus:border-[#1d1d1f]"
-                    placeholder="פעולת הפחתת סיכון (ניסוי / ספייק)"
+                    placeholder="פעולת אימות (ניסוי / ספייק)"
                     value={newGapMit}
                     onChange={(e) => setNewGapMit(e.target.value)}
                   />
@@ -506,7 +515,7 @@ export default function SkeletonDashboard() {
                   <kbd className="bg-white dark:bg-zinc-900 border border-[#d8d4ca] dark:border-zinc-800 px-2 py-0.5 rounded text-[#1d1d1f] dark:text-white shadow-sm">Cmd + K</kbd>
                 </div>
                 <div className="flex justify-between py-1.5 border-b border-[#e8e5dc] dark:border-zinc-900">
-                  <span className="text-[#555] dark:text-zinc-400 font-sans">סינון מצב MVP בלבד</span>
+                  <span className="text-[#555] dark:text-zinc-400 font-sans">סינון גרסת חצי הזמן (MVP בלבד)</span>
                   <kbd className="bg-white dark:bg-zinc-900 border border-[#d8d4ca] dark:border-zinc-800 px-2 py-0.5 rounded text-[#1d1d1f] dark:text-white shadow-sm">M</kbd>
                 </div>
                 <div className="flex justify-between py-1.5 border-b border-[#e8e5dc] dark:border-zinc-900">
@@ -535,7 +544,7 @@ export default function SkeletonDashboard() {
         )}
       </AnimatePresence>
 
-      {/* Command Palette (Hebrew) */}
+      {/* Command Palette */}
       {cmdOpen && (
         <div 
           onClick={() => setCmdOpen(false)}
@@ -563,7 +572,7 @@ export default function SkeletonDashboard() {
                   onSelect={() => { setMvpOnly(!mvpOnly); setCmdOpen(false); }}
                   className="px-3 py-2 text-xs text-[#1d1d1f] dark:text-zinc-300 hover:bg-white dark:hover:bg-zinc-900 rounded-lg cursor-pointer data-[selected=true]:bg-white dark:data-[selected=true]:bg-zinc-900 flex justify-between"
                 >
-                  <span>הצג משימות MVP בלבד</span>
+                  <span>הצג משימות גרסת חצי הזמן (MVP) בלבד</span>
                   <kbd className="font-mono text-[10px] text-[#86868b]">M</kbd>
                 </Command.Item>
                 <Command.Item 

@@ -1,4 +1,4 @@
-export type GapCategory = 'tech' | 'market' | 'execution';
+export type GapCategory = 'critical' | 'acquired'; // פער קריטי (עלול לבטל פרויקט) מול פער נרכש (נלמד תוך כדי תנועה)
 
 export interface KnowledgeGap {
   id: string;
@@ -8,18 +8,18 @@ export interface KnowledgeGap {
 }
 
 export interface TaskOKR {
-  metric: string;
-  target: number;
-  current: number;
-  unit: string;
+  metric: string; // יעד ומדד כמותי
+  target: number; // מספר היעד
+  current: number; // מצב נוכחי
+  unit: string; // יחידת מידה
 }
 
 export interface Task {
   id: string;
   title: string;
-  isEssential: boolean;
-  isBottleneck: boolean;
-  delayDays: number;
+  isEssential: boolean; // חיוני לגרסת חצי הזמן / MVP
+  isBottleneck: boolean; // צוואר בקבוק
+  delayDays: number; // ימי עיכוב
   okr: TaskOKR;
   completed: boolean;
 }
@@ -27,7 +27,7 @@ export interface Task {
 export interface Avenue {
   id: string;
   title: string;
-  isCriticalPath: boolean;
+  isCriticalPath: boolean; // שלד בסיסי: 3-5 צעדים שבלעדיהם התהליך נשבר
   tasks: Task[];
 }
 
@@ -37,29 +37,36 @@ export interface HistoricalBenchmark {
   plannedDays: number;
   actualDays: number;
   gapPercent: number;
+  lessonsLearned?: string;
+  addedValue?: string;
 }
 
 export interface ProjectData {
-  // Step 1: הסיפור
+  // שלב 1: סיפור
   oneLiner: string;
   problem: string;
   targetAudience: string;
   dayInTheLife: string;
 
-  // Step 2: פערי ידע
+  // שלב 2: חלוקה לנושאים ולמידה
   knowledgeGaps: KnowledgeGap[];
 
-  // Step 3: אפיקים ופרה-מורטם
+  // שלב 3: חלוקה לאפיקים + פרה-מורטם
   avenues: Avenue[];
   preMortem: string;
 
-  // Step 4: מבט מבחוץ
+  // שלב 4: מבט מבחוץ
   referenceProject: string;
   plannedDurationDays: number;
   actualDurationDays: number;
   optimismGapPercent: number;
+  addedValueText?: string;
+  lessonsLearnedText?: string;
   historicalBenchmarks: HistoricalBenchmark[];
 
-  // Step 6: חוצצים
+  // שלב 6: בניית לו״ז וחוצץ ביטחון
   totalBufferDays: number;
+  bottleneckBufferDays?: number;
+  subBranchBufferDays?: number;
+  endProjectBufferDays?: number;
 }

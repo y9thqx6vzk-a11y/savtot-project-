@@ -40,10 +40,10 @@ export default function Step6Buffers({ isActive, isPast }: { isActive: boolean, 
     return (
       <motion.div layout transition={transition} className="text-sm space-y-1">
         <div className="font-medium text-[#1d1d1f] dark:text-white font-mono">
-          חוצץ כולל: {project.totalBufferDays} ימים
+          חוצץ ביטחון כולל: {project.totalBufferDays} ימים
         </div>
         <div className="text-xs text-[#86868b]">
-          {bottleneckTasks.length} משימות סומנו כצוואר בקבוק / נתיב קריטי
+          {bottleneckTasks.length} משימות בצווארי בקבוק וענפי משנה
         </div>
       </motion.div>
     );
@@ -52,10 +52,32 @@ export default function Step6Buffers({ isActive, isPast }: { isActive: boolean, 
   return (
     <motion.div layout transition={transition} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
       
+      {/* Guidance text from user prompt */}
+      <div className="space-y-2 text-xs text-[#666] dark:text-zinc-400 font-light leading-relaxed border-r-2 border-[#1d1d1f] dark:border-white pr-3">
+        <p>
+          <strong>יש להימנע מלו״ז קשיח</strong> – המטרה היא לו״ז דינמי עם רמת אמינות באחוזים להצלחה בעמידה בזמנים.
+        </p>
+        <p>
+          <strong>מציבים חוצץ ביטחון בשלושה מקומות קריטיים:</strong>
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-[11px] pt-1 font-mono">
+          <div className="p-2 rounded-xl bg-white/70 dark:bg-zinc-900 border border-[#e2ded5] dark:border-zinc-800">
+            <strong>1. צוואר בקבוק:</strong> משימות שללא סיומן שאר הפרויקט ממתין.
+          </div>
+          <div className="p-2 rounded-xl bg-white/70 dark:bg-zinc-900 border border-[#e2ded5] dark:border-zinc-800">
+            <strong>2. הזנת ענפי משנה:</strong> שלבים שאינם קריטיים לשלד אך יש להם ערך.
+          </div>
+          <div className="p-2 rounded-xl bg-white/70 dark:bg-zinc-900 border border-[#e2ded5] dark:border-zinc-800">
+            <strong>3. סוף פרויקט:</strong> בלימת סטיות כוללת לפני מסירה סופית.
+          </div>
+        </div>
+      </div>
+
+      {/* Input Total Buffer */}
       <div className="space-y-3">
         <div className="flex justify-between items-baseline">
           <label className="text-xs tracking-wider uppercase font-semibold text-[#86868b] block">
-            תקציב חוצץ כולל (Total Buffer Budget)
+            תקציב חוצץ ביטחון כולל (ימים / שבועות)
           </label>
           {parsed && (
             <span className="text-xs font-mono text-[#555] dark:text-zinc-300">
@@ -63,9 +85,6 @@ export default function Step6Buffers({ isActive, isPast }: { isActive: boolean, 
             </span>
           )}
         </div>
-        <p className="text-xs text-[#86868b] font-light">
-          כמה ימי עיכוב כוללים הפרויקט מסוגל לספוג לפני קריסה של תאריך היעד הסופי?
-        </p>
 
         <input 
           type="text"
@@ -76,7 +95,7 @@ export default function Step6Buffers({ isActive, isPast }: { isActive: boolean, 
         />
 
         {suggestedDays > 0 && (
-          <div className="pt-2 flex items-center justify-between">
+          <div className="pt-1 flex items-center justify-between">
             <span className="text-xs text-[#666] dark:text-zinc-400">
               המלצה לפי הטיית עבר (+{avgBias}%): <strong className="text-[#1d1d1f] dark:text-white font-mono">{suggestedDays} ימים</strong>
             </span>
@@ -90,17 +109,18 @@ export default function Step6Buffers({ isActive, isPast }: { isActive: boolean, 
         )}
       </div>
 
+      {/* Bottlenecks Tagging */}
       <div className="space-y-4 pt-4 border-t border-[#e8e5dc] dark:border-zinc-900">
         <div>
           <label className="text-xs tracking-wider uppercase font-semibold text-[#86868b] block">
-            תיוג צווארי בקבוק (Bottlenecks)
+            מיקום חוצץ 1: סימון צווארי בקבוק בפרויקט
           </label>
           <p className="text-xs text-[#86868b] font-light mt-0.5">
-            סמן משימות שלא ניתן להקביל. כל עיכוב בהן מקזז ישירות מתקציב החוצץ הכללי.
+            סמן את המשימות שכל עיכוב בהן פוגע ישירות בחוצץ הפרויקט כולו:
           </p>
         </div>
         
-        <div className="max-h-60 overflow-y-auto space-y-1.5 pr-1 no-scrollbar">
+        <div className="max-h-56 overflow-y-auto space-y-1.5 pr-1 no-scrollbar">
           {allTasks.map(task => (
             <div 
               key={task.id} 
@@ -130,23 +150,35 @@ export default function Step6Buffers({ isActive, isPast }: { isActive: boolean, 
         </div>
       </div>
 
-      {/* Traffic Light Rules */}
-      <div className="bg-[#f7f5ef] dark:bg-zinc-950 p-4 border border-[#e5e1d6] dark:border-zinc-900 rounded-2xl">
-        <div className="text-xs text-[#86868b] font-semibold mb-3 tracking-wider uppercase">
-          מדיניות רמזור החוצצים (Traffic Light System)
+      {/* Traffic Light Rules with exact user definitions */}
+      <div className="bg-[#f7f5ef] dark:bg-zinc-950 p-4 border border-[#e5e1d6] dark:border-zinc-900 rounded-2xl space-y-3">
+        <div className="text-xs text-[#86868b] font-semibold tracking-wider uppercase">
+          שיטת הרמזור של חוצצי הביטחון
         </div>
-        <div className="grid grid-cols-3 gap-3 text-xs">
-          <div className="flex items-center gap-2 bg-white/70 dark:bg-zinc-900/60 p-2.5 rounded-xl border border-[#e8e5dc] dark:border-zinc-800 shadow-sm">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#10b981]" />
-            <span className="font-mono text-[#555] dark:text-zinc-300">&lt; 33% (תקין)</span>
+        
+        <div className="space-y-2 text-xs">
+          <div className="flex items-start gap-3 bg-white/70 dark:bg-zinc-900/60 p-3 rounded-xl border border-[#e8e5dc] dark:border-zinc-800 shadow-sm">
+            <span className="w-3 h-3 rounded-full bg-[#10b981] mt-0.5 shrink-0 shadow-[0_0_8px_rgba(16,185,129,0.4)]" />
+            <div>
+              <strong className="text-[#10b981] block">ירוק – ניצול פחות משליש של החוצץ (&lt; 33%):</strong>
+              <span className="text-[#666] dark:text-zinc-400">הפרויקט מתקדם כמתוכנן, אין צורך בהתערבות.</span>
+            </div>
           </div>
-          <div className="flex items-center gap-2 bg-white/70 dark:bg-zinc-900/60 p-2.5 rounded-xl border border-[#e8e5dc] dark:border-zinc-800 shadow-sm">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#f59e0b]" />
-            <span className="font-mono text-[#555] dark:text-zinc-300">33%-66% (זהירות)</span>
+
+          <div className="flex items-start gap-3 bg-white/70 dark:bg-zinc-900/60 p-3 rounded-xl border border-[#e8e5dc] dark:border-zinc-800 shadow-sm">
+            <span className="w-3 h-3 rounded-full bg-[#f59e0b] mt-0.5 shrink-0 shadow-[0_0_8px_rgba(245,158,11,0.4)]" />
+            <div>
+              <strong className="text-[#f59e0b] block">צהוב – ניצול בין שליש לשני שליש של החוצץ (33%-66%):</strong>
+              <span className="text-[#666] dark:text-zinc-400">מעקב מקרוב וזיהוי מגמות איפה נוצר העיכוב.</span>
+            </div>
           </div>
-          <div className="flex items-center gap-2 bg-white/70 dark:bg-zinc-900/60 p-2.5 rounded-xl border border-[#e8e5dc] dark:border-zinc-800 shadow-sm">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#ef4444]" />
-            <span className="font-mono text-[#555] dark:text-zinc-300">&gt; 66% (קריטי)</span>
+
+          <div className="flex items-start gap-3 bg-white/70 dark:bg-zinc-900/60 p-3 rounded-xl border border-[#e8e5dc] dark:border-zinc-800 shadow-sm">
+            <span className="w-3 h-3 rounded-full bg-[#ef4444] mt-0.5 shrink-0 shadow-[0_0_8px_rgba(239,68,68,0.4)]" />
+            <div>
+              <strong className="text-[#ef4444] block">אדום – ניצול מעל שני שליש של החוצץ (&gt; 66%):</strong>
+              <span className="text-[#666] dark:text-zinc-400">איתור חסמים והתערבות ממוקדת כדי להחזיר את הפרויקט למסלול.</span>
+            </div>
           </div>
         </div>
       </div>
@@ -159,7 +191,7 @@ export default function Step6Buffers({ isActive, isPast }: { isActive: boolean, 
           onClick={() => setActiveStep(7)}
           className="bg-[#1d1d1f] text-white dark:bg-white dark:text-black px-5 py-2 rounded-full text-xs font-semibold hover:opacity-90 transition-opacity shadow-sm"
         >
-          המשך לשלב הבא ←
+          המשך לשלב 7 ←
         </button>
       </div>
     </motion.div>

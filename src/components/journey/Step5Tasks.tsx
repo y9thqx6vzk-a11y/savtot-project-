@@ -49,7 +49,7 @@ export default function Step5Tasks({ isActive, isPast }: { isActive: boolean, is
     const essentialTasks = project.avenues.reduce((acc, ave) => acc + ave.tasks.filter(t => t.isEssential).length, 0);
     return (
       <motion.div layout transition={transition} className="text-sm">
-        <span className="font-mono font-medium text-[#1d1d1f] dark:text-white">{totalTasks}</span> משימות בסך הכל (<span className="font-mono font-medium text-[#1d1d1f] dark:text-white">{essentialTasks}</span> הכרחיות ל-MVP)
+        <span className="font-mono font-medium text-[#1d1d1f] dark:text-white">{totalTasks}</span> משימות בסך הכל (<span className="font-mono font-medium text-[#1d1d1f] dark:text-white">{essentialTasks}</span> הכרחיות לגרסת חצי הזמן)
       </motion.div>
     );
   }
@@ -57,7 +57,7 @@ export default function Step5Tasks({ isActive, isPast }: { isActive: boolean, is
   if (project.avenues.length === 0) {
     return (
       <motion.div layout transition={transition} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-sm text-[#86868b]">
-        אנא הגדר תחילה לפחות אפיק עבודה אחד בשלב 3.
+        אנא הגדר תחילה לפחות אפיק פעולה אחד בשלב 3.
       </motion.div>
     );
   }
@@ -65,6 +65,16 @@ export default function Step5Tasks({ isActive, isPast }: { isActive: boolean, is
   return (
     <motion.div layout transition={transition} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
       
+      {/* Guidance text from user prompt */}
+      <div className="space-y-2 text-xs text-[#666] dark:text-zinc-400 font-light leading-relaxed border-r-2 border-[#1d1d1f] dark:border-white pr-3">
+        <p>
+          <strong>פירוק כל אפיק למשימות ותעדוף:</strong> נזהה איזו משימה היא הכרחית ואיזו תוספת.
+        </p>
+        <p className="bg-[#f7f5ef] dark:bg-zinc-900 p-2.5 rounded-xl border border-[#e5e1d6] dark:border-zinc-800 text-[#1d1d1f] dark:text-zinc-200">
+          <strong>מבחן חצי הזמן:</strong> אם היינו חייבים לשחרר גרסה עובדת בחצי מהזמן – על מה היינו מוותרים כדי שזה יקרה? המשימות שנשארות הן משימות הליבה ההכרחיות (MVP).
+        </p>
+      </div>
+
       {/* Avenue Pills */}
       <div className="flex gap-2 border-b border-[#e8e5dc] dark:border-zinc-900 pb-3 overflow-x-auto no-scrollbar">
         {project.avenues.map(ave => (
@@ -82,7 +92,7 @@ export default function Step5Tasks({ isActive, isPast }: { isActive: boolean, is
         ))}
       </div>
 
-      {/* Task List for Active Avenue */}
+      {/* Task List */}
       <div className="space-y-2">
         {project.avenues.find(a => a.id === activeAvenueId)?.tasks.map(task => (
           <div key={task.id} className="flex items-center justify-between group p-3 bg-white/70 dark:bg-zinc-950/70 border border-[#e2ded5] dark:border-zinc-800 rounded-xl shadow-sm">
@@ -91,8 +101,8 @@ export default function Step5Tasks({ isActive, isPast }: { isActive: boolean, is
               <span className={`text-sm ${task.isEssential ? 'text-[#1d1d1f] dark:text-white font-medium' : 'text-[#666]'}`}>
                 {task.title}
               </span>
-              <span className="text-[10px] font-mono text-[#86868b] uppercase border border-[#d8d4ca] dark:border-zinc-800 px-1.5 py-0.5 rounded">
-                {task.isEssential ? 'ליבת MVP' : 'רשות / בונוס'}
+              <span className="text-[10px] font-mono text-[#86868b] border border-[#d8d4ca] dark:border-zinc-800 px-2 py-0.5 rounded-full">
+                {task.isEssential ? 'הכרחי (גרסת חצי הזמן)' : 'תוספת / רשות'}
               </span>
             </div>
             <button onClick={() => removeTask(activeAvenueId!, task.id)} className="text-[#86868b] hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity p-1">✕</button>
@@ -104,7 +114,7 @@ export default function Step5Tasks({ isActive, isPast }: { isActive: boolean, is
       <div className="bg-[#f7f5ef] dark:bg-zinc-950 p-4 border border-[#e5e1d6] dark:border-zinc-900 rounded-2xl space-y-3 mt-4">
         <input 
           className="w-full bg-transparent border-b border-[#dcd8ce] dark:border-zinc-800 pb-2 text-sm text-[#1d1d1f] dark:text-zinc-200 focus:outline-none focus:border-[#1d1d1f] dark:focus:border-white placeholder:text-[#a8a49c]"
-          placeholder="שם המשימה..."
+          placeholder="הגדר משימה חדשה..."
           value={newTaskTitle}
           onChange={(e) => setNewTaskTitle(e.target.value)}
           onKeyDown={(e) => {
@@ -119,11 +129,11 @@ export default function Step5Tasks({ isActive, isPast }: { isActive: boolean, is
         <div className="flex items-center gap-6 pt-1">
           <label className="flex items-center gap-2 cursor-pointer select-none">
             <input type="radio" checked={isEssential} onChange={() => setIsEssential(true)} className="accent-[#1d1d1f] w-4 h-4" />
-            <span className="text-xs text-[#1d1d1f] dark:text-white font-medium">הכרחי עבור MVP ראשוני</span>
+            <span className="text-xs text-[#1d1d1f] dark:text-white font-medium">הכרחית לשחרור (גרסת חצי הזמן)</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer select-none">
             <input type="radio" checked={!isEssential} onChange={() => setIsEssential(false)} className="accent-[#1d1d1f] w-4 h-4" />
-            <span className="text-xs text-[#666] dark:text-zinc-400">רשות / הרחבה עתידית</span>
+            <span className="text-xs text-[#666] dark:text-zinc-400">תוספת / אפשר לוותר זמנית</span>
           </label>
         </div>
       </div>
@@ -136,7 +146,7 @@ export default function Step5Tasks({ isActive, isPast }: { isActive: boolean, is
           onClick={() => setActiveStep(6)}
           className="bg-[#1d1d1f] text-white dark:bg-white dark:text-black px-5 py-2 rounded-full text-xs font-semibold hover:opacity-90 transition-opacity shadow-sm"
         >
-          המשך לשלב הבא ←
+          המשך לשלב 6 ←
         </button>
       </div>
     </motion.div>
