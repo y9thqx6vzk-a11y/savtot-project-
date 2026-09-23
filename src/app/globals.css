@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --traffic-green: #22c55e;
   --traffic-yellow: #eab308;
@@ -8,6 +10,9 @@
 
 /* Linear-inspired Monochromatic Light Palette */
 html.light {
+  color-scheme: light;
+  background-color: #ffffff;
+  color: #09090b;
   --bg-main: #ffffff;
   --bg-card: #ffffff;
   --bg-subtle: #f4f4f5;
@@ -20,6 +25,9 @@ html.light {
 
 /* Linear-inspired Monochromatic Dark Palette */
 html.dark {
+  color-scheme: dark;
+  background-color: #09090b;
+  color: #fafafa;
   --bg-main: #09090b;
   --bg-card: #121215;
   --bg-subtle: #18181b;
@@ -69,7 +77,7 @@ input::placeholder, textarea::placeholder {
 }
 
 /* Ensure minimum breathing room so Hebrew characters never touch the border or clip */
-input[type="text"], input:not([type]) {
+input[type="text"], input[type="number"], input:not([type]) {
   padding-right: 0.75rem;
   padding-left: 0.75rem;
 }
@@ -77,4 +85,28 @@ input[type="text"], input:not([type]) {
 textarea {
   padding-right: 0.75rem;
   padding-left: 0.75rem;
+}
+
+/* Guaranteed high-contrast text visibility in dark mode */
+html.dark input,
+html.dark textarea,
+html.dark select {
+  color: #fafafa !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #71717a !important;
+}
+
+/* Light mode high-contrast text visibility */
+html.light input,
+html.light textarea,
+html.light select {
+  color: #09090b !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #a1a1aa !important;
 }
