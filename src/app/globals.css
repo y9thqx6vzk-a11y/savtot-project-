@@ -54,3 +54,27 @@ html.dark ::-webkit-scrollbar-thumb {
 ::-webkit-scrollbar-thumb:hover {
   background: #a1a1aa;
 }
+
+/* Fix RTL input & textarea text clipping, overflow and boundary issues */
+input, textarea, select {
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: plaintext;
+  box-sizing: border-box;
+}
+
+input::placeholder, textarea::placeholder {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Ensure minimum breathing room so Hebrew characters never touch the border or clip */
+input[type="text"], input:not([type]) {
+  padding-right: 0.75rem;
+  padding-left: 0.75rem;
+}
+
+textarea {
+  padding-right: 0.75rem;
+  padding-left: 0.75rem;
+}

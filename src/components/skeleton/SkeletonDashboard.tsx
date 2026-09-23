@@ -490,7 +490,8 @@ export default function SkeletonDashboard() {
                 {/* Inline Add Gap Form */}
                 <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 rounded-md space-y-2 shadow-sm">
                   <input 
-                    className="w-full bg-transparent border-b border-zinc-200 dark:border-zinc-700 pb-1 text-xs text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-900"
+                    dir="rtl"
+                    className="w-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-md px-2.5 py-1.5 text-xs text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-900 transition-colors"
                     placeholder="הוסף פער ידע / סיכון חדש..."
                     value={newGapDesc}
                     onChange={(e) => setNewGapDesc(e.target.value)}
@@ -511,7 +512,8 @@ export default function SkeletonDashboard() {
                     ))}
                   </div>
                   <input 
-                    className="w-full bg-transparent border-b border-zinc-200 dark:border-zinc-700 pb-1 text-xs text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-900"
+                    dir="rtl"
+                    className="w-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-md px-2.5 py-1.5 text-xs text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-900 transition-colors"
                     placeholder="פעולת אימות (ניסוי / ספייק)"
                     value={newGapMit}
                     onChange={(e) => setNewGapMit(e.target.value)}

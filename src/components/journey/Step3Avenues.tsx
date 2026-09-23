@@ -93,7 +93,8 @@ export default function Step3Avenues({ isActive, isPast }: { isActive: boolean, 
         {/* Add Avenue Form */}
         <div className="bg-zinc-50 dark:bg-zinc-900/50 p-4 border border-zinc-200 dark:border-zinc-800 rounded space-y-3">
           <input 
-            className="w-full bg-transparent border-b border-zinc-300 dark:border-zinc-700 pb-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-100 placeholder:text-zinc-400"
+            dir="rtl"
+            className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded-md px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors placeholder:text-zinc-400"
             placeholder="הגדר אפיק פעולה חדש..."
             value={newAve}
             onChange={(e) => setNewAve(e.target.value)}
@@ -136,7 +137,8 @@ export default function Step3Avenues({ isActive, isPast }: { isActive: boolean, 
           מדמיינים מראש מה יכול להשתבש, מה יגרום ל״מוות״ של הפרויקט כדי לתרגם זאת למשימות מנע:
         </p>
         <textarea 
-          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded p-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors resize-none placeholder:text-zinc-400"
+          dir="rtl"
+          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md p-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors resize-none placeholder:text-zinc-400 leading-relaxed"
           rows={3}
           placeholder="מה יגרום למוות של הפרויקט אם לא ניערך לכך?..."
           value={project.preMortem}

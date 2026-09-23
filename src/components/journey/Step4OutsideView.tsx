@@ -142,7 +142,8 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
           <span className="text-[11px] font-mono text-zinc-400">חובה</span>
         </div>
         <input 
-          className="w-full bg-transparent border-b border-zinc-200 dark:border-zinc-800 pb-2 text-sm focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-100 transition-colors font-medium text-zinc-950 dark:text-zinc-50 placeholder:text-zinc-400"
+          dir="rtl"
+          className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded-md px-3 py-2 text-sm font-medium text-zinc-950 dark:text-zinc-50 focus:outline-none transition-colors placeholder:text-zinc-400"
           placeholder="למשל: אפליקציה מתחרה, כלי קודם שבנית, מוצר מוביל בתחום..."
           value={project.referenceProject}
           onFocus={(e) => e.target.select()}
@@ -162,7 +163,8 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
           מידע שקשה לכמת בימים: תלונות של משתמשים על מוצרים קיימים, במה הם הסתבכו, פיצ'רים מיותרים שהם בנו, איך הם התחילו בקטן, מקורות וקישורים.
         </p>
         <textarea 
-          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded p-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors resize-none placeholder:text-zinc-400 leading-relaxed"
+          dir="rtl"
+          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md p-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors resize-none placeholder:text-zinc-400 leading-relaxed"
           rows={3}
           placeholder="רשמו כאן כל תובנה חופשית מהשטח על הפרויקט או המוצר הדומה..."
           value={project.outsideViewNotes || ""}
@@ -177,7 +179,8 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
           סדר גודל, צוות ומשאבים של הפרויקט הדומה (אופציונלי)
         </label>
         <input 
-          className="w-full bg-transparent border-b border-zinc-200 dark:border-zinc-800 pb-2 text-sm focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-100 transition-colors font-medium text-zinc-950 dark:text-zinc-50 placeholder:text-zinc-400"
+          dir="rtl"
+          className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded-md px-3 py-2 text-sm font-medium text-zinc-950 dark:text-zinc-50 focus:outline-none transition-colors placeholder:text-zinc-400"
           placeholder="למשל: מפתח יחיד ב-Bootstrap, צוות של 3 מהנדסים, חברה גדולה עם תקציב גבוה..."
           value={project.referenceScale || ""}
           onFocus={(e) => e.target.select()}
@@ -191,7 +194,8 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
           מה אפשר ללמוד מהם? (מוקשים וכשלים שברצוננו למנוע)
         </label>
         <textarea 
-          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded p-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors resize-none placeholder:text-zinc-400"
+          dir="rtl"
+          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md p-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors resize-none placeholder:text-zinc-400 leading-relaxed"
           rows={2}
           placeholder="איפה הם הסתבכו, מה היה מיותר או אילו טעויות נמנע מראש..."
           value={project.lessonsLearnedText || ""}
@@ -206,7 +210,8 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
           איזה ערך מוסף ייחודי יש בפרויקט שלנו לעומתם?
         </label>
         <textarea 
-          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded p-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors resize-none placeholder:text-zinc-400"
+          dir="rtl"
+          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md p-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors resize-none placeholder:text-zinc-400 leading-relaxed"
           rows={2}
           placeholder="במה הפתרון שלנו פשוט, חזק, מהיר או ממוקד יותר מהפתרונות הקיימים?"
           value={project.addedValueText || ""}
@@ -252,7 +257,8 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
                 </div>
                 <input 
                   type="text"
-                  className="w-full bg-transparent border-b border-zinc-200 dark:border-zinc-800 pb-1.5 text-sm focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-100 transition-colors font-mono text-zinc-950 dark:text-zinc-50 placeholder:text-zinc-400"
+                  dir="rtl"
+                  className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded-md px-3 py-1.5 text-sm font-mono text-zinc-950 dark:text-zinc-50 placeholder:text-zinc-400 focus:outline-none transition-colors"
                   placeholder="למשל: שבועיים, 14 יום"
                   value={plannedText}
                   onFocus={(e) => e.target.select()}
@@ -273,7 +279,8 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
                 </div>
                 <input 
                   type="text"
-                  className="w-full bg-transparent border-b border-zinc-200 dark:border-zinc-800 pb-1.5 text-sm focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-100 transition-colors font-mono text-zinc-950 dark:text-zinc-50 placeholder:text-zinc-400"
+                  dir="rtl"
+                  className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded-md px-3 py-1.5 text-sm font-mono text-zinc-950 dark:text-zinc-50 placeholder:text-zinc-400 focus:outline-none transition-colors"
                   placeholder="למשל: 4 שבועות, 28 יום"
                   value={actualText}
                   onFocus={(e) => e.target.select()}

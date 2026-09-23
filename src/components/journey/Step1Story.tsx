@@ -39,14 +39,21 @@ export default function Step1Story({ isActive, isPast }: { isActive: boolean, is
         <label className="text-xs tracking-wider uppercase font-mono font-medium text-zinc-500 block">
           מה הפרויקט שאני רוצה לבצע? (תאר את הפרויקט במשפט אחד)
         </label>
-        <input 
+        <textarea 
           autoFocus
-          className="w-full bg-transparent border-b border-zinc-200 dark:border-zinc-800 pb-2 text-xl font-light text-zinc-950 dark:text-zinc-50 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-50 transition-colors placeholder:text-zinc-400"
+          dir="rtl"
+          rows={2}
+          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md p-3 text-base md:text-lg font-light text-zinc-950 dark:text-zinc-50 focus:outline-none transition-colors resize-none placeholder:text-zinc-400 leading-relaxed"
           placeholder="למשל: אפליקציית רשת להנגשת עולם ניהול הפרויקטים ומעקב יומיומי ללא עומס"
           value={project.oneLiner}
           onFocus={(e) => e.target.select()}
           onChange={(e) => updateProject({ oneLiner: e.target.value })}
-          onKeyDown={(e) => e.key === 'Enter' && document.getElementById('step1-prob')?.focus()}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              document.getElementById('step1-prob')?.focus();
+            }
+          }}
         />
       </div>
 
@@ -57,12 +64,18 @@ export default function Step1Story({ isActive, isPast }: { isActive: boolean, is
         </label>
         <textarea 
           id="step1-prob"
-          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded p-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors resize-none placeholder:text-zinc-400"
+          dir="rtl"
+          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md p-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors resize-none placeholder:text-zinc-400 leading-relaxed"
           rows={3}
           placeholder="למשל: העומס שיש הרבה פעמים בפרויקטים, וכתוצאה מאותו עומס נוצר בלאגן, ודחייה או ביטול של הפרויקט."
           value={project.problem}
           onFocus={(e) => e.target.select()}
           onChange={(e) => updateProject({ problem: e.target.value })}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+              document.getElementById('step1-target')?.focus();
+            }
+          }}
         />
       </div>
 
@@ -71,12 +84,21 @@ export default function Step1Story({ isActive, isPast }: { isActive: boolean, is
         <label className="text-xs tracking-wider uppercase font-mono font-medium text-zinc-500 block">
           עבור מי? (קהל היעד)
         </label>
-        <input 
-          className="w-full bg-transparent border-b border-zinc-200 dark:border-zinc-800 pb-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-50 transition-colors placeholder:text-zinc-400"
+        <textarea 
+          id="step1-target"
+          dir="rtl"
+          rows={2}
+          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md p-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors resize-none placeholder:text-zinc-400 leading-relaxed"
           placeholder="למשל: לכל אחד שרוצה בצורה מקצועית ופשוטה לייצר תוכנית עבודה, ואז מקום לעקוב אחרי הביצועים שלו בצורה יומיומית."
           value={project.targetAudience}
           onFocus={(e) => e.target.select()}
           onChange={(e) => updateProject({ targetAudience: e.target.value })}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              document.getElementById('step1-day')?.focus();
+            }
+          }}
         />
       </div>
 
@@ -86,7 +108,9 @@ export default function Step1Story({ isActive, isPast }: { isActive: boolean, is
           איך נראה יום בחיי משתמש, אחרי שהכל מוכן?
         </label>
         <textarea 
-          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded p-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors resize-none placeholder:text-zinc-400"
+          id="step1-day"
+          dir="rtl"
+          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md p-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors resize-none placeholder:text-zinc-400 leading-relaxed"
           rows={2}
           placeholder="למשל: המשתמש מבין בכמה שלבים פשוטים איך להתחיל, מתכנן בצורה נכונה, ומנהל מעקב יומיומי רגוע ללא בלאגן."
           value={project.dayInTheLife}
