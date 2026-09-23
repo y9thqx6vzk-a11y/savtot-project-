@@ -83,11 +83,15 @@ input::placeholder, textarea::placeholder {
 }
 
 textarea {
+  padding-right: 1.5rem !important; /* 24px clear margin from border */
+  padding-left: 1.25rem !important;
   padding-top: 0.875rem !important;
   padding-bottom: 0.875rem !important;
   min-height: 84px;
   overflow-y: auto !important;
-  word-break: break-word !important;
+  overflow-x: hidden !important;
+  overscroll-behavior-x: none !important;
+  word-break: normal !important;
   overflow-wrap: break-word !important;
   white-space: pre-wrap !important;
   resize: vertical;

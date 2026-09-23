@@ -122,7 +122,6 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
           className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded-md px-4 py-2.5 text-sm font-medium text-zinc-950 dark:text-zinc-50 focus:outline-none transition-colors placeholder:text-zinc-400"
           placeholder="למשל: אפליקציה מתחרה, כלי קודם שבנית, מוצר מוביל בתחום..."
           value={project.referenceProject}
-          onFocus={(e) => e.target.select()}
           onChange={(e) => updateProject({ referenceProject: e.target.value })}
         />
       </div>
@@ -140,11 +139,14 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
         </p>
         <textarea 
           dir="rtl"
+          wrap="soft"
           rows={4}
-          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md px-4 py-3 sm:px-5 sm:py-3.5 text-sm font-normal text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors min-h-[100px] resize-y placeholder:text-zinc-400 leading-relaxed"
+          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md pr-5 pl-4 py-3 sm:pr-6 sm:pl-5 sm:py-3.5 text-sm font-normal text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors min-h-[100px] resize-y overflow-x-hidden placeholder:text-zinc-400 leading-relaxed"
           placeholder="רשמו כאן כל תובנה חופשית מהשטח על הפרויקט או המוצר הדומה..."
           value={project.outsideViewNotes || ""}
-          onFocus={(e) => e.target.select()}
+          onScroll={(e) => {
+            if (e.currentTarget.scrollLeft !== 0) e.currentTarget.scrollLeft = 0;
+          }}
           onInput={(e) => {
             const el = e.currentTarget;
             el.style.height = 'auto';
@@ -164,7 +166,6 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
           className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded-md px-4 py-2.5 text-sm font-medium text-zinc-950 dark:text-zinc-50 focus:outline-none transition-colors placeholder:text-zinc-400"
           placeholder="למשל: מפתח יחיד ב-Bootstrap, צוות של 3 מהנדסים, חברה גדולה עם תקציב גבוה..."
           value={project.referenceScale || ""}
-          onFocus={(e) => e.target.select()}
           onChange={(e) => updateProject({ referenceScale: e.target.value })}
         />
       </div>
@@ -176,11 +177,14 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
         </label>
         <textarea 
           dir="rtl"
+          wrap="soft"
           rows={3}
-          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md px-4 py-3 sm:px-5 sm:py-3.5 text-sm font-normal text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors min-h-[88px] resize-y placeholder:text-zinc-400 leading-relaxed"
+          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md pr-5 pl-4 py-3 sm:pr-6 sm:pl-5 sm:py-3.5 text-sm font-normal text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors min-h-[88px] resize-y overflow-x-hidden placeholder:text-zinc-400 leading-relaxed"
           placeholder="איפה הם הסתבכו, מה היה מיותר או אילו טעויות נמנע מראש..."
           value={project.lessonsLearnedText || ""}
-          onFocus={(e) => e.target.select()}
+          onScroll={(e) => {
+            if (e.currentTarget.scrollLeft !== 0) e.currentTarget.scrollLeft = 0;
+          }}
           onInput={(e) => {
             const el = e.currentTarget;
             el.style.height = 'auto';
@@ -197,11 +201,14 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
         </label>
         <textarea 
           dir="rtl"
+          wrap="soft"
           rows={3}
-          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md px-4 py-3 sm:px-5 sm:py-3.5 text-sm font-normal text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors min-h-[88px] resize-y placeholder:text-zinc-400 leading-relaxed"
+          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md pr-5 pl-4 py-3 sm:pr-6 sm:pl-5 sm:py-3.5 text-sm font-normal text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors min-h-[88px] resize-y overflow-x-hidden placeholder:text-zinc-400 leading-relaxed"
           placeholder="במה הפתרון שלנו פשוט, חזק, מהיר או ממוקד יותר מהפתרונות הקיימים?"
           value={project.addedValueText || ""}
-          onFocus={(e) => e.target.select()}
+          onScroll={(e) => {
+            if (e.currentTarget.scrollLeft !== 0) e.currentTarget.scrollLeft = 0;
+          }}
           onInput={(e) => {
             const el = e.currentTarget;
             el.style.height = 'auto';
@@ -252,7 +259,6 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
                   className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded-md px-4 py-2 text-sm font-mono text-zinc-950 dark:text-zinc-50 placeholder:text-zinc-400 focus:outline-none transition-colors"
                   placeholder="למשל: שבועיים, 14 יום"
                   value={plannedText}
-                  onFocus={(e) => e.target.select()}
                   onChange={(e) => setPlannedText(e.target.value)}
                 />
               </div>
@@ -274,7 +280,6 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
                   className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded-md px-4 py-2 text-sm font-mono text-zinc-950 dark:text-zinc-50 placeholder:text-zinc-400 focus:outline-none transition-colors"
                   placeholder="למשל: 4 שבועות, 28 יום"
                   value={actualText}
-                  onFocus={(e) => e.target.select()}
                   onChange={(e) => setActualText(e.target.value)}
                 />
               </div>
