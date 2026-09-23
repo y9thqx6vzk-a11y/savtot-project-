@@ -44,6 +44,7 @@ export default function Step1Story({ isActive, isPast }: { isActive: boolean, is
           className="w-full bg-transparent border-b border-zinc-200 dark:border-zinc-800 pb-2 text-xl font-light text-zinc-950 dark:text-zinc-50 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-50 transition-colors placeholder:text-zinc-400"
           placeholder="למשל: אפליקציית רשת להנגשת עולם ניהול הפרויקטים ומעקב יומיומי ללא עומס"
           value={project.oneLiner}
+          onFocus={(e) => e.target.select()}
           onChange={(e) => updateProject({ oneLiner: e.target.value })}
           onKeyDown={(e) => e.key === 'Enter' && document.getElementById('step1-prob')?.focus()}
         />
@@ -60,6 +61,7 @@ export default function Step1Story({ isActive, isPast }: { isActive: boolean, is
           rows={3}
           placeholder="למשל: העומס שיש הרבה פעמים בפרויקטים, וכתוצאה מאותו עומס נוצר בלאגן, ודחייה או ביטול של הפרויקט."
           value={project.problem}
+          onFocus={(e) => e.target.select()}
           onChange={(e) => updateProject({ problem: e.target.value })}
         />
       </div>
@@ -73,6 +75,7 @@ export default function Step1Story({ isActive, isPast }: { isActive: boolean, is
           className="w-full bg-transparent border-b border-zinc-200 dark:border-zinc-800 pb-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-50 transition-colors placeholder:text-zinc-400"
           placeholder="למשל: לכל אחד שרוצה בצורה מקצועית ופשוטה לייצר תוכנית עבודה, ואז מקום לעקוב אחרי הביצועים שלו בצורה יומיומית."
           value={project.targetAudience}
+          onFocus={(e) => e.target.select()}
           onChange={(e) => updateProject({ targetAudience: e.target.value })}
         />
       </div>
@@ -87,6 +90,7 @@ export default function Step1Story({ isActive, isPast }: { isActive: boolean, is
           rows={2}
           placeholder="למשל: המשתמש מבין בכמה שלבים פשוטים איך להתחיל, מתכנן בצורה נכונה, ומנהל מעקב יומיומי רגוע ללא בלאגן."
           value={project.dayInTheLife}
+          onFocus={(e) => e.target.select()}
           onChange={(e) => updateProject({ dayInTheLife: e.target.value })}
           onKeyDown={handleKeyDown}
         />

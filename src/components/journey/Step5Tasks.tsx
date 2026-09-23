@@ -20,7 +20,7 @@ export default function Step5Tasks({ isActive, isPast }: { isActive: boolean, is
 
     const newTask = {
       id: Math.random().toString(36).substring(2, 9),
-      title: newTaskTitle,
+      title: newTaskTitle.trim(),
       isEssential: isEssential,
       isBottleneck: false,
       delayDays: 0,
@@ -28,7 +28,9 @@ export default function Step5Tasks({ isActive, isPast }: { isActive: boolean, is
       completed: false,
     };
 
-    updateAvenue(activeAvenueId, { tasks: [...avenue.tasks, newTask] });
+    // Purge system-suggested sample tasks (t-*) when user adds their own
+    const existingTasks = avenue.tasks.filter(t => !t.id.startsWith("t-"));
+    updateAvenue(activeAvenueId, { tasks: [...existingTasks, newTask] });
     setNewTaskTitle("");
   };
 

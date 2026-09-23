@@ -15,11 +15,13 @@ export default function Step3Avenues({ isActive, isPast }: { isActive: boolean, 
     if (!newAve.trim()) return;
     const avenue = {
       id: Math.random().toString(36).substring(2, 9),
-      title: newAve,
+      title: newAve.trim(),
       isCriticalPath: isCrit,
       tasks: [],
     };
-    updateProject({ avenues: [...project.avenues, avenue] });
+    // Purge system-suggested sample avenues (ave-*) when user adds their own
+    const existingAvenues = project.avenues.filter(a => !a.id.startsWith("ave-"));
+    updateProject({ avenues: [...existingAvenues, avenue] });
     setNewAve("");
     setIsCrit(false);
   };

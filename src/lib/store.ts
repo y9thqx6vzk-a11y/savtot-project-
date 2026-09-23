@@ -49,22 +49,7 @@ export const initialProjectState: ProjectData = {
   plannedDurationDays: 0,
   actualDurationDays: 0,
   optimismGapPercent: 0,
-  historicalBenchmarks: [
-    {
-      id: "bench-1",
-      title: "עיצוב מחדש של מערכת התשלומים והאימות",
-      plannedDays: 14,
-      actualDays: 20,
-      gapPercent: 43,
-    },
-    {
-      id: "bench-2",
-      title: "מנוע סנכרון בזמן אמת",
-      plannedDays: 30,
-      actualDays: 40,
-      gapPercent: 33,
-    }
-  ],
+  historicalBenchmarks: [],
   totalBufferDays: 0,
 };
 

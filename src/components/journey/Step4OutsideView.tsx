@@ -33,13 +33,18 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
 
   const handleSaveBenchmark = () => {
     if (project.referenceProject && plannedParsed && actualParsed) {
-      addHistoricalBenchmark({
+      const cleanBenchmarks = (project.historicalBenchmarks || []).filter(b => !b.id.startsWith("bench-"));
+      const newBench = {
+        id: Math.random().toString(36).substring(2, 9),
         title: project.referenceProject,
         plannedDays: plannedParsed.days,
         actualDays: actualParsed.days,
         gapPercent: project.optimismGapPercent,
         addedValue: project.addedValueText,
         lessonsLearned: project.lessonsLearnedText,
+      };
+      updateProject({
+        historicalBenchmarks: [newBench, ...cleanBenchmarks]
       });
     }
   };
@@ -97,6 +102,7 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
           className="w-full bg-transparent border-b border-zinc-200 dark:border-zinc-800 pb-2 text-sm focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-100 transition-colors font-medium text-zinc-950 dark:text-zinc-50 placeholder:text-zinc-400"
           placeholder="שם של פרויקט דומה בעבר..."
           value={project.referenceProject}
+          onFocus={(e) => e.target.select()}
           onChange={(e) => updateProject({ referenceProject: e.target.value })}
         />
       </div>
@@ -117,6 +123,7 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
             className="w-full bg-transparent border-b border-zinc-200 dark:border-zinc-800 pb-2 text-sm focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-100 transition-colors font-mono text-zinc-950 dark:text-zinc-50 placeholder:text-zinc-400"
             placeholder="למשל: שבועיים, 14 יום"
             value={plannedText}
+            onFocus={(e) => e.target.select()}
             onChange={(e) => setPlannedText(e.target.value)}
           />
         </div>
@@ -135,6 +142,7 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
             className="w-full bg-transparent border-b border-zinc-200 dark:border-zinc-800 pb-2 text-sm focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-100 transition-colors font-mono text-zinc-950 dark:text-zinc-50 placeholder:text-zinc-400"
             placeholder="למשל: 4 שבועות, 28 יום"
             value={actualText}
+            onFocus={(e) => e.target.select()}
             onChange={(e) => setActualText(e.target.value)}
           />
         </div>
@@ -150,6 +158,7 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
           rows={2}
           placeholder="במה הפתרון שלנו פשוט, חזק ומדויק יותר?"
           value={project.addedValueText || ""}
+          onFocus={(e) => e.target.select()}
           onChange={(e) => updateProject({ addedValueText: e.target.value })}
         />
       </div>
@@ -164,6 +173,7 @@ export default function Step4OutsideView({ isActive, isPast }: { isActive: boole
           rows={2}
           placeholder="לקחים מרכזיים מפרויקט העבר..."
           value={project.lessonsLearnedText || ""}
+          onFocus={(e) => e.target.select()}
           onChange={(e) => updateProject({ lessonsLearnedText: e.target.value })}
           onKeyDown={handleKeyDown}
         />

@@ -28,11 +28,13 @@ export default function Step2Gaps({ isActive, isPast }: { isActive: boolean, isP
     if (!newDesc.trim()) return;
     const gap = {
       id: Math.random().toString(36).substring(2, 9),
-      description: newDesc,
+      description: newDesc.trim(),
       category: newCat,
-      mitigation: newMit || "העמקת ידע וניסוי מקדים",
+      mitigation: newMit.trim() || "העמקת ידע וניסוי מקדים",
     };
-    updateProject({ knowledgeGaps: [...project.knowledgeGaps, gap] });
+    // Purge system-suggested sample gaps (kg-*) when user adds their own
+    const existingGaps = project.knowledgeGaps.filter(g => !g.id.startsWith("kg-"));
+    updateProject({ knowledgeGaps: [...existingGaps, gap] });
     setNewDesc("");
     setNewMit("");
   };
@@ -151,21 +153,6 @@ export default function Step2Gaps({ isActive, isPast }: { isActive: boolean, isP
           >
             + הוסף פער ידע
           </button>
-        </div>
-      </div>
-
-      {/* Suggested Reading References */}
-      <div className="p-3 bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded text-xs text-zinc-600 dark:text-zinc-400">
-        <span className="font-semibold text-zinc-900 dark:text-zinc-100 block mb-1 font-mono text-[11px] uppercase tracking-wider">
-          עקרונות ומתודולוגיות מומלצות לתכנון הפרויקט:
-        </span>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-1 text-[11px] font-mono text-zinc-500">
-          <div>• Thinking, Fast and Slow (Kahneman)</div>
-          <div>• The Goal (Eliyahu Goldratt)</div>
-          <div>• Making Things Happen (Scott Berkun)</div>
-          <div>• Measure What Matters (John Doerr)</div>
-          <div>• How Big Things Get Done (Flyvbjerg)</div>
-          <div>• User Story Mapping (Jeff Patton)</div>
         </div>
       </div>
 
