@@ -2,10 +2,11 @@
 
 import { useAppStore } from "@/lib/store";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Command } from "cmdk";
 import { useAppMotion } from "@/lib/useMotionConfig";
 import { GapCategory } from "@/types/project";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 export default function SkeletonDashboard() {
   const { 
@@ -18,6 +19,7 @@ export default function SkeletonDashboard() {
     exportJSON,
     collapsedAvenueIds,
     toggleAvenueCollapse,
+    theme,
   } = useAppStore();
 
   const { transition, shouldReduceMotion } = useAppMotion();
@@ -33,10 +35,15 @@ export default function SkeletonDashboard() {
   const [newGapCat, setNewGapCat] = useState<GapCategory>("tech");
   const [newGapMit, setNewGapMit] = useState("");
 
+  const catLabels: Record<GapCategory, string> = {
+    tech: "טכנולוגי",
+    market: "שוק / מוצר",
+    execution: "ביצוע / תפעול",
+  };
+
   // Keyboard Shortcuts Listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't trigger single-key shortcuts when typing in inputs
       const target = e.target as HTMLElement;
       const isInput = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA';
 
@@ -84,7 +91,6 @@ export default function SkeletonDashboard() {
 
   const handleAvenueClick = (aveId: string) => {
     if (focusMode) {
-      // In focus mode, collapse all others and open this one
       project.avenues.forEach(a => {
         if (a.id !== aveId && !collapsedAvenueIds.includes(a.id)) {
           toggleAvenueCollapse(a.id);
@@ -104,7 +110,7 @@ export default function SkeletonDashboard() {
       id: Math.random().toString(36).substring(2, 9),
       description: newGapDesc,
       category: newGapCat,
-      mitigation: newGapMit || "Under investigation",
+      mitigation: newGapMit || "דרושה בדיקה",
     };
     updateProject({ knowledgeGaps: [...project.knowledgeGaps, newGap] });
     setNewGapDesc("");
@@ -116,9 +122,9 @@ export default function SkeletonDashboard() {
   };
 
   const bufferStatus = getBufferStatus();
-  const bufferColor = bufferStatus === 'green' ? 'bg-[#22c55e] shadow-[0_0_12px_rgba(34,197,94,0.6)]' : 
-                      bufferStatus === 'yellow' ? 'bg-[#eab308] shadow-[0_0_12px_rgba(234,179,8,0.6)]' : 
-                      'bg-[#ef4444] shadow-[0_0_12px_rgba(239,68,68,0.6)]';
+  const bufferColor = bufferStatus === 'green' ? 'bg-[#10b981] shadow-[0_0_12px_rgba(16,185,129,0.5)]' : 
+                      bufferStatus === 'yellow' ? 'bg-[#f59e0b] shadow-[0_0_12px_rgba(245,158,11,0.5)]' : 
+                      'bg-[#ef4444] shadow-[0_0_12px_rgba(239,68,68,0.5)]';
 
   const consumedDays = getConsumedBufferDays();
   const totalDays = project.totalBufferDays;
@@ -128,110 +134,123 @@ export default function SkeletonDashboard() {
     updateTask(aveId, taskId, { completed: !completed });
   };
 
+  const isLight = theme === 'light';
+
   return (
-    <div className="min-h-screen bg-black text-zinc-100 flex justify-center py-12 px-6 select-none font-sans">
+    <div className="min-h-screen flex justify-center py-12 px-6 select-none font-sans text-right" dir="rtl">
       
       <div className="w-full max-w-4xl">
-        {/* Header & Controls */}
-        <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-12 border-b border-zinc-900 pb-6 gap-6">
+        {/* Top Bar with Theme Toggle & Status */}
+        <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-10 border-b border-[#e8e5dc] dark:border-zinc-850 pb-6 gap-6">
           <div>
-            <div className="flex items-center gap-3 mb-1.5">
-              <h1 className="text-3xl font-light tracking-tight text-white">{project.oneLiner || "The Skeleton"}</h1>
-              {/* Traffic Light Dot (ONLY color on page) */}
+            <div className="flex items-center gap-3 mb-2">
+              <h1 className="text-3xl font-light tracking-tight text-[#1d1d1f] dark:text-white">
+                {project.oneLiner || "לוח השלד (The Skeleton)"}
+              </h1>
+              {/* Traffic Light Dot (ONLY color on canvas) */}
               <div 
-                title={`Buffer: ${consumedDays}/${totalDays}d used (${bufferPct}%) - ${bufferStatus.toUpperCase()}`}
+                title={`באפר: ${consumedDays}/${totalDays} ימים נוצלו (${bufferPct}%) - ${bufferStatus === 'green' ? 'תקין' : bufferStatus === 'yellow' ? 'זהירות' : 'קריטי'}`}
                 className="relative cursor-help"
               >
-                <div className={`w-3 h-3 rounded-full ${bufferColor} transition-all duration-300`} />
+                <div className={`w-3.5 h-3.5 rounded-full ${bufferColor} transition-all duration-300`} />
               </div>
             </div>
 
-            <div className="text-xs text-zinc-500 flex items-center gap-4 font-mono">
-              <span>{project.avenues.length} Avenues</span>
-              <span>Buffer: {consumedDays} / {totalDays}d ({bufferPct}%)</span>
+            <div className="text-xs text-[#86868b] flex items-center gap-4 font-mono">
+              <span>{project.avenues.length} אפיקי עבודה</span>
+              <span>באפר: {consumedDays} / {totalDays} ימים ({bufferPct}%)</span>
               <button 
                 onClick={() => setDrawerOpen(true)} 
-                className="text-zinc-400 hover:text-white underline underline-offset-4 decoration-zinc-800 transition-colors"
+                className="text-[#1d1d1f] dark:text-white underline underline-offset-4 decoration-[#c5c0b5] hover:opacity-80 transition-opacity font-sans"
               >
-                Story & Risks [S]
+                סיפור וסיכונים [S]
               </button>
             </div>
           </div>
           
-          <div className="flex items-center gap-5 flex-wrap">
+          <div className="flex items-center gap-4 flex-wrap">
+            <ThemeToggle />
+
             {/* Focus Mode Toggle */}
             <button
               onClick={() => setFocusMode(!focusMode)}
-              className={`text-[11px] font-mono uppercase px-2.5 py-1 rounded border transition-colors ${focusMode ? 'bg-white text-black font-semibold border-white' : 'border-zinc-800 text-zinc-500 hover:text-zinc-300'}`}
-              title="Only keep one avenue open at a time"
+              className={`text-xs px-3.5 py-1.5 rounded-full border transition-all ${
+                focusMode 
+                  ? 'bg-[#1d1d1f] text-white dark:bg-white dark:text-black font-semibold border-transparent shadow-sm' 
+                  : 'bg-white/80 dark:bg-zinc-900 border-[#e2ded5] dark:border-zinc-800 text-[#666] hover:text-[#1d1d1f]'
+              }`}
+              title="מיקוד: פתיחת אפיק בודד וסגירת כל השאר"
             >
-              Focus Mode
+              מצב מיקוד
             </button>
 
             {/* MVP ONLY Switch */}
-            <div className="flex items-center gap-2.5">
-              <span className="text-xs font-mono tracking-wider uppercase text-zinc-400">MVP ONLY</span>
+            <div className="flex items-center gap-2.5 bg-white/80 dark:bg-zinc-900 px-3.5 py-1 rounded-full border border-[#e2ded5] dark:border-zinc-800 shadow-sm">
+              <span className="text-xs font-semibold text-[#1d1d1f] dark:text-zinc-300">MVP בלבד</span>
               <button 
                 onClick={() => setMvpOnly(!mvpOnly)}
-                className={`relative w-10 h-5 rounded-full transition-colors ${mvpOnly ? 'bg-white' : 'bg-zinc-800'}`}
-                aria-label="Toggle MVP Only Mode"
+                className={`relative w-9 h-5 rounded-full transition-colors ${mvpOnly ? 'bg-[#1d1d1f] dark:bg-white' : 'bg-[#e2ded5] dark:bg-zinc-800'}`}
+                aria-label="סנן משימות MVP"
               >
                 <motion.div 
                   layout
                   transition={transition}
-                  className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full ${mvpOnly ? 'bg-black translate-x-5' : 'bg-zinc-400'}`}
+                  className={`absolute top-0.5 right-0.5 w-4 h-4 rounded-full ${mvpOnly ? 'bg-white dark:bg-black translate-x-[-16px]' : 'bg-[#8e8e93]'}`}
                 />
               </button>
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <button 
                 onClick={() => setShortcutsOpen(true)}
-                className="text-xs text-zinc-500 hover:text-zinc-300 border border-zinc-800 rounded px-2 py-1 font-mono"
-                title="Keyboard Shortcuts"
+                className="text-xs text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-white bg-white/80 dark:bg-zinc-900 border border-[#e2ded5] dark:border-zinc-800 rounded-full px-2.5 py-1 font-mono shadow-sm"
+                title="קיצורי מקלדת"
               >
                 ?
               </button>
               <button 
                 onClick={() => setStage(1)} 
-                className="text-xs text-zinc-500 hover:text-white transition-colors border border-zinc-800 rounded px-2.5 py-1 font-mono"
+                className="text-xs text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-white bg-white/80 dark:bg-zinc-900 border border-[#e2ded5] dark:border-zinc-800 rounded-full px-3 py-1 font-sans shadow-sm"
               >
-                Edit [J]
+                עריכת המסע [J]
               </button>
             </div>
           </div>
         </div>
 
         {/* Tree Structure */}
-        <div className="space-y-6">
+        <div className="space-y-5">
           {project.avenues.map(ave => {
             const visibleTasks = mvpOnly ? ave.tasks.filter(t => t.isEssential) : ave.tasks;
             const isCollapsed = collapsedAvenueIds.includes(ave.id);
 
             return (
-              <div key={ave.id} className="border border-zinc-900/60 rounded-md p-4 bg-zinc-950/40">
+              <div 
+                key={ave.id} 
+                className="border border-[#e8e5dc] dark:border-zinc-850 rounded-2xl p-5 bg-white/80 dark:bg-zinc-950/80 shadow-[0_2px_12px_rgba(0,0,0,0.02)] transition-all"
+              >
                 {/* Avenue Header (Click to collapse) */}
                 <div 
                   onClick={() => handleAvenueClick(ave.id)}
                   className="flex items-center justify-between cursor-pointer group py-1 select-none"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <span className="text-[10px] font-mono text-zinc-600 transition-transform duration-200">
-                      {isCollapsed ? "▶" : "▼"}
+                  <div className="flex items-center gap-3">
+                    <span className="text-[11px] font-mono text-[#86868b] transition-transform duration-200">
+                      {isCollapsed ? "◀" : "▼"}
                     </span>
-                    <h3 className="font-semibold text-zinc-200 tracking-wider text-xs uppercase flex items-center gap-2">
+                    <h3 className="font-semibold text-[#1d1d1f] dark:text-zinc-100 tracking-wide text-xs uppercase flex items-center gap-2">
                       {ave.title}
                     </h3>
                     {ave.isCriticalPath && (
-                      <span className="text-[9px] font-mono border border-zinc-700 bg-zinc-900 text-white px-1.5 py-0.5 rounded uppercase font-semibold">
-                        Critical Path
+                      <span className="text-[9px] font-mono border border-red-200 dark:border-red-900/60 bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full uppercase font-bold">
+                        נתיב קריטי
                       </span>
                     )}
                   </div>
 
-                  <div className="text-[11px] font-mono text-zinc-600">
-                    {visibleTasks.filter(t => t.completed).length} / {visibleTasks.length} done
+                  <div className="text-xs font-mono text-[#86868b]">
+                    {visibleTasks.filter(t => t.completed).length} / {visibleTasks.length} הושלמו
                   </div>
                 </div>
                 
@@ -244,11 +263,11 @@ export default function SkeletonDashboard() {
                       animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, height: "auto" }}
                       exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, height: 0 }}
                       transition={transition}
-                      className="mt-3 pl-3 space-y-1 border-l border-zinc-800/80 overflow-hidden"
+                      className="mt-3 pr-3 space-y-1 border-r border-[#e8e5dc] dark:border-zinc-800 overflow-hidden"
                     >
                       {visibleTasks.length === 0 ? (
-                        <div className="text-xs text-zinc-600 italic py-2">
-                          {mvpOnly ? "No essential MVP tasks in this avenue." : "No tasks added yet."}
+                        <div className="text-xs text-[#86868b] italic py-2">
+                          {mvpOnly ? "אין משימות MVP הכרחיות באפיק זה." : "לא נוספו משימות לאפיק זה."}
                         </div>
                       ) : (
                         visibleTasks.map(task => {
@@ -259,61 +278,73 @@ export default function SkeletonDashboard() {
                               key={task.id}
                               layout
                               transition={transition}
-                              className={`flex items-center justify-between py-2 pr-3 pl-3 rounded transition-colors group ${isCriticalTask ? 'border-l-2 border-white bg-zinc-900/30' : 'border-l-2 border-transparent hover:bg-zinc-900/40'}`}
+                              className={`flex items-center justify-between py-2.5 pl-3 pr-3 rounded-xl transition-all group ${
+                                isCriticalTask 
+                                  ? 'border-r-2 border-[#1d1d1f] dark:border-white bg-[#f8f6f0] dark:bg-zinc-900/40' 
+                                  : 'border-r-2 border-transparent hover:bg-[#f7f5ef] dark:hover:bg-zinc-900/30'
+                              }`}
                             >
                               <div className="flex items-center gap-3">
                                 <button 
                                   onClick={() => toggleTaskComplete(ave.id, task.id, task.completed)}
-                                  className={`w-3.5 h-3.5 rounded-sm border flex items-center justify-center transition-colors ${task.completed ? 'bg-white border-white' : 'border-zinc-700 hover:border-zinc-400'}`}
+                                  className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${
+                                    task.completed 
+                                      ? 'bg-[#1d1d1f] text-white dark:bg-white dark:text-black border-transparent shadow-sm' 
+                                      : 'border-[#c5c0b5] dark:border-zinc-700 hover:border-[#1d1d1f]'
+                                  }`}
                                 >
-                                  {task.completed && <span className="text-black text-[10px] font-bold">✓</span>}
+                                  {task.completed && <span className="text-[10px] font-bold">✓</span>}
                                 </button>
 
-                                <span className={`text-sm transition-colors ${task.completed ? 'text-zinc-600 line-through' : 'text-zinc-200 font-medium'}`}>
+                                <span className={`text-sm transition-colors ${
+                                  task.completed 
+                                    ? 'text-[#a1a1a6] line-through' 
+                                    : 'text-[#1d1d1f] dark:text-zinc-200 font-medium'
+                                }`}>
                                   {task.title}
                                 </span>
 
                                 {isCriticalTask && (
-                                  <span className="text-[9px] font-mono text-zinc-400 border border-zinc-800 px-1 rounded uppercase tracking-wider">
-                                    Critical
+                                  <span className="text-[9px] font-mono text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/40 bg-red-50/50 dark:bg-red-950/20 px-1.5 py-0.5 rounded">
+                                    קריטי
                                   </span>
                                 )}
 
                                 {!task.isEssential && !mvpOnly && (
-                                  <span className="text-[9px] font-mono text-zinc-600 uppercase border border-zinc-900 px-1 rounded">
-                                    Extra
+                                  <span className="text-[9px] font-mono text-[#86868b] border border-[#e2ded5] dark:border-zinc-800 px-1.5 py-0.5 rounded">
+                                    רשות
                                   </span>
                                 )}
                               </div>
 
-                              <div className="flex items-center gap-4">
+                              <div className="flex items-center gap-3">
                                 {/* OKR Quantitative Badge */}
                                 {task.okr && task.okr.target > 0 && (
-                                  <div className="text-[10px] bg-zinc-900/80 border border-zinc-800 px-2 py-0.5 rounded text-zinc-400 font-mono flex items-center gap-1.5">
-                                    <span className="text-zinc-500">{task.okr.metric}:</span>
-                                    <div className="flex items-center text-zinc-200 font-bold">
+                                  <div className="text-[10px] bg-white dark:bg-zinc-900 border border-[#e2ded5] dark:border-zinc-800 px-2.5 py-1 rounded-full text-[#555] dark:text-zinc-400 font-mono flex items-center gap-1.5 shadow-sm">
+                                    <span className="text-[#86868b]">{task.okr.metric}:</span>
+                                    <div className="flex items-center text-[#1d1d1f] dark:text-zinc-200 font-bold">
                                       <input 
                                         type="number"
-                                        className="bg-transparent w-8 text-right focus:outline-none focus:text-white font-mono" 
+                                        className="bg-transparent w-8 text-center focus:outline-none focus:underline font-mono" 
                                         value={task.okr.current} 
                                         onChange={(e) => updateTask(ave.id, task.id, { okr: { ...task.okr, current: Number(e.target.value) } })}
                                       />
-                                      <span className="text-zinc-500 font-normal ml-0.5">/ {task.okr.target} {task.okr.unit}</span>
+                                      <span className="text-[#86868b] font-normal mr-0.5">/ {task.okr.target} {task.okr.unit}</span>
                                     </div>
                                   </div>
                                 )}
 
                                 {/* Task Slippage / Delay Modifier */}
                                 {task.isBottleneck && (
-                                  <div className="flex items-center gap-1 text-[10px] font-mono bg-zinc-950 px-2 py-0.5 border border-zinc-900 rounded">
-                                    <span className="text-zinc-400">Delay:</span>
+                                  <div className="flex items-center gap-1 text-[10px] font-mono bg-white dark:bg-zinc-900 px-2.5 py-1 border border-[#e2ded5] dark:border-zinc-800 rounded-full shadow-sm">
+                                    <span className="text-[#86868b]">עיכוב:</span>
                                     <input 
                                       type="number"
-                                      className="bg-transparent border border-zinc-800 rounded px-1 w-8 text-center text-white focus:outline-none focus:border-zinc-500 font-mono" 
+                                      className="bg-transparent border border-[#d8d4ca] dark:border-zinc-700 rounded px-1 w-8 text-center text-[#1d1d1f] dark:text-white focus:outline-none font-mono font-bold" 
                                       value={task.delayDays} 
                                       onChange={(e) => updateTask(ave.id, task.id, { delayDays: Number(e.target.value) })}
                                     />
-                                    <span className="text-zinc-600">d</span>
+                                    <span className="text-[#86868b]">ימים</span>
                                   </div>
                                 )}
                               </div>
@@ -330,15 +361,15 @@ export default function SkeletonDashboard() {
         </div>
 
         {/* Minimal Footer */}
-        <div className="mt-16 pt-6 border-t border-zinc-900 flex justify-between items-center text-xs text-zinc-600 font-mono">
+        <div className="mt-14 pt-6 border-t border-[#e8e5dc] dark:border-zinc-850 flex justify-between items-center text-xs text-[#86868b] font-mono">
           <div className="flex items-center gap-2">
-            <span>Press</span> 
-            <kbd className="bg-zinc-900 px-1.5 py-0.5 rounded border border-zinc-800 text-zinc-400 font-mono">Cmd + K</kbd> 
-            <span>or</span>
-            <kbd className="bg-zinc-900 px-1.5 py-0.5 rounded border border-zinc-800 text-zinc-400 font-mono">?</kbd>
+            <span>תפריט פקודות:</span> 
+            <kbd className="bg-white dark:bg-zinc-900 px-2 py-0.5 rounded border border-[#d8d4ca] dark:border-zinc-800 text-[#1d1d1f] dark:text-white font-mono shadow-sm">Cmd + K</kbd> 
+            <span>או</span>
+            <kbd className="bg-white dark:bg-zinc-900 px-2 py-0.5 rounded border border-[#d8d4ca] dark:border-zinc-800 text-[#1d1d1f] dark:text-white font-mono shadow-sm">?</kbd>
           </div>
-          <button onClick={handleExport} className="hover:text-white transition-colors">
-            Export JSON [E]
+          <button onClick={handleExport} className="hover:text-[#1d1d1f] dark:hover:text-white transition-colors">
+            ייצוא גיבוי JSON [E]
           </button>
         </div>
       </div>
@@ -351,62 +382,66 @@ export default function SkeletonDashboard() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={transition}
-            className="fixed top-0 right-0 bottom-0 w-[420px] max-w-full bg-zinc-950 border-l border-zinc-900 p-6 shadow-2xl overflow-y-auto z-40"
+            className="fixed top-0 left-0 bottom-0 w-[420px] max-w-full bg-[#fbfaf7] dark:bg-zinc-950 border-r border-[#e8e5dc] dark:border-zinc-800 p-6 shadow-2xl overflow-y-auto z-40 text-right"
           >
-            <div className="flex justify-between items-center mb-6 pb-4 border-b border-zinc-900">
-              <h2 className="text-base font-medium text-white tracking-tight">Project Story & Gaps</h2>
-              <button onClick={() => setDrawerOpen(false)} className="text-zinc-500 hover:text-white text-xs font-mono">ESC</button>
+            <div className="flex justify-between items-center mb-6 pb-4 border-b border-[#e8e5dc] dark:border-zinc-900">
+              <h2 className="text-base font-semibold text-[#1d1d1f] dark:text-white tracking-tight">סיפור הפרויקט והסיכונים</h2>
+              <button onClick={() => setDrawerOpen(false)} className="text-xs font-mono text-[#86868b] hover:text-[#1d1d1f]">סגור (ESC)</button>
             </div>
             
-            <div className="space-y-6 text-sm text-zinc-400">
+            <div className="space-y-6 text-sm text-[#555] dark:text-zinc-400">
               <div>
-                <h4 className="text-zinc-500 text-[11px] font-mono mb-1 uppercase tracking-wider">Root Problem</h4>
-                <p className="text-zinc-200 text-xs leading-relaxed">{project.problem || "None specified"}</p>
+                <h4 className="text-[#86868b] text-[11px] font-semibold mb-1 uppercase tracking-wider">הבעיה המרכזית</h4>
+                <p className="text-[#1d1d1f] dark:text-zinc-200 text-xs leading-relaxed">{project.problem || "טרם צוינה"}</p>
               </div>
 
               <div>
-                <h4 className="text-zinc-500 text-[11px] font-mono mb-1 uppercase tracking-wider">Target Audience</h4>
-                <p className="text-zinc-200 text-xs">{project.targetAudience || "None specified"}</p>
+                <h4 className="text-[#86868b] text-[11px] font-semibold mb-1 uppercase tracking-wider">קהל יעד</h4>
+                <p className="text-[#1d1d1f] dark:text-zinc-200 text-xs">{project.targetAudience || "טרם צוין"}</p>
               </div>
 
               <div>
-                <h4 className="text-zinc-500 text-[11px] font-mono mb-1 uppercase tracking-wider">Day in the Life</h4>
-                <p className="text-zinc-200 text-xs leading-relaxed">{project.dayInTheLife || "None specified"}</p>
+                <h4 className="text-[#86868b] text-[11px] font-semibold mb-1 uppercase tracking-wider">היום שאחרי</h4>
+                <p className="text-[#1d1d1f] dark:text-zinc-200 text-xs leading-relaxed">{project.dayInTheLife || "טרם צוין"}</p>
               </div>
 
               <div>
-                <h4 className="text-zinc-500 text-[11px] font-mono mb-1 uppercase tracking-wider">Pre-Mortem Failure Scenario</h4>
-                <p className="text-zinc-300 border-l-2 border-zinc-700 pl-3 text-xs leading-relaxed italic">{project.preMortem || "None specified"}</p>
+                <h4 className="text-[#86868b] text-[11px] font-semibold mb-1 uppercase tracking-wider">ניתוח כשל מראש (Pre-Mortem)</h4>
+                <p className="text-[#1d1d1f] dark:text-zinc-200 border-r-2 border-[#1d1d1f] dark:border-zinc-700 pr-3 text-xs leading-relaxed italic">
+                  {project.preMortem || "טרם הוגדר"}
+                </p>
               </div>
 
               {/* Inline Knowledge Gaps Management */}
-              <div className="pt-4 border-t border-zinc-900">
+              <div className="pt-4 border-t border-[#e8e5dc] dark:border-zinc-900">
                 <div className="flex justify-between items-center mb-3">
-                  <h4 className="text-zinc-400 text-xs font-mono uppercase tracking-wider">
-                    Knowledge Gaps ({project.knowledgeGaps.length})
+                  <h4 className="text-[#1d1d1f] dark:text-zinc-200 text-xs font-semibold uppercase tracking-wider">
+                    פערי ידע ואי-ודאות ({project.knowledgeGaps.length})
                   </h4>
                 </div>
 
                 <div className="space-y-2 mb-4">
                   {project.knowledgeGaps.map(g => (
-                    <div key={g.id} className="bg-black border border-zinc-900 p-2.5 rounded group">
+                    <div key={g.id} className="bg-white dark:bg-black border border-[#e2ded5] dark:border-zinc-900 p-3 rounded-xl shadow-sm group">
                       <div className="flex justify-between items-start">
-                        <div className="text-zinc-200 text-xs font-medium">{g.description}</div>
-                        <button onClick={() => handleRemoveDrawerGap(g.id)} className="text-zinc-600 hover:text-white text-xs opacity-0 group-hover:opacity-100">✕</button>
+                        <div className="text-[#1d1d1f] dark:text-zinc-200 text-xs font-medium">{g.description}</div>
+                        <button onClick={() => handleRemoveDrawerGap(g.id)} className="text-[#86868b] hover:text-red-500 text-xs opacity-0 group-hover:opacity-100 p-0.5">✕</button>
                       </div>
-                      <div className="text-[10px] text-zinc-500 mt-1 flex gap-2 items-center">
-                        <span className="font-mono uppercase bg-zinc-900 px-1 rounded text-zinc-400">{g.category}</span>
-                        <span>Spike: {g.mitigation}</span>
+                      <div className="text-[10px] text-[#86868b] mt-1.5 flex gap-2 items-center">
+                        <span className="font-mono bg-[#f5f3ee] dark:bg-zinc-900 px-1.5 py-0.5 rounded text-[#555] dark:text-zinc-400">
+                          {catLabels[g.category]}
+                        </span>
+                        <span>בדיקה: {g.mitigation}</span>
                       </div>
                     </div>
                   ))}
                 </div>
 
                 {/* Inline Add Gap Form */}
-                <div className="bg-black border border-zinc-900 p-3 rounded space-y-2">
+                <div className="bg-white/80 dark:bg-black border border-[#e2ded5] dark:border-zinc-900 p-3 rounded-2xl space-y-2 shadow-sm">
                   <input 
-                    className="w-full bg-transparent border-b border-zinc-800 pb-1 text-xs text-white placeholder:text-zinc-700 focus:outline-none focus:border-zinc-500"
-                    placeholder="Add new gap / unverified assumption..."
+                    className="w-full bg-transparent border-b border-[#dcd8ce] dark:border-zinc-800 pb-1 text-xs text-[#1d1d1f] dark:text-white placeholder:text-[#a8a49c] focus:outline-none focus:border-[#1d1d1f]"
+                    placeholder="הוסף פער ידע / סיכון חדש..."
                     value={newGapDesc}
                     onChange={(e) => setNewGapDesc(e.target.value)}
                   />
@@ -415,23 +450,27 @@ export default function SkeletonDashboard() {
                       <button
                         key={c}
                         onClick={() => setNewGapCat(c)}
-                        className={`text-[9px] font-mono uppercase px-2 py-0.5 rounded border ${newGapCat === c ? 'bg-white text-black border-white' : 'border-zinc-800 text-zinc-500'}`}
+                        className={`text-[10px] px-2 py-0.5 rounded-full border ${
+                          newGapCat === c 
+                            ? 'bg-[#1d1d1f] text-white dark:bg-white dark:text-black border-transparent font-medium' 
+                            : 'border-[#dcd8ce] dark:border-zinc-800 text-[#666]'
+                        }`}
                       >
-                        {c}
+                        {catLabels[c]}
                       </button>
                     ))}
                   </div>
                   <input 
-                    className="w-full bg-transparent border-b border-zinc-800 pb-1 text-xs text-white placeholder:text-zinc-700 focus:outline-none focus:border-zinc-500"
-                    placeholder="Mitigation experiment / spike"
+                    className="w-full bg-transparent border-b border-[#dcd8ce] dark:border-zinc-800 pb-1 text-xs text-[#1d1d1f] dark:text-white placeholder:text-[#a8a49c] focus:outline-none focus:border-[#1d1d1f]"
+                    placeholder="פעולת הפחתת סיכון (ניסוי / ספייק)"
                     value={newGapMit}
                     onChange={(e) => setNewGapMit(e.target.value)}
                   />
                   <button 
                     onClick={handleAddDrawerGap}
-                    className="w-full bg-zinc-900 hover:bg-zinc-800 text-white text-[11px] py-1.5 rounded transition-colors font-medium"
+                    className="w-full bg-[#1d1d1f] text-white dark:bg-white dark:text-black text-xs py-1.5 rounded-full transition-opacity font-semibold mt-1"
                   >
-                    + Add Risk Item
+                    + הוסף סיכון לרשימה
                   </button>
                 </div>
               </div>
@@ -445,7 +484,8 @@ export default function SkeletonDashboard() {
         {shortcutsOpen && (
           <div 
             onClick={() => setShortcutsOpen(false)}
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 text-right"
+            dir="rtl"
           >
             <motion.div 
               onClick={(e) => e.stopPropagation()}
@@ -453,41 +493,41 @@ export default function SkeletonDashboard() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={transition}
-              className="bg-zinc-950 border border-zinc-800 rounded-lg p-6 max-w-md w-full shadow-2xl space-y-4"
+              className="bg-[#fbfaf7] dark:bg-zinc-950 border border-[#e2ded5] dark:border-zinc-800 rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-4"
             >
-              <div className="flex justify-between items-center border-b border-zinc-900 pb-3">
-                <h3 className="text-sm font-semibold text-white tracking-wide uppercase">Keyboard Shortcuts</h3>
-                <button onClick={() => setShortcutsOpen(false)} className="text-xs font-mono text-zinc-500 hover:text-white">ESC</button>
+              <div className="flex justify-between items-center border-b border-[#e8e5dc] dark:border-zinc-900 pb-3">
+                <h3 className="text-sm font-semibold text-[#1d1d1f] dark:text-white tracking-wide">קיצורי מקלדת (Keyboard Shortcuts)</h3>
+                <button onClick={() => setShortcutsOpen(false)} className="text-xs font-mono text-[#86868b] hover:text-[#1d1d1f]">סגור (ESC)</button>
               </div>
 
               <div className="space-y-2 text-xs font-mono">
-                <div className="flex justify-between py-1.5 border-b border-zinc-900">
-                  <span className="text-zinc-400">Open Command Palette</span>
-                  <kbd className="bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-white">Cmd + K</kbd>
+                <div className="flex justify-between py-1.5 border-b border-[#e8e5dc] dark:border-zinc-900">
+                  <span className="text-[#555] dark:text-zinc-400 font-sans">פתיחת שורת פקודות (Command Palette)</span>
+                  <kbd className="bg-white dark:bg-zinc-900 border border-[#d8d4ca] dark:border-zinc-800 px-2 py-0.5 rounded text-[#1d1d1f] dark:text-white shadow-sm">Cmd + K</kbd>
                 </div>
-                <div className="flex justify-between py-1.5 border-b border-zinc-900">
-                  <span className="text-zinc-400">Toggle MVP Only View</span>
-                  <kbd className="bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-white">M</kbd>
+                <div className="flex justify-between py-1.5 border-b border-[#e8e5dc] dark:border-zinc-900">
+                  <span className="text-[#555] dark:text-zinc-400 font-sans">סינון מצב MVP בלבד</span>
+                  <kbd className="bg-white dark:bg-zinc-900 border border-[#d8d4ca] dark:border-zinc-800 px-2 py-0.5 rounded text-[#1d1d1f] dark:text-white shadow-sm">M</kbd>
                 </div>
-                <div className="flex justify-between py-1.5 border-b border-zinc-900">
-                  <span className="text-zinc-400">Open Story & Risks Drawer</span>
-                  <kbd className="bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-white">S</kbd>
+                <div className="flex justify-between py-1.5 border-b border-[#e8e5dc] dark:border-zinc-900">
+                  <span className="text-[#555] dark:text-zinc-400 font-sans">פתיחת מגירת הסיפור והסיכונים</span>
+                  <kbd className="bg-white dark:bg-zinc-900 border border-[#d8d4ca] dark:border-zinc-800 px-2 py-0.5 rounded text-[#1d1d1f] dark:text-white shadow-sm">S</kbd>
                 </div>
-                <div className="flex justify-between py-1.5 border-b border-zinc-900">
-                  <span className="text-zinc-400">Return to The Journey (Wizard)</span>
-                  <kbd className="bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-white">J</kbd>
+                <div className="flex justify-between py-1.5 border-b border-[#e8e5dc] dark:border-zinc-900">
+                  <span className="text-[#555] dark:text-zinc-400 font-sans">חזרה לאשף The Journey</span>
+                  <kbd className="bg-white dark:bg-zinc-900 border border-[#d8d4ca] dark:border-zinc-800 px-2 py-0.5 rounded text-[#1d1d1f] dark:text-white shadow-sm">J</kbd>
                 </div>
-                <div className="flex justify-between py-1.5 border-b border-zinc-900">
-                  <span className="text-zinc-400">Export JSON Backup</span>
-                  <kbd className="bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-white">E</kbd>
+                <div className="flex justify-between py-1.5 border-b border-[#e8e5dc] dark:border-zinc-900">
+                  <span className="text-[#555] dark:text-zinc-400 font-sans">ייצוא גיבוי נתונים לקובץ JSON</span>
+                  <kbd className="bg-white dark:bg-zinc-900 border border-[#d8d4ca] dark:border-zinc-800 px-2 py-0.5 rounded text-[#1d1d1f] dark:text-white shadow-sm">E</kbd>
                 </div>
-                <div className="flex justify-between py-1.5 border-b border-zinc-900">
-                  <span className="text-zinc-400">Advance Step in Wizard</span>
-                  <kbd className="bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-white">Cmd + Enter</kbd>
+                <div className="flex justify-between py-1.5 border-b border-[#e8e5dc] dark:border-zinc-900">
+                  <span className="text-[#555] dark:text-zinc-400 font-sans">התקדמות שלב באשף</span>
+                  <kbd className="bg-white dark:bg-zinc-900 border border-[#d8d4ca] dark:border-zinc-800 px-2 py-0.5 rounded text-[#1d1d1f] dark:text-white shadow-sm">Cmd + Enter</kbd>
                 </div>
                 <div className="flex justify-between py-1.5">
-                  <span className="text-zinc-400">Close Any Modal or Drawer</span>
-                  <kbd className="bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-white">ESC</kbd>
+                  <span className="text-[#555] dark:text-zinc-400 font-sans">סגירת חלונות ומגירות</span>
+                  <kbd className="bg-white dark:bg-zinc-900 border border-[#d8d4ca] dark:border-zinc-800 px-2 py-0.5 rounded text-[#1d1d1f] dark:text-white shadow-sm">ESC</kbd>
                 </div>
               </div>
             </motion.div>
@@ -495,75 +535,76 @@ export default function SkeletonDashboard() {
         )}
       </AnimatePresence>
 
-      {/* Command Palette */}
+      {/* Command Palette (Hebrew) */}
       {cmdOpen && (
         <div 
           onClick={() => setCmdOpen(false)}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-start justify-center pt-28 px-4"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-start justify-center pt-28 px-4"
+          dir="rtl"
         >
           <Command 
-            className="w-[520px] bg-zinc-950 border border-zinc-800 rounded-xl shadow-2xl overflow-hidden font-sans"
+            className="w-[520px] bg-[#fbfaf7] dark:bg-zinc-950 border border-[#e2ded5] dark:border-zinc-800 rounded-2xl shadow-2xl overflow-hidden font-sans text-right"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center px-4 border-b border-zinc-900">
+            <div className="flex items-center px-4 border-b border-[#e8e5dc] dark:border-zinc-900">
               <Command.Input 
-                className="w-full bg-transparent text-sm py-4 focus:outline-none placeholder:text-zinc-600 text-white font-medium" 
-                placeholder="Type a command or search..."
+                className="w-full bg-transparent text-sm py-4 focus:outline-none placeholder:text-[#a8a49c] text-[#1d1d1f] dark:text-white font-medium" 
+                placeholder="הקלד פקודה או חפש..."
                 autoFocus
               />
-              <button onClick={() => setCmdOpen(false)} className="text-[10px] font-mono bg-zinc-900 px-2 py-1 rounded text-zinc-500">ESC</button>
+              <button onClick={() => setCmdOpen(false)} className="text-[10px] font-mono bg-white dark:bg-zinc-900 px-2 py-1 rounded border border-[#e2ded5] dark:border-zinc-800 text-[#86868b]">ESC</button>
             </div>
             
             <Command.List className="max-h-[320px] overflow-y-auto p-2">
-              <Command.Empty className="text-xs text-zinc-500 p-4 text-center">No matching commands.</Command.Empty>
+              <Command.Empty className="text-xs text-[#86868b] p-4 text-center">לא נמצאו פקודות תואמות.</Command.Empty>
               
-              <Command.Group heading="Display" className="text-[10px] font-mono uppercase text-zinc-500 px-2 py-1.5">
+              <Command.Group heading="תצוגה" className="text-[11px] font-semibold text-[#86868b] px-2 py-1.5">
                 <Command.Item 
                   onSelect={() => { setMvpOnly(!mvpOnly); setCmdOpen(false); }}
-                  className="px-3 py-2 text-xs text-zinc-300 hover:bg-zinc-900 hover:text-white rounded cursor-pointer data-[selected=true]:bg-zinc-900 flex justify-between"
+                  className="px-3 py-2 text-xs text-[#1d1d1f] dark:text-zinc-300 hover:bg-white dark:hover:bg-zinc-900 rounded-lg cursor-pointer data-[selected=true]:bg-white dark:data-[selected=true]:bg-zinc-900 flex justify-between"
                 >
-                  <span>Toggle MVP Only View</span>
-                  <kbd className="font-mono text-[10px] text-zinc-500">M</kbd>
+                  <span>הצג משימות MVP בלבד</span>
+                  <kbd className="font-mono text-[10px] text-[#86868b]">M</kbd>
                 </Command.Item>
                 <Command.Item 
                   onSelect={() => { setFocusMode(!focusMode); setCmdOpen(false); }}
-                  className="px-3 py-2 text-xs text-zinc-300 hover:bg-zinc-900 hover:text-white rounded cursor-pointer data-[selected=true]:bg-zinc-900"
+                  className="px-3 py-2 text-xs text-[#1d1d1f] dark:text-zinc-300 hover:bg-white dark:hover:bg-zinc-900 rounded-lg cursor-pointer data-[selected=true]:bg-white dark:data-[selected=true]:bg-zinc-900 flex justify-between"
                 >
-                  <span>Toggle Focus Mode (Single Avenue)</span>
+                  <span>הפעל/כבה מצב מיקוד (אפיק יחיד)</span>
                 </Command.Item>
               </Command.Group>
 
-              <Command.Group heading="Navigation & Context" className="text-[10px] font-mono uppercase text-zinc-500 px-2 py-1.5 mt-2">
+              <Command.Group heading="ניווט ומידע" className="text-[11px] font-semibold text-[#86868b] px-2 py-1.5 mt-2">
                 <Command.Item 
                   onSelect={() => { setDrawerOpen(true); setCmdOpen(false); }}
-                  className="px-3 py-2 text-xs text-zinc-300 hover:bg-zinc-900 hover:text-white rounded cursor-pointer data-[selected=true]:bg-zinc-900 flex justify-between"
+                  className="px-3 py-2 text-xs text-[#1d1d1f] dark:text-zinc-300 hover:bg-white dark:hover:bg-zinc-900 rounded-lg cursor-pointer data-[selected=true]:bg-white dark:data-[selected=true]:bg-zinc-900 flex justify-between"
                 >
-                  <span>View Story, Gaps & Pre-mortem</span>
-                  <kbd className="font-mono text-[10px] text-zinc-500">S</kbd>
+                  <span>צפה בסיפור, פערי ידע ופרה-מורטם</span>
+                  <kbd className="font-mono text-[10px] text-[#86868b]">S</kbd>
                 </Command.Item>
                 <Command.Item 
                   onSelect={() => { setShortcutsOpen(true); setCmdOpen(false); }}
-                  className="px-3 py-2 text-xs text-zinc-300 hover:bg-zinc-900 hover:text-white rounded cursor-pointer data-[selected=true]:bg-zinc-900 flex justify-between"
+                  className="px-3 py-2 text-xs text-[#1d1d1f] dark:text-zinc-300 hover:bg-white dark:hover:bg-zinc-900 rounded-lg cursor-pointer data-[selected=true]:bg-white dark:data-[selected=true]:bg-zinc-900 flex justify-between"
                 >
-                  <span>Keyboard Shortcuts Cheat Sheet</span>
-                  <kbd className="font-mono text-[10px] text-zinc-500">?</kbd>
+                  <span>רשימת קיצורי מקלדת</span>
+                  <kbd className="font-mono text-[10px] text-[#86868b]">?</kbd>
                 </Command.Item>
                 <Command.Item 
                   onSelect={() => { setStage(1); setCmdOpen(false); }}
-                  className="px-3 py-2 text-xs text-zinc-300 hover:bg-zinc-900 hover:text-white rounded cursor-pointer data-[selected=true]:bg-zinc-900 flex justify-between"
+                  className="px-3 py-2 text-xs text-[#1d1d1f] dark:text-zinc-300 hover:bg-white dark:hover:bg-zinc-900 rounded-lg cursor-pointer data-[selected=true]:bg-white dark:data-[selected=true]:bg-zinc-900 flex justify-between"
                 >
-                  <span>Return to The Journey (Wizard)</span>
-                  <kbd className="font-mono text-[10px] text-zinc-500">J</kbd>
+                  <span>חזרה לעריכת אשף המסע (Stage 1)</span>
+                  <kbd className="font-mono text-[10px] text-[#86868b]">J</kbd>
                 </Command.Item>
               </Command.Group>
 
-              <Command.Group heading="Data" className="text-[10px] font-mono uppercase text-zinc-500 px-2 py-1.5 mt-2">
+              <Command.Group heading="נתונים" className="text-[11px] font-semibold text-[#86868b] px-2 py-1.5 mt-2">
                 <Command.Item 
                   onSelect={() => { handleExport(); setCmdOpen(false); }}
-                  className="px-3 py-2 text-xs text-zinc-300 hover:bg-zinc-900 hover:text-white rounded cursor-pointer data-[selected=true]:bg-zinc-900 flex justify-between"
+                  className="px-3 py-2 text-xs text-[#1d1d1f] dark:text-zinc-300 hover:bg-white dark:hover:bg-zinc-900 rounded-lg cursor-pointer data-[selected=true]:bg-white dark:data-[selected=true]:bg-zinc-900 flex justify-between"
                 >
-                  <span>Export JSON Backup</span>
-                  <kbd className="font-mono text-[10px] text-zinc-500">E</kbd>
+                  <span>ייצוא גיבוי נתונים לקובץ JSON</span>
+                  <kbd className="font-mono text-[10px] text-[#86868b]">E</kbd>
                 </Command.Item>
               </Command.Group>
             </Command.List>

@@ -41,8 +41,9 @@ interface AppState {
   // Navigation & View Mode
   activeStep: number;
   stage: 1 | 2;
-  focusedAvenueId: string | null; // For Focus Mode in Stage 2
-  collapsedAvenueIds: string[]; // For Smart Auto-Collapse in Stage 2
+  theme: 'light' | 'dark'; // Apple Light (warm) or Minimalist Dark
+  focusedAvenueId: string | null;
+  collapsedAvenueIds: string[];
   
   // Data
   project: ProjectData;
@@ -50,6 +51,8 @@ interface AppState {
   // Actions
   setActiveStep: (step: number) => void;
   setStage: (stage: 1 | 2) => void;
+  toggleTheme: () => void;
+  setTheme: (theme: 'light' | 'dark') => void;
   setFocusedAvenueId: (id: string | null) => void;
   toggleAvenueCollapse: (id: string) => void;
   updateProject: (data: Partial<ProjectData>) => void;
@@ -82,14 +85,14 @@ const initialProjectState: ProjectData = {
   historicalBenchmarks: [
     {
       id: 'bench-1',
-      title: 'Auth & Billing Redesign',
+      title: 'עיצוב מחדש של מערכת התשלומים והאימות',
       plannedDays: 14,
       actualDays: 20,
       gapPercent: 43,
     },
     {
       id: 'bench-2',
-      title: 'Realtime Sync Engine',
+      title: 'מנוע סנכרון בזמן אמת',
       plannedDays: 30,
       actualDays: 40,
       gapPercent: 33,
@@ -103,12 +106,15 @@ export const useAppStore = create<AppState>()(
     (set, get) => ({
       activeStep: 1,
       stage: 1,
+      theme: 'light', // Warm Apple light by default
       focusedAvenueId: null,
       collapsedAvenueIds: [],
       project: initialProjectState,
 
       setActiveStep: (step) => set({ activeStep: step }),
       setStage: (stage) => set({ stage }),
+      toggleTheme: () => set((state) => ({ theme: state.theme === 'light' ? 'dark' : 'light' })),
+      setTheme: (theme) => set({ theme }),
       setFocusedAvenueId: (id) => set({ focusedAvenueId: id }),
       
       toggleAvenueCollapse: (id) => set((state) => {
@@ -189,7 +195,7 @@ export const useAppStore = create<AppState>()(
       getSuggestedBufferDays: () => {
         const avgBias = get().getAverageOptimismBias();
         const planned = get().project.plannedDurationDays || 14;
-        if (avgBias <= 0) return Math.ceil(planned * 0.2); // Default 20% safety margin
+        if (avgBias <= 0) return Math.ceil(planned * 0.2);
         return Math.ceil(planned * (avgBias / 100));
       },
 

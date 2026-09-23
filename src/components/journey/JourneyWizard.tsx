@@ -5,6 +5,7 @@ import { useAppStore } from "@/lib/store";
 import { sampleProject } from "@/lib/initialData";
 import { motion } from "framer-motion";
 import { useAppMotion } from "@/lib/useMotionConfig";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 import Step1Story from "./Step1Story";
 import Step2Gaps from "./Step2Gaps";
 import Step3Avenues from "./Step3Avenues";
@@ -14,7 +15,7 @@ import Step6Buffers from "./Step6Buffers";
 import Step7OKRs from "./Step7OKRs";
 
 export default function JourneyWizard() {
-  const { activeStep, setActiveStep, updateProject, setStage } = useAppStore();
+  const { activeStep, setActiveStep, updateProject, setStage, theme } = useAppStore();
   const { transition, shouldReduceMotion } = useAppMotion();
 
   // Scroll to active step
@@ -31,24 +32,38 @@ export default function JourneyWizard() {
   };
 
   const steps = [
-    { id: 1, component: Step1Story, title: "1. The Story" },
-    { id: 2, component: Step2Gaps, title: "2. Knowledge Gaps" },
-    { id: 3, component: Step3Avenues, title: "3. Avenues & Pre-mortem" },
-    { id: 4, component: Step4OutsideView, title: "4. The Outside View" },
-    { id: 5, component: Step5Tasks, title: "5. Task Breakdown" },
-    { id: 6, component: Step6Buffers, title: "6. Schedule & Buffers" },
-    { id: 7, component: Step7OKRs, title: "7. Value & OKRs" },
+    { id: 1, component: Step1Story, title: "1. הסיפור והחזון" },
+    { id: 2, component: Step2Gaps, title: "2. פערי ידע ואי-ודאות" },
+    { id: 3, component: Step3Avenues, title: "3. אפיקים ופרה-מורטם" },
+    { id: 4, component: Step4OutsideView, title: "4. המבט מבחוץ וכיול זמנים" },
+    { id: 5, component: Step5Tasks, title: "5. פירוק משימות ותיוג MVP" },
+    { id: 6, component: Step6Buffers, title: "6. לוח זמנים ובאפר רמזור" },
+    { id: 7, component: Step7OKRs, title: "7. ערך ומדדי תוצאה (OKRs)" },
   ];
 
+  const isLight = theme === 'light';
+
   return (
-    <div className="max-w-2xl mx-auto py-20 px-6 relative">
-      <div className="absolute top-6 right-6 flex items-center gap-3">
-        <button 
-          onClick={handleLoadSample}
-          className="text-xs text-zinc-400 hover:text-white transition-colors border border-zinc-800 hover:border-zinc-600 px-3 py-1.5 rounded font-mono"
-        >
-          Load Blueprint Demo
-        </button>
+    <div className="max-w-2xl mx-auto py-16 px-6 relative font-sans text-right" dir="rtl">
+      {/* Header Controls */}
+      <div className="flex items-center justify-between mb-12">
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <button 
+            onClick={handleLoadSample}
+            className={`text-xs px-3.5 py-1.5 rounded-full transition-all duration-200 border font-medium ${
+              isLight
+                ? 'bg-[#ffffff] text-[#555] border-[#e2ded5] hover:text-[#1d1d1f] hover:border-[#c5c0b5] shadow-[0_1px_4px_rgba(0,0,0,0.03)]'
+                : 'bg-[#1c1c1e] text-[#86868b] border-[#2c2c30] hover:text-white hover:border-[#3e3e44]'
+            }`}
+          >
+            טען תוכנית דוגמה (1-Click Blueprint)
+          </button>
+        </div>
+
+        <span className="text-[11px] font-mono uppercase tracking-widest text-[#86868b]">
+          שלב 1 מתוך 2: המסע
+        </span>
       </div>
 
       <motion.div 
@@ -57,17 +72,21 @@ export default function JourneyWizard() {
         transition={transition}
         className="mb-14"
       >
-        <span className="text-[11px] font-mono uppercase tracking-widest text-zinc-500">Stage 1: Setup Wizard</span>
-        <h1 className="text-3xl font-light tracking-tight text-white mt-1">The Journey</h1>
-        <p className="text-sm text-zinc-500 mt-1 font-light">Seven sequential steps to eliminate planning friction and cognitive overload.</p>
+        <h1 className="text-3xl font-normal tracking-tight text-[#1d1d1f] dark:text-[#f5f5f7]">
+          המסע לתכנון שקט
+        </h1>
+        <p className="text-sm text-[#86868b] dark:text-[#a1a1aa] mt-1.5 font-light leading-relaxed">
+          שבעה צעדים רציפים מונחי-מקלדת שמפרקים עומס קוגניטיבי והופכים רעיון מופשט לשלד עבודה ברור.
+        </p>
       </motion.div>
 
-      <div className="space-y-4 pb-64">
+      {/* Progressive Disclosure Steps */}
+      <div className="space-y-6 pb-64">
         {steps.map((step) => {
           const isActive = activeStep === step.id;
           const isPast = step.id < activeStep;
           
-          if (step.id > activeStep) return null; // Progressive disclosure
+          if (step.id > activeStep) return null;
 
           const StepComponent = step.component;
 
@@ -75,14 +94,20 @@ export default function JourneyWizard() {
             <div 
               key={step.id} 
               id={`step-${step.id}`}
-              className={`transition-all duration-300 ${isActive ? 'opacity-100' : 'opacity-40 hover:opacity-100 cursor-pointer'}`}
+              className={`transition-all duration-300 ${isActive ? 'opacity-100' : 'opacity-50 hover:opacity-100 cursor-pointer'}`}
               onClick={() => { if (!isActive) setActiveStep(step.id) }}
             >
-              <div className="text-xs font-mono uppercase tracking-wider text-zinc-500 mb-2 flex items-center justify-between">
-                <span>{step.title}</span>
-                {isPast && <span className="text-[10px] text-zinc-600">Click to expand</span>}
+              <div className="text-xs font-mono tracking-wide text-[#86868b] mb-2 flex items-center justify-between">
+                <span className="font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">{step.title}</span>
+                {isPast && (
+                  <span className="text-[10px] text-[#8e8e93] hover:underline">לחץ לעריכה</span>
+                )}
               </div>
-              <div className={`border-l-2 pl-6 py-2 transition-colors ${isActive ? 'border-white' : 'border-zinc-800'}`}>
+              <div className={`border-r-2 pr-6 py-2 transition-colors ${
+                isActive 
+                  ? 'border-[#1d1d1f] dark:border-white' 
+                  : 'border-[#e5e2da] dark:border-[#2c2c30]'
+              }`}>
                 <StepComponent isActive={isActive} isPast={isPast} />
               </div>
             </div>
@@ -95,13 +120,13 @@ export default function JourneyWizard() {
           initial={{ opacity: 0 }} 
           animate={{ opacity: 1 }} 
           transition={transition}
-          className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black via-black/90 to-transparent flex justify-center"
+          className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#fbfaf7] via-[#fbfaf7]/95 to-transparent dark:from-[#0c0c0e] dark:via-[#0c0c0e]/95 flex justify-center z-20"
         >
           <button 
             onClick={() => setStage(2)}
-            className="bg-white text-black px-8 py-3 rounded font-medium hover:bg-zinc-200 transition-colors shadow-xl shadow-white/5 text-sm"
+            className="bg-[#1d1d1f] text-white dark:bg-white dark:text-black px-8 py-3.5 rounded-full font-medium transition-all shadow-[0_4px_20px_rgba(0,0,0,0.12)] hover:scale-[1.02] text-sm"
           >
-            Generate Skeleton Dashboard
+            חולל את לוח השלד (The Skeleton) ←
           </button>
         </motion.div>
       )}

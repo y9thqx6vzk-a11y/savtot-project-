@@ -40,26 +40,26 @@ export interface HistoricalBenchmark {
 }
 
 export interface ProjectData {
-  // Step 1
+  // Step 1: הסיפור
   oneLiner: string;
   problem: string;
   targetAudience: string;
   dayInTheLife: string;
 
-  // Step 2
+  // Step 2: פערי ידע
   knowledgeGaps: KnowledgeGap[];
 
-  // Step 3
+  // Step 3: אפיקים ופרה-מורטם
   avenues: Avenue[];
   preMortem: string;
 
-  // Step 4
+  // Step 4: מבט מבחוץ
   referenceProject: string;
   plannedDurationDays: number;
   actualDurationDays: number;
   optimismGapPercent: number;
   historicalBenchmarks: HistoricalBenchmark[];
 
-  // Step 6
+  // Step 6: חוצצים
   totalBufferDays: number;
 }
