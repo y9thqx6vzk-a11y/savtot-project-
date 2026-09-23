@@ -215,6 +215,17 @@ export default function SkeletonDashboard() {
                 ?
               </button>
               <button 
+                onClick={() => {
+                  if (window.confirm("האם לפתוח פרויקט חדש ונקי? (מומלץ לייצא קובץ גיבוי JSON אם ברצונך לשמור את הנתונים הנוכחיים)")) {
+                    useAppStore.getState().resetProject();
+                  }
+                }}
+                className="text-xs text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-md px-3 py-1.5 font-sans shadow-sm"
+                title="איפוס והתחלת פרויקט חדש מדף חלק"
+              >
+                + פרויקט חדש
+              </button>
+              <button 
                 onClick={() => setStage(1)} 
                 className="text-xs text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-md px-3 py-1.5 font-sans shadow-sm"
               >

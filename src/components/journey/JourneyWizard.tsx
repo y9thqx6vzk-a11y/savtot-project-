@@ -50,8 +50,19 @@ export default function JourneyWizard() {
           <ThemeToggle />
           <JsonUploader />
           <button 
+            onClick={() => {
+              if (window.confirm("האם לפתוח פרויקט חדש ונקי? (מומלץ לייצא קובץ גיבוי JSON אם ברצונך לשמור את הנתונים הנוכחיים)")) {
+                useAppStore.getState().resetProject();
+              }
+            }}
+            className="text-xs px-3 py-1 rounded transition-colors font-mono border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:border-zinc-400 dark:hover:border-zinc-600 shadow-xs"
+            title="איפוס והתחלת פרויקט חדש מדף חלק"
+          >
+            + פרויקט חדש
+          </button>
+          <button 
             onClick={handleLoadSample}
-            className="text-xs px-3 py-1 rounded transition-colors font-mono border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white hover:border-zinc-400 dark:hover:border-zinc-600 shadow-xs"
+            className="text-xs px-3 py-1 rounded transition-colors font-mono border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white hover:border-zinc-400 dark:hover:border-zinc-600 shadow-xs"
           >
             טען דוגמה
           </button>
