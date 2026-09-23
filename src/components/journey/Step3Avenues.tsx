@@ -94,7 +94,7 @@ export default function Step3Avenues({ isActive, isPast }: { isActive: boolean, 
         <div className="bg-zinc-50 dark:bg-zinc-900/50 p-4 border border-zinc-200 dark:border-zinc-800 rounded space-y-3">
           <input 
             dir="rtl"
-            className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded-md px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors placeholder:text-zinc-400"
+            className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded-md px-4 py-2.5 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors placeholder:text-zinc-400"
             placeholder="הגדר אפיק פעולה חדש..."
             value={newAve}
             onChange={(e) => setNewAve(e.target.value)}
@@ -138,10 +138,15 @@ export default function Step3Avenues({ isActive, isPast }: { isActive: boolean, 
         </p>
         <textarea 
           dir="rtl"
-          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md p-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors resize-none placeholder:text-zinc-400 leading-relaxed"
-          rows={3}
+          rows={4}
+          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md px-4 py-3 sm:px-5 sm:py-3.5 text-sm font-normal text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors min-h-[100px] resize-y placeholder:text-zinc-400 leading-relaxed"
           placeholder="מה יגרום למוות של הפרויקט אם לא ניערך לכך?..."
           value={project.preMortem}
+          onInput={(e) => {
+            const el = e.currentTarget;
+            el.style.height = 'auto';
+            el.style.height = `${Math.max(el.scrollHeight, 100)}px`;
+          }}
           onChange={(e) => updateProject({ preMortem: e.target.value })}
           onKeyDown={handleKeyDown}
         />

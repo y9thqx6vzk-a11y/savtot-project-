@@ -42,11 +42,16 @@ export default function Step1Story({ isActive, isPast }: { isActive: boolean, is
         <textarea 
           autoFocus
           dir="rtl"
-          rows={2}
-          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md p-3 text-base md:text-lg font-light text-zinc-950 dark:text-zinc-50 focus:outline-none transition-colors resize-none placeholder:text-zinc-400 leading-relaxed"
+          rows={3}
+          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md px-4 py-3 sm:px-5 sm:py-3.5 text-base font-normal text-zinc-950 dark:text-zinc-50 focus:outline-none transition-colors min-h-[88px] resize-y placeholder:text-zinc-400 leading-relaxed"
           placeholder="למשל: אפליקציית רשת להנגשת עולם ניהול הפרויקטים ומעקב יומיומי ללא עומס"
           value={project.oneLiner}
           onFocus={(e) => e.target.select()}
+          onInput={(e) => {
+            const el = e.currentTarget;
+            el.style.height = 'auto';
+            el.style.height = `${Math.max(el.scrollHeight, 88)}px`;
+          }}
           onChange={(e) => updateProject({ oneLiner: e.target.value })}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -65,11 +70,16 @@ export default function Step1Story({ isActive, isPast }: { isActive: boolean, is
         <textarea 
           id="step1-prob"
           dir="rtl"
-          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md p-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors resize-none placeholder:text-zinc-400 leading-relaxed"
-          rows={3}
+          rows={4}
+          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md px-4 py-3 sm:px-5 sm:py-3.5 text-sm font-normal text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors min-h-[110px] resize-y placeholder:text-zinc-400 leading-relaxed"
           placeholder="למשל: העומס שיש הרבה פעמים בפרויקטים, וכתוצאה מאותו עומס נוצר בלאגן, ודחייה או ביטול של הפרויקט."
           value={project.problem}
           onFocus={(e) => e.target.select()}
+          onInput={(e) => {
+            const el = e.currentTarget;
+            el.style.height = 'auto';
+            el.style.height = `${Math.max(el.scrollHeight, 110)}px`;
+          }}
           onChange={(e) => updateProject({ problem: e.target.value })}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
@@ -87,11 +97,16 @@ export default function Step1Story({ isActive, isPast }: { isActive: boolean, is
         <textarea 
           id="step1-target"
           dir="rtl"
-          rows={2}
-          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md p-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors resize-none placeholder:text-zinc-400 leading-relaxed"
+          rows={3}
+          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md px-4 py-3 sm:px-5 sm:py-3.5 text-sm font-normal text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors min-h-[88px] resize-y placeholder:text-zinc-400 leading-relaxed"
           placeholder="למשל: לכל אחד שרוצה בצורה מקצועית ופשוטה לייצר תוכנית עבודה, ואז מקום לעקוב אחרי הביצועים שלו בצורה יומיומית."
           value={project.targetAudience}
           onFocus={(e) => e.target.select()}
+          onInput={(e) => {
+            const el = e.currentTarget;
+            el.style.height = 'auto';
+            el.style.height = `${Math.max(el.scrollHeight, 88)}px`;
+          }}
           onChange={(e) => updateProject({ targetAudience: e.target.value })}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -110,11 +125,16 @@ export default function Step1Story({ isActive, isPast }: { isActive: boolean, is
         <textarea 
           id="step1-day"
           dir="rtl"
-          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md p-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors resize-none placeholder:text-zinc-400 leading-relaxed"
-          rows={2}
+          rows={3}
+          className="w-full bg-zinc-50/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 dark:focus:border-zinc-400 rounded-md px-4 py-3 sm:px-5 sm:py-3.5 text-sm font-normal text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors min-h-[88px] resize-y placeholder:text-zinc-400 leading-relaxed"
           placeholder="למשל: המשתמש מבין בכמה שלבים פשוטים איך להתחיל, מתכנן בצורה נכונה, ומנהל מעקב יומיומי רגוע ללא בלאגן."
           value={project.dayInTheLife}
           onFocus={(e) => e.target.select()}
+          onInput={(e) => {
+            const el = e.currentTarget;
+            el.style.height = 'auto';
+            el.style.height = `${Math.max(el.scrollHeight, 88)}px`;
+          }}
           onChange={(e) => updateProject({ dayInTheLife: e.target.value })}
           onKeyDown={handleKeyDown}
         />

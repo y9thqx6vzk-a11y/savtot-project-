@@ -64,27 +64,33 @@ html.dark ::-webkit-scrollbar-thumb {
 }
 
 /* Fix RTL input & textarea text clipping, overflow and boundary issues */
-input, textarea, select {
-  direction: rtl;
-  text-align: right;
-  unicode-bidi: plaintext;
-  box-sizing: border-box;
+input:not([type="checkbox"]):not([type="radio"]):not([type="button"]):not([type="submit"]):not([type="range"]):not([type="color"]),
+textarea,
+select {
+  direction: rtl !important;
+  text-align: right !important;
+  box-sizing: border-box !important;
+  font-family: inherit !important;
+  line-height: 1.6 !important;
+  padding-right: 1.25rem !important; /* 20px generous right padding so Hebrew characters never get clipped against the border */
+  padding-left: 1.25rem !important;
+  text-indent: 0 !important;
 }
 
 input::placeholder, textarea::placeholder {
-  direction: rtl;
-  text-align: right;
-}
-
-/* Ensure minimum breathing room so Hebrew characters never touch the border or clip */
-input[type="text"], input[type="number"], input:not([type]) {
-  padding-right: 0.75rem;
-  padding-left: 0.75rem;
+  direction: rtl !important;
+  text-align: right !important;
 }
 
 textarea {
-  padding-right: 0.75rem;
-  padding-left: 0.75rem;
+  padding-top: 0.875rem !important;
+  padding-bottom: 0.875rem !important;
+  min-height: 84px;
+  overflow-y: auto !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  white-space: pre-wrap !important;
+  resize: vertical;
 }
 
 /* Guaranteed high-contrast text visibility in dark mode */

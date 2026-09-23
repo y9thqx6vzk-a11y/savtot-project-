@@ -111,7 +111,7 @@ export default function Step6Buffers({ isActive, isPast }: { isActive: boolean, 
           <input 
             type="text"
             dir="rtl"
-            className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded px-3 py-1.5 text-base focus:outline-none font-mono text-zinc-950 dark:text-zinc-50 placeholder:text-zinc-400 transition-colors"
+            className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded px-4 py-2.5 text-sm focus:outline-none font-mono text-zinc-950 dark:text-zinc-50 placeholder:text-zinc-400 transition-colors"
             placeholder="למשל: שבוע, 7 ימים, 48 שעות"
             value={bufferText}
             onChange={(e) => setBufferText(e.target.value)}

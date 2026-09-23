@@ -107,7 +107,7 @@ export default function Step2Gaps({ isActive, isPast }: { isActive: boolean, isP
       <div className="bg-zinc-50 dark:bg-zinc-900/50 p-4 border border-zinc-200 dark:border-zinc-800 rounded space-y-3">
         <input 
           dir="rtl"
-          className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded-md px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors placeholder:text-zinc-400"
+          className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded-md px-4 py-2.5 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors placeholder:text-zinc-400"
           placeholder="תאר את פער הידע (טכנולוגיה, שיטה, רגולציה)..."
           value={newDesc}
           onChange={(e) => setNewDesc(e.target.value)}
@@ -134,7 +134,7 @@ export default function Step2Gaps({ isActive, isPast }: { isActive: boolean, isP
         <input 
           id="step2-mit"
           dir="rtl"
-          className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded-md px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors placeholder:text-zinc-400"
+          className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-300 rounded-md px-4 py-2.5 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none transition-colors placeholder:text-zinc-400"
           placeholder="פעולת אימות מקדימה / ניסוי מהיר (ספייק קוד, בדיקה)"
           value={newMit}
           onChange={(e) => setNewMit(e.target.value)}
