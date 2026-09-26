@@ -6,6 +6,8 @@ import SkeletonDashboard from "@/components/skeleton/SkeletonDashboard";
 import { useEffect, useState } from "react";
 
 import { decodeProjectFromUrl } from "@/lib/urlSharing";
+import ChaosLanding from "@/components/landing/ChaosLanding";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function Home() {
   const stage = useAppStore((state) => state.stage);
@@ -14,6 +16,7 @@ export default function Home() {
   
   const [mounted, setMounted] = useState(false);
   const [sharedNotice, setSharedNotice] = useState<string | null>(null);
+  const [isLandingFinished, setIsLandingFinished] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -64,18 +67,34 @@ export default function Home() {
   if (!mounted) return <div className="min-h-screen bg-white dark:bg-[#09090b]" />;
 
   return (
-    <main className={`min-h-screen transition-colors duration-200 font-sans ${
-      theme === 'light' 
-        ? 'bg-[#ffffff] text-zinc-900 selection:bg-zinc-200' 
-        : 'bg-[#09090b] text-zinc-100 selection:bg-zinc-800'
-    }`}>
-      {sharedNotice && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 px-4 py-2 rounded-full shadow-lg text-xs font-medium flex items-center gap-2" dir="rtl">
-          <span>✓</span>
-          <span>הפרויקט המשותף &quot;{sharedNotice}&quot; נטען בהצלחה!</span>
-        </div>
+    <AnimatePresence mode="wait">
+      {!isLandingFinished ? (
+        <ChaosLanding
+          key="landing"
+          theme={theme}
+          onFinish={() => setIsLandingFinished(true)}
+        />
+      ) : (
+        <motion.main
+          key="main-app"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className={`min-h-screen transition-colors duration-200 font-sans ${
+            theme === 'light' 
+              ? 'bg-[#ffffff] text-zinc-900 selection:bg-zinc-200' 
+              : 'bg-[#09090b] text-zinc-100 selection:bg-zinc-800'
+          }`}
+        >
+          {sharedNotice && (
+            <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 px-4 py-2 rounded-full shadow-lg text-xs font-medium flex items-center gap-2" dir="rtl">
+              <span>✓</span>
+              <span>הפרויקט המשותף &quot;{sharedNotice}&quot; נטען בהצלחה!</span>
+            </div>
+          )}
+          {stage === 1 ? <JourneyWizard /> : <SkeletonDashboard />}
+        </motion.main>
       )}
-      {stage === 1 ? <JourneyWizard /> : <SkeletonDashboard />}
-    </main>
+    </AnimatePresence>
   );
 }
